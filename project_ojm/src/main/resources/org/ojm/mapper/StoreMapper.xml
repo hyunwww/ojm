@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.ojm.mapper.StoreMapper"> <!-- 경로 표기법이 클래스명 표기법처럼 작성 -->
+	<!-- 신규 매장 등록 -->
+	<insert id="storeRegister" parameterType="org.ojm.domain.StoreVO">
+		insert into store values(
+			seq_sno.nextval,
+			#{uno},
+			#{sname},
+			#{saddress},
+			#{wd},
+			#{kd},
+			#{sphone},
+			#{scate},
+			#{sdeli},
+			#{scrn},
+			#{sdepo},
+			#{slike},
+			#{sstar},
+			#{spermmit}, 
+			#{openHour}
+		)
+	</insert>
+	
+	<!-- 매장의 전체목록(승인 대기 상태의 매장은 제외) -->
+	<select id="allStore" resultType="org.ojm.domain.StoreVO">
+		select * from store where spermmit = 1
+	</select>
+	
+	<!-- 특정 매장의 정보 가져오기  -->
+	<select id="storeInfo" parameterType="int" resultType="org.ojm.domain.StoreVO">
+		select * from store where sno = #{sno}
+	</select>
+	
+	<!-- 평가 작성 시 평점 평균 최신화  -->
+	<update id="updateRate" parameterType="int">
+		update store
+		set sstar = 
+		(select nvl(round(avg(rvstar),1), 0) from review) 
+		where sno = #{sno}
+	</update>
+	
+	<!-- 매장 승인  -->
+	<update id="storePermit" parameterType="int">
+		update store
+		set spermmit = 1 
+		where sno = #{sno}
+	</update>
+	
+	<!-- 특정 매장 삭제  -->
+	<delete id="deleteStore" parameterType="int">
+		delete from store where sno = #{sno}
+	</delete>
+	
+	<!-- 좋아요 수 제어  -->
+	<update id="storeLike" >
+		update store
+		set slike = slike + #{amount} 
+		where sno = #{sno}
+	</update>
+	
+	<!-- 검색어로 매장 검색  -->
+	<select id="searchStore" parameterType="String" resultType="org.ojm.domain.StoreVO">
+		select * from store where sname like #{input} and spermmit = 1
+	</select>
+	
+</mapper>

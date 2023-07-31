@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.ojm.mapper.StoreImgMapper"> <!-- 경로 표기법이 클래스명 표기법처럼 작성 -->
+	
+	<insert id="addImg" parameterType="org.ojm.domain.StoreImgVO">
+		insert into storeimg values(
+			seq_sino.nextval,
+			#{sno},
+			#{uuid},
+			#{uploadPath},
+			#{fileName}
+		)
+	
+	</insert>
+	
+	<select id="getImg" parameterType="int" resultType="org.ojm.domain.StoreImgVO">
+		select * from storeimg where sno = #{sno}
+	</select>
+	
+	
+</mapper>
