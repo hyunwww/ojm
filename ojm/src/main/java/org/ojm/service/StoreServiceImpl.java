@@ -24,7 +24,6 @@ public class StoreServiceImpl implements StoreService{
 	
 	@Autowired
 	StoreMapper mapper;
-	
 	@Autowired
 	MenuMapper mMapper;
 	@Autowired
@@ -80,7 +79,7 @@ public class StoreServiceImpl implements StoreService{
 		
 		return iMapper.getImg(sno);
 	}
-
+	
 
 	@Override
 	public int storePermit(int sno) {
@@ -102,5 +101,55 @@ public class StoreServiceImpl implements StoreService{
 		
 		return result;
 	}
+	@Override
+	public List<StoreVO> searchStoreByUno(int uno) {
+		return mapper.searchStoreByUno(uno);
+	}
+	@Override
+	public int deleteStore(int sno) {
+		
+		return mapper.deleteStore(sno);
+	}
+
+	@Override
+	public int removeImg(int sino) {
+		return iMapper.removeImg(sino);
+	}
 	
+	@Override
+	@Transactional
+	public int updateStore(StoreVO store) {
+		
+		int result = 0;
+		//storeinfo
+		if (mapper.updateStore(store) > 0) {
+			
+			//메뉴
+			mMapper.deleteMenu(store.getSno());	//삭제
+			
+			if (store.getMenuList() != null && !store.getMenuList().isEmpty()) {
+				for (MenuVO menu : store.getMenuList()) {
+					menu.setSno(store.getSno());
+					mMapper.addMenu(menu);
+				}
+			}
+			//이미지
+			if (store.getImgList() != null && !store.getImgList().isEmpty()) {
+				for (StoreImgVO img : store.getImgList()) {
+					img.setSno(store.getSno());
+					iMapper.addImg(img);
+				}
+				
+			}
+			
+			result = 1;
+		}else {
+			
+		}
+		
+		
+		
+		
+		return result;
+	}
 }

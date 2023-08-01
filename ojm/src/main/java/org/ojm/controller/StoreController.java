@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -190,4 +191,90 @@ public class StoreController {
 		return "";
 	}
 	
+	@GetMapping(value = "/myStore")
+	public String goMyStore(@RequestParam("uno") int uno, Model model) {
+		
+		model.addAttribute("storeList", service.searchStoreByUno(uno));
+		
+		
+		return "/store/myStore";
+	}
+	
+	@GetMapping("/delete")
+	public String goDelete(@RequestParam("sno") int sno,Model model) {
+		
+		model.addAttribute("store", service.storeInfo(sno));
+		return "/store/storeDelete";
+	}
+	@PostMapping(value = "/delete", produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public ResponseEntity<String> storeDelete(@RequestParam("sno")int sno,
+												@RequestParam("pw")String pw) {
+		
+		log.info("delete store, pw : " + pw);
+		// 유저 pw 체크 후 검증성공 시 삭제, 실패 시 실패 메세지와 함께 오류status 전송 후 script 처리
+		
+		return new ResponseEntity<String>("삭제되었습니다." ,HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/update")
+	public String goUpdate(@RequestParam("sno")int sno, Model model) {
+		
+		StoreVO storeInfo = service.storeInfo(sno);
+		model.addAttribute("store", storeInfo);
+		String[] time = storeInfo.getOpenHour().split(" ");
+		model.addAttribute("openHour", time[0]);
+		model.addAttribute("closeHour", time[2]);
+		return "/store/storeUpdate";
+	}
+	
+	@PostMapping("/update")
+	public String updateStore(StoreVO storeInfo,
+								@RequestParam("openHour")String open,
+								@RequestParam("closeHour")String close) {
+		
+		log.info("updating store >>> " + storeInfo);
+		String time = open + " ~ " + close;
+		storeInfo.setOpenHour(time);
+		
+		
+		
+		if (service.updateStore(storeInfo) > 0) {
+			return "redirect:/store/myStore?uno="+storeInfo.getUno();
+		}else {
+			return "redrect:/";
+		}
+		
+	}
+	
+	
+	@PostMapping(value = "/deleteImg")
+	@ResponseBody
+	public ResponseEntity<String> deleteImage(@RequestBody StoreImgVO[] images){ //기존 이미지 삭제
+		log.info("deleteImages... >> " + images);
+		if (images == null || images.length < 1) {
+			return new ResponseEntity<String>("nothing to remove", HttpStatus.OK);
+		}
+		for (StoreImgVO imgInfo : images) {
+			File targetFile = new File(imgInfo.getUploadPath(), imgInfo.getUuid()+"_"+imgInfo.getFileName());
+			if (targetFile.exists()) {
+				log.info("targetFile 확인됨");
+				
+				if (targetFile.delete()) {
+					log.info("targetFile 삭제됨");
+					//서비스에서 db 정보도 삭제
+					service.removeImg(imgInfo.getSino());
+				}else {
+					log.info("targetFile 삭제 실패");
+					return new ResponseEntity<String>("remove fail", HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			}else {
+				log.info("targetFile 없음");
+				return new ResponseEntity<String>("noSuchFile", HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		
+		return new ResponseEntity<String>("ok", HttpStatus.OK);
+	}
 }

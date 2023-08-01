@@ -1,5 +1,7 @@
 package org.ojm.service;
 
+import java.util.List;
+
 import org.ojm.domain.MenuVO;
 import org.ojm.mapper.MenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +27,11 @@ public class MenuServiceImpl implements MenuService{
 	public int nextSno() {
 		
 		return mMapper.nextSno();
+	}
+	@Override
+	public List<MenuVO> getMenu(int sno) {
+		
+		
+		return mMapper.getMenu(sno);
 	}
 }

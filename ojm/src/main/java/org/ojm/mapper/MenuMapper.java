@@ -8,4 +8,5 @@ public interface MenuMapper {
 	public int addMenu(MenuVO menu);
 	public List<MenuVO> getMenu(int sno);
 	public int nextSno();
+	public int deleteMenu(int sno);
 }
