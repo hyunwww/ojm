@@ -1,6 +1,7 @@
 package org.ojm.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.ojm.domain.StoreVO;
@@ -10,6 +11,7 @@ public interface StoreMapper {
 	public List<StoreVO> allStore();
 	public List<StoreVO> searchStore(String input);
 	public List<StoreVO> searchStoreByUno(int uno);
+	public List<StoreVO> searchStoreByCate(Map<String, List<String>> map);
 	public StoreVO storeInfo(int sno);
 	public int updateRate(int sno);
 	public int storePermit(int sno);

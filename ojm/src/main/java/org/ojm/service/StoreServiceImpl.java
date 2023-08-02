@@ -1,8 +1,10 @@
 package org.ojm.service;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.ojm.domain.MenuVO;
@@ -139,14 +141,18 @@ public class StoreServiceImpl implements StoreService{
 					img.setSno(store.getSno());
 					iMapper.addImg(img);
 				}
-				
 			}
-			
 			result = 1;
 		}else {
-			
 		}
+		return result;
+	}
+	
+	//필터링 적용
+	@Override
+	public List<StoreVO> searchStoreWithFilter(Map<String, List<String>> map) {
 		
+		List<StoreVO> result = mapper.searchStoreByCate(map);
 		
 		
 		

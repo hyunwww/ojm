@@ -9,6 +9,11 @@
 	div{
 		text-align: center;
 	}
+	input[name="smaxreserv"]{
+		display: none;
+	}
+	
+	
 	.thumbnail{
 		width: 100px;
 		background-size: contain;
@@ -112,6 +117,17 @@
 			}else{
 				$("#depoInput").attr("disabled", false);
 				$("input[name='deposit']").attr("disabled", false);
+			}
+		});
+		
+		//예약 가능 ox
+		$("input[name='checkReserv']").on("change", function() {
+			console.log($(this)[0].checked);
+			if ($(this)[0].checked) {
+				$("input[name=smaxreserv]").show();
+			}else{
+				$("input[name=smaxreserv]").hide();
+				$("input[name=smaxreserv]").val("");
 			}
 		});
 		
@@ -291,6 +307,12 @@
 							<option value="일식">jap</option>
 							<option value="아시아">asia</option>
 						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>예약<input type="checkbox" value="1" name="checkReserv"></td>
+					<td>
+						<input type="number" name="smaxreserv" placeholder="예약 최대 가능 인원">
 					</td>
 				</tr>
 				<tr>

@@ -2,11 +2,15 @@ package org.ojm.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.ojm.domain.InfoVO;
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
+import org.ojm.domain.UserVO;
 import org.ojm.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,17 +92,40 @@ public class StoreController {
 		
 		
 		input = "%" + input + "%"; 
-		log.info("search process >>> " + input);
+		log.info("searchByKeyword >>> " + input);
 		
 		model.addAttribute("stores", service.searchStore(input));
 		
 		return "/store/storeSearch";
 	}
+	@GetMapping(value = "/search/filter", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<StoreVO>> searchStore(@RequestParam("scate[]")List<String> scate,
+														@RequestParam("location")String location) {
+		List<StoreVO> result = null;
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		List<String> loc = new ArrayList<String>();
+		if (location == null || location.equals("")) {
+		}else {
+			loc.add("%" + location + "%");
+		}
+		map.put("cateList", scate);
+		map.put("location", loc);
+		log.info("searchWithFilter >>> " + map);
+		result = service.searchStoreWithFilter(map);
+		log.info("검색결과 : " + result);
+		
+		
+		
+		
+		return new ResponseEntity<List<StoreVO>>(result, HttpStatus.OK);
+	}
 	
 	
 	// 매장 상세정보 ( test 끝 )
 	@GetMapping("/detail")
-	public String detail(Model model, @RequestParam("sno") int sno) {
+	public String detail(Model model, @RequestParam("sno") int sno,
+							@ModelAttribute("uvo")UserVO uvo) {
 		
 		log.info("detail...." + sno);
 		
@@ -105,8 +133,22 @@ public class StoreController {
 		//uno을 통해 좋아요 정보 받아와서 처리해야함.
 		// uno >> userinfo >> ulikestore 데이터 가공 후 현재 sno와 일치하는지 확인
 		boolean isLike = false;
+		InfoVO userInfo = uvo.getInfo();
 		
 		//이 아래에 판단하는 코드 작성 후 isLike에 대입
+		
+		if (userInfo.getUlikestore() != null && userInfo.getUlikestore().equals("")) {
+			for (String no : userInfo.getUlikestore().split(",")) {
+				if (sno == Integer.parseInt(no)) {
+					isLike = true;
+					break;
+				}
+			}
+		}else {
+		}
+		
+		
+		
 		
 		
 		model.addAttribute("isLike", isLike);
@@ -165,17 +207,20 @@ public class StoreController {
 	//매장 좋아요 적용 ( 미구현, parameter는 정상 전달 됨 )
 	@GetMapping(value = "/likeStore")
 	@ResponseBody
-	public ResponseEntity<Boolean> likeStore(@RequestParam("sno") int sno, @RequestParam("uno") int uno) {
+	public ResponseEntity<Boolean> likeStore(@RequestParam("sno") int sno,
+											@RequestParam("uno") int uno,
+											@RequestParam("current")boolean current) {
 		
 		log.info("storelike process");
 		log.info("sno : " + sno);
 		log.info("uno : " + uno);
+		log.info("current : " + current);
 		
 		// 현재유저의 해당 매장 좋아요 여부 판단하여 true/false 전달
 		
 		
 		
-		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+		return new ResponseEntity<Boolean>(!current, HttpStatus.OK);
 	}
 	
 	

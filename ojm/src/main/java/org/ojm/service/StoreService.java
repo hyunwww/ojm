@@ -1,6 +1,7 @@
 package org.ojm.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
@@ -10,6 +11,7 @@ public interface StoreService {
 	public List<StoreVO> allStores();
 	public List<StoreVO> searchStore(String input);
 	public List<StoreVO> searchStoreByUno(int uno);
+	public List<StoreVO> searchStoreWithFilter(Map<String, List<String>> map);
 	public StoreVO storeInfo(int sno);
 	public int storeRegister(StoreVO store);
 	public List<StoreImgVO> getStoreImgs(int sno);

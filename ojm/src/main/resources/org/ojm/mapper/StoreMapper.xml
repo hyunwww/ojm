@@ -21,7 +21,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{slike},
 			#{sstar},
 			#{spermmit}, 
-			#{openHour}
+			#{openHour},
+			#{smaxreserv}
 		)
 	</insert>
 	
@@ -77,6 +78,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update store set scate = #{scate} , sdepo = #{sdepo} , sphone = #{sphone} , openhour = #{openHour} , scrn = #{scrn} 
 		where sno = #{sno}
 	</update>
+	
+	
+	<!-- 매장 필터링  -->
+	<select id="searchStoreByCate" parameterType="Map" resultType="org.ojm.domain.StoreVO">
+			select * from store  
+			<choose>
+				<when test="cateList != null and cateList.size() > 0">
+					where scate in 
+					<foreach collection="cateList" item="cate" open="(" close=")" separator=",">
+						#{cate} 
+					</foreach> 
+					and 
+				</when>
+				<otherwise>
+					where 1 = 0 or 
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="location != null and location.size() > 0">
+					saddress like
+					<foreach collection="location" item="loc">
+						#{loc}
+					</foreach>
+				</when>
+				<otherwise>
+					1 = 1
+				</otherwise>
+			</choose>
+			
+			
+			
+	</select>
+	
+	
 	
 	
 </mapper>

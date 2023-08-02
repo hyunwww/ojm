@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StoreVO {
 	
-	private int sno, uno, sdeli, slike, spermmit;
+	private int sno, uno, sdeli, slike, spermmit, smaxreserv;
 	private double sstar;
 	private String sname, saddress, wd, kd, sphone, scate,scrn,sdepo,openHour;
 	

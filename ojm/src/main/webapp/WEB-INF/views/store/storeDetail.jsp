@@ -7,7 +7,12 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-	button{
+	document body{
+		position : absolute;
+		width: 100%;
+		height: 100%;
+	}
+	#btnContainer button{
 		color: white;
 		background-color: purple;
 		border-radius: 3px;
@@ -33,13 +38,33 @@
 		color: white;
 		background: purple;
 	}
-	
+	.mapModal {
+	  position: absolute;
+	  width: 1000px;
+	  height: 700px;
+	  top: 50%;
+	  left: 50%;
+	  transform: translate(-50%, -50%);
+	  overflow: hidden;
+	}
+	.map-overlay{
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  background-color: rgba(0, 0, 0, 0.8);
+	  display: none;
+	  z-index: 1;
+	}
 	
 </style>
+<link rel="stylesheet" href="/resources/css/imgPopup.css">
 <link rel="stylesheet" href="/resources/css/slide.css">
 <link rel="stylesheet" href="/resources/css/reviewModal.css">
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
+<script type="text/javascript" src="/resources/js/imgPopup.js"></script>
 <!-- 지도 관련 스크립트 -->
 <script type="text/javascript">
 	$(function() {
@@ -50,15 +75,25 @@
 		var coords = new kakao.maps.LatLng(kd, wd);
 		//map
 		var mapContainer = $("#mapContainer")[0];
+		var mapModal = $(".mapModal")[0];
 		var options = { //지도를 생성할 때 필요한 기본 옵션
 				center: coords, //지도의 중심좌표.
-				level: 4 //지도의 레벨(확대, 축소 정도)
+				level: 4, //지도의 레벨(확대, 축소 정도)
+				draggable: false
 			};
 
 		var map = new kakao.maps.Map(mapContainer, options); //지도 생성 및 객체 리턴
+		var popMap = new kakao.maps.Map(mapModal, {
+			center: coords,
+			level: 3
+		});
 		
 		var marker = new kakao.maps.Marker({
             map: map,
+            position: coords,
+        });
+		var popMarker = new kakao.maps.Marker({
+            map: popMap,
             position: coords
         });
 		
@@ -76,7 +111,7 @@
 		
 		//뒤로가기 버튼 이벤트
 		$("#backBtn").on("click", function() {
-			location.href = '/store/storeList';
+			history.go(-1);
 		});
 		
 		
@@ -86,29 +121,28 @@
 		});
 		
 		//좋아요 버튼 이벤트
-		$("#likeBtn").on("click", function() {
+		$("#utilBox span").on("click", function() {
 			alert("좋아요 버튼 이벤트!");
-			
+			var nowLike = '${isLike}';
 			//uno, sno 전달 , 버튼 css 변경
 			$.ajax({
 			      type: "get",
 			      url: "/store/likeStore",
 			      data: {sno : sno,
-			    	  	 uno : 1},	//uno 일단 임의로 설정해놓음.
+			    	  	 uno : uno,
+			    	  	 current : nowLike},
 			      success: function (result, status, xhr) {
 			    	  console.log(result);
 			    	  
 			    	  if(result){
-			    		  $("#likeBtn").addClass("enabledLike");
+			    		  $("#utilBox span").addClass("enabledLike");
+			    		  $("#utilBox span").removeAttr("id");
 			    	  }else{
-			    		  $("#likeBtn").removeClass("enabledLike");
+			    		  $("#utilBox span").removeClass("enabledLike");
+			    		  $("#utilBox span").attr("id", "likeBtn");
 			    	  }
 			      }
 			});
-			
-			
-			
-			
 		});
 		
 		//리뷰작성 버튼 이벤트
@@ -122,12 +156,34 @@
 		});
 		
 		
+		//이미지 클릭 이벤트
+		$("#storeDetail img").on("click", function() {
+			$(".slide-overlay").show();
+		});
+		$(".close-btn").click(function() {
+			$(".slide-overlay").hide();
+		});
+		
+		//지도 클릭 이벤트
+		$("#mapContainer").click(function() {
+			$(".map-overlay").show();
+			popMap.relayout();
+			popMap.panTo(coords);
+		});
+		// 지도 모달 바깥 클릭 시 닫힘
+        window.onclick = function(event) {
+			var mapOverlay = $(".map-overlay")[0];
+            if (event.target == mapOverlay) {
+            	$(".map-overlay").hide();
+            }
+        }
 	});
 
 </script>
 <script type="text/javascript" src="/resources/js/slide.js"></script>
 <script type="text/javascript">
 	var sno = '${store.sno}';
+	var uno = '${uvo.uno}';
 	//imgLoad(sno);
 	
 </script>
@@ -162,7 +218,14 @@
 				</c:choose>
 			</p>
 			<div id="utilBox" style="text-align: left;">
-				<span id="likeBtn">좋아요 ${store.slike }</span>
+				<c:choose>
+					<c:when test="${isLike }">
+						<span class="enabledLike">좋아요 ${store.slike }</span>
+					</c:when>
+					<c:otherwise>
+						<span id="likeBtn">좋아요 ${store.slike }</span>
+					</c:otherwise>
+				</c:choose>
 				<p>평점 평균 ${store.sstar }</p>
 			</div>
 		</div>
@@ -177,9 +240,9 @@
 			</ul>
 
 		</div>
-		<div style="text-align: right; padding: 10px;">
+		<div id="btnContainer" style="text-align: right; padding: 10px;">
 			<button id="backBtn">뒤로</button>
-			<button id="reportBtn">신고</button>
+			<button id="reportBtn" style="background-color: maroon;">신고</button>
 			<button id="open-modal">리뷰 작성</button>
 			<button id="bookBtn">예약</button>
 		</div>
@@ -229,7 +292,38 @@
 			</form>
 		</div>
 	</div>
-
+	
+	
+	<!-- 이미지 팝업  -->
+	<div class="slide-overlay">
+		<button class="close-btn">close</button>
+		<button class="slide-btn --prev">prev</button>
+		<button class="slide-btn --next">next</button>
+		<div class="slide__container">
+			<ul class="slides">
+				<c:forEach var="img" items="${store.imgList }">
+					<li>
+						<img alt="${img.sino }" src="/images/${img.uuid }_${img.fileName}">
+					</li>
+				</c:forEach>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- 지도 팝업  -->
+	<div class="map-overlay">
+		<div class="mapModal">
+			
+		
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
 	<script type="text/javascript"> /* review 모달 스크립트  */
 		function myFunction(drawstar) {
 			//const drawstar = document.querySelector('.star input');

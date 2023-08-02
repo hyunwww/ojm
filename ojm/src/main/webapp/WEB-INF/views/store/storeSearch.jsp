@@ -13,7 +13,7 @@
 	
 	    height: 100%;
 	
-	    overflow: hidden;
+	    overflow: auto;
 	
 	}
 	.wrapper{
@@ -52,8 +52,23 @@
 		width: 100px;
 		height: 200px;
 	}
-	
-</style>
+	#loading {
+	  display: inline-block;
+	  width: 50px;
+	  height: 50px;
+	  border: 3px solid rgba(255,255,255,.3);
+	  border-radius: 50%;
+	  border-top-color: coral;
+	  animation: spin 1s ease-in-out infinite;
+	  -webkit-animation: spin 1s ease-in-out infinite;
+	}
+	@keyframes spin {
+	  to { -webkit-transform: rotate(360deg); }
+	}
+	@-webkit-keyframes spin {
+	  to { -webkit-transform: rotate(360deg); }
+	}
+	</style>
   
   
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
@@ -67,14 +82,63 @@
 				alert("검색어 입력 필요.");
 				return;
 			}
-			
-			
 			$("#searchBox form").submit(); 
 		});
 		
+		//메인으로
 		$("#mainBtn").on("click", function() {
 			location.href = '/';
 		})
+		
+		//좌측 필터링 적용하여 검색하기
+		$(".sideFilter input,select").change(function() {
+			
+			var selectedCate = $("input[name='scate']:checked");
+			var selectedLocation = $(".sideFilter select").val();
+			var scate = [];
+			// 카테고리 처리
+			for (var i = 0; i < selectedCate.length; i++) {
+				scate.push(selectedCate[i].value);
+			}
+			
+			if (scate.length < 1) {
+				scate.push("");
+			}
+			
+			//ajax 처리가 끝날 때까지 로딩 표시
+			$("#searchResult").html('<div id="loading"></div>');
+			
+			
+			$.ajax({
+			      type: "get",
+			      url: "/store/search/filter",
+			      data: {scate : scate,
+			    	  	location : selectedLocation},
+			      success: function (result, status, xhr) {
+			    	  console.log(result);
+			    	  
+			    	  
+			    	  $("#searchResult").empty();
+			    	  
+			    	  var str = "";
+			    	  if (result.length > 0) {
+				    	  for (var store of result) {
+				    		  str += '<hr><p>이름 : <a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></p>';
+						  }
+				    	  $("#searchResult").append(str);
+					}else{
+						  str += '<p>일치하는 결과가 없습니다.</p>';
+				    	  $("#searchResult").append(str);
+					}
+			    	  
+					  
+			      }
+			});
+			  
+			
+		});
+		
+		
 	});
 
 
@@ -129,14 +193,15 @@
 					</c:choose>
 				</div>
 			</div>
+			
 			<div class="sideFilter">
 				<div class="category one">
-					<h5>one</h5>
-					<input type="checkbox" name="" value="check">1
-					<input type="checkbox" name="" value="check">2
-					<input type="checkbox" name="" value="check">3
-					<input type="checkbox" name="" value="check">4
-					<input type="checkbox" name="" value="check">5
+					<h5>카테고리</h5>
+					<input type="checkbox" name="scate" value="한식">한식
+					<input type="checkbox" name="scate" value="일식">일식
+					<input type="checkbox" name="scate" value="중식">중식
+					<input type="checkbox" name="scate" value="양식">양식
+					<input type="checkbox" name="scate" value="아시아">아시아
 				</div>
 				<br><hr>
 				<div class="category two">
@@ -149,22 +214,28 @@
 				</div>
 				<br><hr>
 				<div class="category three">
-					<h5>one</h5>
-					<input type="checkbox" name="" value="check">1
-					<input type="checkbox" name="" value="check">2
-					<input type="checkbox" name="" value="check">3
-					<input type="checkbox" name="" value="check">4
-					<input type="checkbox" name="" value="check">5
+					<h5>평균 평점</h5>
+					<input type="checkbox" name="" value="1">0~1<br>
+					<input type="checkbox" name="" value="2">1~2<br>
+					<input type="checkbox" name="" value="3">2~3<br>
+					<input type="checkbox" name="" value="4">3~4<br>
+					<input type="checkbox" name="" value="5">4~5
 				</div>
 				<br><hr>
 				<div id="category four">
-					<h5>one</h5>
-					<select name="scate">
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
+					<h5>지역</h5>
+					<select name="location">
+						<option value="">지역 선택</option>
+						<option value="서울">서울</option>
+						<option value="경기도">경기도</option>
+						<option value="충청북도">충청북도</option>
+						<option value="충청남도">충청남도</option>
+						<option value="제주도">제주도</option>
+						<option value="전라북도">전라북도</option>
+						<option value="전라남도">전라남도</option>
+						<option value="경상남도">경상남도</option>
+						<option value="경상북도">경상북도</option>
+						<option value="강원도">강원도</option>
 					</select>
 				</div>
 			</div>
@@ -172,7 +243,7 @@
 	</div>
 	
 	<div class="rankingArea">
-	
+		<!-- 좋아요 순 랭킹 나열할 예정  -->
 	</div>
 	
 </body>
