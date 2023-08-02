@@ -58,6 +58,7 @@
 <script type="text/javascript">
 	
 	function check(f){	// 빈칸 체크
+		console.log(f);
 		
 		// 체크박스 값 가져와서 문자열로 저장하기
 		

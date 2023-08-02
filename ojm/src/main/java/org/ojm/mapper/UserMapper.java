@@ -1,6 +1,7 @@
 package org.ojm.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.ojm.domain.AuthVO;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.UserVO;
 
@@ -10,6 +11,8 @@ public interface UserMapper {
 	
 	public int regUser(UserVO uvo);
 	public int regUserInfo(InfoVO ivo);
+	public int regUserAuth(AuthVO avo);
+	
 	public int modifyUser(UserVO uvo);
 	
 	public int modifyUserInfo(InfoVO ivo);
@@ -21,5 +24,7 @@ public interface UserMapper {
 	public int newMailKey(@Param("email") String email,@Param("mail_key") String mail_key);
 	public int updateMailKey(@Param("email") String email,@Param("mail_key") String mail_key);
 	public int updateMailAuth(@Param("email") String email,@Param("mail_key") String mail_key);
+	
+	public UserVO getUserByID(String userid);
 	
 }

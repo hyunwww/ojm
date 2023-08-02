@@ -3,6 +3,7 @@ package org.ojm.controller;
 
 import javax.mail.MessagingException;
 
+import org.ojm.domain.AuthVO;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.UserVO;
 import org.ojm.mail.MailHandler;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,8 +49,11 @@ public class UserController {
 	@Setter(onMethod_ = @Autowired)
 	UserService service;
 	
-	@Autowired
+	@Autowired(required = false)
     JavaMailSender mailSender;
+	
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 	
 	@GetMapping("/login")
 	public void userLogin() {
@@ -67,9 +72,9 @@ public class UserController {
 		
 		if(vo!=null) {
 			model.addAttribute("uvo", vo);
-			if(vo.getAuth().equals("user")) {
-				return "user/myPage/main";
-			}
+			/*
+			 * if(vo.getAuthList().toString().c) { return "user/myPage/main"; }
+			 */
 			return "redirect:/user/myPage/tmp";
 		}
 		return "redirect:login";
@@ -85,10 +90,11 @@ public class UserController {
 		return "user/userRegister";
 	}
 	@PostMapping("/regUser")
-	public String userRegisterP(UserVO uvo,InfoVO ivo,Model model) {
+	public String userRegisterP(UserVO uvo,InfoVO ivo,AuthVO avo, Model model) {
 		log.info("userRegister Post......");
 		log.info(uvo);
 		log.info(ivo);
+		log.info(avo);
 		
 		if(service.regUser(uvo,ivo)>0) {
 			model.addAttribute("register", "user");
@@ -107,9 +113,23 @@ public class UserController {
 	}
 	
 	@PostMapping("/reg_buisness")
-	public String buisnessRegisterP(UserVO uvo,Model model) {
+	public String buisnessRegisterP(Model model,
+			@RequestParam("userid") String userid,
+			@RequestParam("userpw") String userpw,
+			@RequestParam("username") String username,
+			@RequestParam("userbirth") String userbirth,
+			@RequestParam("userphone") String userphone,
+			@RequestParam("useremail") String useremail
+			) {
 		log.info("buisnessRegister Post......");
-		log.info(uvo);
+		UserVO uvo = new UserVO();
+		
+		uvo.setUserid(userid);
+		uvo.setUserpw(passwordEncoder.encode(userpw));
+		uvo.setUsername(username);
+		uvo.setUserphone(userphone);
+		uvo.setUseremail(useremail);
+		
 		if(service.regUser(uvo)>0) {
 			model.addAttribute("register", "buisness");
 		}else {

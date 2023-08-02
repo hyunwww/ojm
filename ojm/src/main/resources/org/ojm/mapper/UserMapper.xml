@@ -12,8 +12,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="userbirth" property="userbirth"/>
 		<result column="userphone" property="userphone"/>
 		<result column="useremail" property="useremail"/>
-		<result column="auth" property="auth"/>
+		<collection property="authList" resultMap="authMap" />
 		<collection property="info" resultMap="infoMap" />
+	</resultMap>
+	<resultMap type="org.ojm.domain.AuthVO" id="authMap">
+		<result column="userid" property="userid"/>
+		<result column="auth" property="auth"/>
 	</resultMap>
 	<resultMap type="org.ojm.domain.InfoVO" id="infoMap">
 		<result column="uino" property="uino"/>
@@ -30,9 +34,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	<select id="login" parameterType="map" resultMap="userMap">
 		select 
-			u.userid,u.userpw,u.username,u.userbirth,
-			u.userphone,u.useremail,u.auth,i.* 
-		from usertable u join userinfo i on u.uno = i.uno 
+		    u.userid,u.userpw,u.username,u.userbirth,
+		    u.userphone,u.useremail,a.auth,i.* 
+		from 
+		        usertable u 
+		    left join 
+		        userinfo i 
+		    on u.uno = i.uno
+		    left join 
+		        userauth a 
+		    on u.userid = a.userid
 		where userid=#{id} and userpw=#{pw}
 	</select>
 	<select id="loginBusiness" resultType="org.ojm.domain.UserVO">
@@ -40,10 +51,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<select id="getUser" parameterType="map" resultMap="userMap">
 		select 
-			u.userid,u.userpw,u.username,u.userbirth,
-			u.userphone,u.useremail,u.auth,i.* 
-		from usertable u join userinfo i on u.uno = i.uno 
-		where userid=#{id} and userpw=#{pw}
+		    u.userid,u.userpw,u.username,u.userbirth,
+		    u.userphone,u.useremail,a.auth,i.* 
+		from 
+		        usertable u 
+		    left join 
+		        userinfo i 
+		    on u.uno = i.uno
+		    left join 
+		        userauth a 
+		    on u.userid = a.userid
+		where u.userid=#{id} and u.userpw=#{pw}
 	</select>
 	
 	<insert id="regUser" parameterType="org.ojm.domain.UserVO">
@@ -53,10 +71,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				#{userid},
 				#{userpw},
 				#{username},
+				sysdate,
 				#{userphone},
-				#{useremail},
-				#{auth},
-				sysdate
+				#{useremail}
 				)
 	</insert>
 	<insert id="regUserInfo" parameterType="org.ojm.domain.InfoVO">
@@ -74,6 +91,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				#{ulikejob},
 				#{ugender}
 				)
+	</insert>
+	<insert id="regUserAuth" parameterType="org.ojm.domain.AuthVO">
+		insert into userauth values(#{userid},#{auth})
 	</insert>
 	<update id="modifyUser" parameterType="org.ojm.domain.UserVO">
 		update usertable set
@@ -109,4 +129,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateMailAuth" >
 	   update mail set mail_auth=1 where email=#{email} and mail_key=#{mail_key}
 	</update>
+	
+	<select id="getUserByID" resultMap="userMap">
+		select 
+		    u.userid,u.userpw,u.username,u.userbirth,
+		    u.userphone,u.useremail,a.auth,i.* 
+		from 
+		        usertable u 
+		    left join 
+		        userinfo i 
+		    on u.uno = i.uno
+		    left join 
+		        userauth a 
+		    on u.userid = a.userid
+		where u.userid=#{id}
+	</select>
 </mapper>

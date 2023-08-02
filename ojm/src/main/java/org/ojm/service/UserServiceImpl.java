@@ -1,5 +1,6 @@
 package org.ojm.service;
 
+import org.ojm.domain.AuthVO;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.UserVO;
 import org.ojm.mapper.UserMapper;
@@ -37,9 +38,11 @@ public class UserServiceImpl implements UserService{
 		}
 		return 1;
 	}
+	@Transactional
 	@Override
 	public int regUser(UserVO uvo) {	// 사업자
 		if(mapper.regUser(uvo)>0) {
+			mapper.regUserAuth(new AuthVO(uvo.getUserid(), "ROLE_business"));
 			return 1;
 		}else {
 			return -1;

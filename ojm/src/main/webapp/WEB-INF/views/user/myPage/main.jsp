@@ -2,6 +2,18 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
+<%@ page import="org.springframework.security.core.Authentication" %>
+<%@ page import="org.ojm.security.domain.CustomUser" %>
+<%
+Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+Object principal = auth.getPrincipal();
+
+pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
+%>
 <!DOCTYPE html>
 <html>
 <head>

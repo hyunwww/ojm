@@ -8,17 +8,18 @@
 </head>
 <body>
 	<form action="login" method="post" id="loginForm">
-		id <input type="text" name="id"><br>
-		pw<input type="password" name="pw"><br>
+		id <input type="text" name="username"><br>
+		pw<input type="password" name="password"><br>
 		<input type="button" name="loginBtn" value="로그인">
 		<input type="button" name="registerBtn" value="회원가입">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }">
 	</form>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	var form = $("#loginForm");
-	var id = $("form [name='id']");
-	var pw = $("form [name='pw']");
+	var id = $("form [name='username']");
+	var pw = $("form [name='password']");
 	var login = $("form [name='loginBtn']");
 	var home = $("form [name='registerBtn']");
 

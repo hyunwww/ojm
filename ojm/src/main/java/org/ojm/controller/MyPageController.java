@@ -28,9 +28,9 @@ public class MyPageController {
 	UserService service;
 	
 	@GetMapping("/main")
-	public String myPageMain(@ModelAttribute("uvo") UserVO vo) {
+	public String myPageMain() {
 		
-		log.info("myPageMain...... uno : " + vo.getUno());
+		log.info("myPageMain...... ");
 		return "user/myPage/main";
 	}
 	@GetMapping("/tmp")
