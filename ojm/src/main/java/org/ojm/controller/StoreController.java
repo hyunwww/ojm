@@ -12,6 +12,7 @@ import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
 import org.ojm.service.StoreService;
+import org.ojm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,7 +38,9 @@ import lombok.extern.log4j.Log4j;
 public class StoreController {
 	
 	@Autowired
-	StoreService service;
+	private StoreService service;
+	@Autowired
+	private UserService uService;
 	
 	
 	@GetMapping("/register")
@@ -117,7 +120,6 @@ public class StoreController {
 		
 		
 		
-		
 		return new ResponseEntity<List<StoreVO>>(result, HttpStatus.OK);
 	}
 	
@@ -136,8 +138,8 @@ public class StoreController {
 		InfoVO userInfo = uvo.getInfo();
 		
 		//이 아래에 판단하는 코드 작성 후 isLike에 대입
-		
-		if (userInfo.getUlikestore() != null && userInfo.getUlikestore().equals("")) {
+		if (userInfo.getUlikestore() != null && !userInfo.getUlikestore().equals("")) {
+			log.info(userInfo.getUlikestore());
 			for (String no : userInfo.getUlikestore().split(",")) {
 				if (sno == Integer.parseInt(no)) {
 					isLike = true;
@@ -151,6 +153,7 @@ public class StoreController {
 		
 		
 		
+		log.info("현재 매장 좋아요 여부 : " + isLike); 
 		model.addAttribute("isLike", isLike);
 		model.addAttribute("store" , service.storeInfo(sno));
 		return "/store/storeDetail";
@@ -204,22 +207,44 @@ public class StoreController {
 	}
 	
 	
-	//매장 좋아요 적용 ( 미구현, parameter는 정상 전달 됨 )
+	//매장 좋아요 적용 ( 테스트 미완 , parameter는 정상 전달 됨 )
 	@GetMapping(value = "/likeStore")
 	@ResponseBody
 	public ResponseEntity<Boolean> likeStore(@RequestParam("sno") int sno,
 											@RequestParam("uno") int uno,
-											@RequestParam("current")boolean current) {
+											@RequestParam("current")boolean current,
+											@ModelAttribute("uvo")UserVO uvo) {
 		
 		log.info("storelike process");
 		log.info("sno : " + sno);
 		log.info("uno : " + uno);
 		log.info("current : " + current);
+		//해당 매장 고유번호 user정보에 추가 후 유저정보 수정
+		if (current) {//좋아요 이미 누른 경우 제거
+			uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore().replace(String.valueOf(sno)+",", ""));
+			
+			//db
+			//service.storeLike(sno, -1);
+		}else {//좋아요 아닌 경우 추가
+			if (uvo.getInfo().getUlikestore() == null || uvo.getInfo().getUlikestore().isEmpty()) {
+				uvo.getInfo().setUlikestore(""+sno+",");
+			}else {
+				uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore() +sno+",");
+			}
+			
+			//db
+			//service.storeLike(sno, 1);
+		}
+		log.info(uvo.getInfo().getUlikestore());
+		
+		//db에 변경사항 저장
+		
+		
+		//유저
+		//uService.modifyUser(uvo);
+		
 		
 		// 현재유저의 해당 매장 좋아요 여부 판단하여 true/false 전달
-		
-		
-		
 		return new ResponseEntity<Boolean>(!current, HttpStatus.OK);
 	}
 	

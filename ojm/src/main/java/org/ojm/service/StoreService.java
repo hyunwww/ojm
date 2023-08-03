@@ -19,6 +19,7 @@ public interface StoreService {
 	public int updateRate(int sno);
 	public int deleteStore(int sno);
 	public int updateStore(StoreVO store);
+	public int storeLike(int sno, int amount);
 	
 	
 	

@@ -24,7 +24,7 @@ public class MenuController {
 	
 	
 	@Autowired
-	MenuService service;
+	private MenuService service;
 	
 	// 메뉴 등록( test 끝 )
 	@PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE )

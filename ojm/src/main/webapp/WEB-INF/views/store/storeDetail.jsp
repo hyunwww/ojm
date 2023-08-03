@@ -57,7 +57,24 @@
 	  display: none;
 	  z-index: 1;
 	}
+	p{
+		position: relative;
+	}
+	#distance{
+		position: absolute;
+		padding: 10px;
+		right: 0;
 	
+	
+	}
+	.customInfo{
+		padding: 2px;
+		background-color: wheat;
+		border: 2px solid indianred;
+		border-radius: 5px; 
+		font-family: sans-serif;
+	
+	}
 </style>
 <link rel="stylesheet" href="/resources/css/imgPopup.css">
 <link rel="stylesheet" href="/resources/css/slide.css">
@@ -65,13 +82,28 @@
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript" src="/resources/js/imgPopup.js"></script>
+
 <!-- 지도 관련 스크립트 -->
 <script type="text/javascript">
+	var popMap;	//지도 객체
+	var kd = '${store.kd}';
+	var wd = '${store.wd}';
+	var bounds = new kakao.maps.LatLngBounds(); //지도 범위
 	$(function() {
 		
+		// 마커 이미지의 주소(현재 위치)
+		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
+		    markerImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
+		    markerImageOptions = { 
+		        offset : new kakao.maps.Point(13, 42)// 마커 좌표에 일치시킬 이미지 안의 좌표
+		    };
 		
-		var kd = '${store.kd}';
-		var wd = '${store.wd}';
+		// 마커 이미지를 생성한다
+		var markerImage = new kakao.maps.MarkerImage(markerImageUrl, markerImageSize, markerImageOptions);
+		
+		
+		
+		
 		var coords = new kakao.maps.LatLng(kd, wd);
 		//map
 		var mapContainer = $("#mapContainer")[0];
@@ -83,21 +115,28 @@
 			};
 
 		var map = new kakao.maps.Map(mapContainer, options); //지도 생성 및 객체 리턴
-		var popMap = new kakao.maps.Map(mapModal, {
+		popMap = new kakao.maps.Map(mapModal, {
 			center: coords,
-			level: 3
+			level: 3,
 		});
+		bounds.extend(coords);
+		// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+		var zoomControl = new kakao.maps.ZoomControl();
+		popMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 		
 		var marker = new kakao.maps.Marker({
             map: map,
             position: coords,
+            image : markerImage
         });
 		var popMarker = new kakao.maps.Marker({
             map: popMap,
-            position: coords
+            position: coords,
+            image : markerImage
         });
 		
 		 // 주소-좌표 변환 객체를 생성합니다
+		 // 매장 주소에 해당하는 위치정보가 없는 경우 지도 숨김
         var geocoder = new kakao.maps.services.Geocoder();
 		geocoder.coord2Address(coords.getLng(), coords.getLat(), function(result, status) {
 			
@@ -107,6 +146,13 @@
 				$("#mapContainer").hide();
 			}
 		});
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		//뒤로가기 버튼 이벤트
@@ -124,6 +170,8 @@
 		$("#utilBox span").on("click", function() {
 			alert("좋아요 버튼 이벤트!");
 			var nowLike = '${isLike}';
+			var sno = '${store.sno}';
+			var uno = '${store.uno}';
 			//uno, sno 전달 , 버튼 css 변경
 			$.ajax({
 			      type: "get",
@@ -132,8 +180,7 @@
 			    	  	 uno : uno,
 			    	  	 current : nowLike},
 			      success: function (result, status, xhr) {
-			    	  console.log(result);
-			    	  
+			    	  console.log(Object.values(result));
 			    	  if(result){
 			    		  $("#utilBox span").addClass("enabledLike");
 			    		  $("#utilBox span").removeAttr("id");
@@ -168,8 +215,12 @@
 		$("#mapContainer").click(function() {
 			$(".map-overlay").show();
 			popMap.relayout();
-			popMap.panTo(coords);
+			popMap.setBounds(bounds);
+			//popMap.panTo(coords);
+			
 		});
+		
+		
 		// 지도 모달 바깥 클릭 시 닫힘
         window.onclick = function(event) {
 			var mapOverlay = $(".map-overlay")[0];
@@ -181,11 +232,73 @@
 
 </script>
 <script type="text/javascript" src="/resources/js/slide.js"></script>
-<script type="text/javascript">
-	var sno = '${store.sno}';
-	var uno = '${uvo.uno}';
-	//imgLoad(sno);
+<script type="text/javascript">  /* 현재 위치 및 거리 계산*/
+	var distance;	//현재 위치로부터의 거리
+	$(function() {
+		navigator.geolocation.getCurrentPosition(
+				function(position) {
+					
+					// 마커 이미지 생성
+					var targetImageUrl = '/resources/img/icon/free-icon-location-pointer-2098567.png', 
+					    targetImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
+					    targetImageOptions = { 
+					        offset : new kakao.maps.Point(13, 42)// 마커 좌표에 일치시킬 이미지 안의 좌표
+					    };
+					
+					var targetMarkerImage = new kakao.maps.MarkerImage(targetImageUrl, targetImageSize, targetImageOptions);
+
+					
+					var currentLocMarker = new kakao.maps.Marker({
+			            map: popMap,
+			            position: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
+			            image : targetMarkerImage
+			        });
+					bounds.extend(currentLocMarker.getPosition());
+					distance = getDistance(kd,wd,position.coords.latitude,position.coords.longitude);
+					console.log("현재 위치로부터의 거리 : " + distance + " km");
+					$("#distance").html(distance+" km");
+					
+					// 커스텀 오버레이를 생성합니다
+					var customOverlay = new kakao.maps.CustomOverlay({
+					    map: popMap,
+					    position: currentLocMarker.getPosition(),
+					    content: '<div class="customInfo" style="padding:3px;">현재 위치</div>',
+					    xAnchor: 0.45,
+					    yAnchor: 2.5
+					});
+
+					
+				}, 
+				function() {
+					alert("geolocation error");
+				}
+				);
+	});
 	
+	//거리계산함수
+	function getDistance(lat1, lon1, lat2, lon2) {
+		if ((lat1 == lat2) && (lon1 == lon2)) {
+			return 0;
+		}
+		else {
+			var radlat1 = Math.PI * lat1/180;
+			var radlat2 = Math.PI * lat2/180;
+			var theta = lon1-lon2;
+			var radtheta = Math.PI * theta/180;
+			var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+			if (dist > 1) {
+				dist = 1;
+			}
+			dist = Math.acos(dist);
+			dist = dist * 180/Math.PI;
+			dist = dist * 60 * 1.1515;
+			dist = dist * 1.609344 
+			
+			//결과 단위 : km
+			return dist.toFixed(1);
+		}
+	}
+
 </script>
 </head>
 <body>
@@ -203,7 +316,7 @@
 		      <div class="slide_next_button slide_button">▶</div>
 		      <ul class="slide_pagination"></ul>
 		    </div>
-			<p>이름 : ${store.sname }</p>
+			<p>이름 : ${store.sname }<span id="distance"></span></p>
 			<p>주소 : ${store.saddress }</p>
 			<p>영업시간 : ${store.openHour }</p>
 			<p>예약금 : ${store.sdepo }</p>
@@ -274,7 +387,7 @@
 					<div class="form-group">
 						<span class="star"> ★★★★★ <span id="rvstar">★★★★★</span> <input
 							type="range" name="rvstar" oninput="myFunction(this.value)"
-							value="1" step="1" min="1" max="10">
+							value="0" step="0.5" min="0" max="5">
 						</span>
 					</div>
 					<span>내용</span>
@@ -283,7 +396,7 @@
 						<input type="hidden" name="uno" value="5">
 						<input type="hidden" name="rvlike" value="1">
 						<!--<input type="hidden" name="pageNum" value="1">
-			<input type="hidden" name="amount" value="10">-->
+						<input type="hidden" name="amount" value="10">-->
 					</div>
 					<button type="button" id="close-modal" data-oper="reset" class="btn-reset">취소</button>
 					<button type="submit" data-oper="register" class="btn">등록</button>
@@ -312,10 +425,7 @@
 	
 	<!-- 지도 팝업  -->
 	<div class="map-overlay">
-		<div class="mapModal">
-			
-		
-		</div>
+		<div class="mapModal"></div>
 	</div>
 	
 	
@@ -327,7 +437,7 @@
 	<script type="text/javascript"> /* review 모달 스크립트  */
 		function myFunction(drawstar) {
 			//const drawstar = document.querySelector('.star input');
-			document.querySelector('.star span').style.width = drawstar * 10
+			document.querySelector('.star span').style.width = drawstar * 20
 					+ '%';
 		}
 		const modal = document.getElementById("modal");

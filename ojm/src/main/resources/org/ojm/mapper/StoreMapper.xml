@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateRate" parameterType="int">
 		update store
 		set sstar = 
-		(select nvl(round(avg(rvstar),1), 0) from review) 
+		(select nvl(round(avg(rvstar),1), 0) from review where sno = #{sno}) 
 		where sno = #{sno}
 	</update>
 	
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<!-- 좋아요 수 제어  -->
-	<update id="storeLike" >
+	<update id="storeLike" parameterType="int">
 		update store
 		set slike = slike + #{amount} 
 		where sno = #{sno}
@@ -81,8 +81,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!-- 매장 필터링  -->
-	<select id="searchStoreByCate" parameterType="Map" resultType="org.ojm.domain.StoreVO">
-			select * from store  
+	
+	<!-- review내용을 포함한 store 정보 -->
+	<resultMap type="org.ojm.domain.StoreVO" id="storeMap">
+		<result property="sno" column="sno"/>
+		<result property="uno" column="uno"/>
+		<result property="kd" column="kd"/>
+		<result property="wd" column="wd"/>
+		<result property="sname" column="sname"/>
+		<result property="saddress" column="saddress"/>
+		<result property="sphone" column="sphone"/>
+		<result property="scate" column="scate"/>
+		<result property="sdeli" column="sdeli"/>
+		<result property="scrn" column="scrn"/>
+		<result property="sdepo" column="sdepo"/>
+		<result property="slike" column="slike"/>
+		<result property="sstar" column="sstar"/>
+		<result property="spermmit" column="spermmit"/>
+		<result property="openHour" column="openhour"/>
+		<result property="smaxreserv" column="smaxreserv"/>
+		<collection property="revList" resultMap="reviewMap"></collection>
+	</resultMap>
+	
+	<!-- 리뷰 정보  -->
+	<resultMap type="org.ojm.domain.ReviewVO" id="reviewMap">
+		<result property="rvno" column="rvno"/>
+		<result property="sno" column="sno_1"/>
+		<result property="uno" column="uno_1"/>
+		<result property="rvstar" column="rvstar"/>
+		<result property="rvcontent" column="rvcontent"/>
+		<result property="rvlike" column="rvlike"/>
+		<result property="rvdate" column="rvdate"/>
+	</resultMap>
+	
+	<select id="searchStoreByCate" parameterType="Map" resultMap="storeMap">
+			select * from store s left join review r on s.sno = r.sno 
 			<choose>
 				<when test="cateList != null and cateList.size() > 0">
 					where scate in 

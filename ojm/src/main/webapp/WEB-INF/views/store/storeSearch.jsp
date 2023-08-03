@@ -72,7 +72,43 @@
   
   
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript"> /* 현재 위치정보 및 거리계산 스크립트 */
+	var currPosition;	//현재 위치정보
+
+		navigator.geolocation.getCurrentPosition(
+				function(position) {
+					currPosition = position;
+				}, 
+				function() {
+					alert("geolocation error");
+				});
+	
+	//거리계산함수
+	function getDistance(lat1, lon1, lat2, lon2) {
+		if ((lat1 == lat2) && (lon1 == lon2)) {
+			return 0;
+		}
+		else {
+			var radlat1 = Math.PI * lat1/180;
+			var radlat2 = Math.PI * lat2/180;
+			var theta = lon1-lon2;
+			var radtheta = Math.PI * theta/180;
+			var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+			if (dist > 1) {
+				dist = 1;
+			}
+			dist = Math.acos(dist);
+			dist = dist * 180/Math.PI;
+			dist = dist * 60 * 1.1515;
+			dist = dist * 1.609344;
+			
+			//결과 단위 : km
+			return dist.toFixed(1);
+		}
+	}
+</script>
 <script type="text/javascript">
+	var storeResult = [];
 	$(function() {
 		
 		
@@ -91,7 +127,7 @@
 		})
 		
 		//좌측 필터링 적용하여 검색하기
-		$(".sideFilter input,select").change(function() {
+		$(".sideFilter input,.sideFilter select").change(function() {
 			
 			var selectedCate = $("input[name='scate']:checked");
 			var selectedLocation = $(".sideFilter select").val();
@@ -115,14 +151,20 @@
 			      data: {scate : scate,
 			    	  	location : selectedLocation},
 			      success: function (result, status, xhr) {
-			    	  console.log(result);
 			    	  
 			    	  
 			    	  $("#searchResult").empty();
-			    	  
 			    	  var str = "";
+			    	  storeResult = [];
 			    	  if (result.length > 0) {
 				    	  for (var store of result) {
+				    		  //거리 정보 부여
+				    		  store.distance = getDistance(Number(store.kd), Number(store.wd), currPosition.coords.latitude, currPosition.coords.longitude)
+				    		  //출력될 태그 부여
+				    		  store.str = '<hr><p>이름 : <a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></p>';
+				    		  
+				    		  
+				    		  storeResult.push(store);
 				    		  str += '<hr><p>이름 : <a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></p>';
 						  }
 				    	  $("#searchResult").append(str);
@@ -134,10 +176,70 @@
 					  
 			      }
 			});
-			  
-			
 		});
 		
+		// 결과 정렬
+		$("select[name='sort']").change(function() {
+			switch ($(this).val()) {
+			case 'review':
+				storeResult.sort(function(a, b) {
+					return b.revList.length - a.revList.length;
+				})
+				
+				console.log(storeResult);
+				var str = "";
+				for (var store of storeResult) {
+					str += store.str + "현재 리뷰 수 : " + store.revList.length;
+				}
+				$("#searchResult").empty();
+				$("#searchResult").append(str);
+				
+				break;
+			case 'star':
+				storeResult.sort(function(a, b) {
+					return b.sstar - a.sstar;
+				})
+				
+				console.log(storeResult);
+				var str = "";
+				for (var store of storeResult) {
+					str += store.str + "평균 평점 : " + store.sstar;
+				}
+				$("#searchResult").empty();
+				$("#searchResult").append(str);
+				
+				
+				break;
+			case 'like':
+				storeResult.sort(function(a, b) {
+					return b.slike - a.slike;
+				})
+				console.log(storeResult);
+				var str = "";
+				for (var store of storeResult) {
+					str += store.str + "현재 좋아요수 : " + store.slike;
+				}
+				$("#searchResult").empty();
+				$("#searchResult").append(str);
+				break;
+			case 'distance':
+				storeResult.sort(function(a, b) {
+					return a.distance - b.distance;
+				})
+				console.log(storeResult);
+				var str = "";
+				for (var store of storeResult) {
+					str += store.str + "거리 : " + store.distance + " km";
+				}
+				$("#searchResult").empty();
+				$("#searchResult").append(str);
+				
+				break;
+
+			default:
+				break;
+			}
+		});
 		
 	});
 
@@ -157,6 +259,12 @@
 					      <button type="button" title="Search" id="searchBtn">search</button>
 					      <button type="button" id="mainBtn">goMain</button>
 				    </form>
+				    <select name="sort">
+				    	<option value="review">리뷰</option>
+				    	<option value="star">별점</option>
+				    	<option value="like">좋아요</option>
+				    	<option value="distance">거리</option>
+				    </select>
 				</div>
 				<h4>검색 결과</h4>
 				<div id="searchResult">

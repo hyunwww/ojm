@@ -25,13 +25,13 @@ import lombok.extern.log4j.Log4j;
 public class StoreServiceImpl implements StoreService{
 	
 	@Autowired
-	StoreMapper mapper;
+	private StoreMapper mapper;
 	@Autowired
-	MenuMapper mMapper;
+	private MenuMapper mMapper;
 	@Autowired
-	StoreImgMapper iMapper;
+	private StoreImgMapper iMapper;
 	@Autowired
-	ReviewMapper rMapper ;
+	private ReviewMapper rMapper ;
 	
 	@Override
 		public List<StoreVO> allStores() {
@@ -157,5 +157,11 @@ public class StoreServiceImpl implements StoreService{
 		
 		
 		return result;
+	}
+	
+	//좋아요 적용
+	@Override
+	public int storeLike(int sno, int amount) {
+		return mapper.storeLike(sno, amount);
 	}
 }
