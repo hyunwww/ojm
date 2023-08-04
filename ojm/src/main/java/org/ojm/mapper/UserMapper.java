@@ -26,5 +26,6 @@ public interface UserMapper {
 	public int updateMailAuth(@Param("email") String email,@Param("mail_key") String mail_key);
 	
 	public UserVO getUserByID(String userid);
+	public int idCheck(String userid);
 	
 }

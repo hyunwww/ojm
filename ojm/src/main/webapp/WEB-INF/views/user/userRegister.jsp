@@ -8,7 +8,9 @@
 </head>
 <body>
 	<form action="" method="post">
-		id<input type="text" name="userid"><br>
+		id<input type="text" name="userid" id="userid">
+		<input type="button" value="중복확인" onclick="idCheck()"><br>
+		
 		pw<input type="text" name="userpw" id="userpw"><br>
 		pw확인<input type="text" id="userpw2"><b id="pwchecked"></b><br>
 		이름<input type="text" name="username"><br>
@@ -57,6 +59,8 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 	
+	var idChecked = false;
+	
 	function check(f){	// 빈칸 체크
 		console.log(f);
 		
@@ -81,6 +85,9 @@
 		ufavor = ufavor.slice(0, -1);  */
 		if(f.userid.value==''){
 			alert("아이디를 입력해주세요.");
+			return;
+		}else if(!idChecked){
+			alert("중복 확인을 해주세요.");
 			return;
 		}else if(f.userpw.value==''){
 			alert("비밀번호를 입력해주세요.");
@@ -116,6 +123,25 @@
 		}
 	});
 	
+	function idCheck(){	// id 중복체크
+		var userid = $("#userid").val();
+		console.log(userid);
+		
+		$.ajax({	
+	      	type : 'post',
+	     	url : 'userIdCheck',
+	      	data: {userid:userid},
+	     	success : function(){ 
+	     		alert("가입 가능한 아이디입니다")
+	     		idChecked=true;
+	      	},
+	      	error : function(result){
+	      		console.log(result.responseText);
+	      		alert("중복된 아이디입니다.")
+	      		idChecked=false;
+	      	}
+		});
+	}
 	
 	
 	

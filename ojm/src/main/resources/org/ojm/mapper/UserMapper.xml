@@ -144,4 +144,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    on u.userid = a.userid
 		where u.userid=#{id}
 	</select>
+	<select id="idCheck" resultType="int">
+		select count(*) from usertable where userid=#{userid}
+	</select>
 </mapper>

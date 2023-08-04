@@ -16,4 +16,6 @@ public interface UserService {
 	public int newMailKey(String email,String mail_key);
 	public int updateMailKey(String email,String mail_key);
 	public int updateMailAuth(String email,String mail_key);
+	
+	public int idCheck(String userid);
 }

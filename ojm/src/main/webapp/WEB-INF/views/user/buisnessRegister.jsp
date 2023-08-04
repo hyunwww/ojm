@@ -51,7 +51,7 @@
 			return;
 		}
 		
-		f.action="reg_buisness" 
+		f.action="regBuisness" 
 		f.submit();
 	}
 	$('#userpw2').focusout(function() {
