@@ -155,6 +155,10 @@ public class UserController {
 	public void findID() {
 		log.info("findID......");
 	}
+	@GetMapping("/findPw")
+	public void findPw() {
+		log.info("findPw......");
+	}
 
 	@PostMapping("/findIDCheck")
 	public void findIDCheck(@RequestParam("useremail") String useremail, @RequestParam("username") String username,
@@ -171,6 +175,19 @@ public class UserController {
 		}
 
 		model.addAttribute("userid", id);
+		model.addAttribute("useremail", useremail);
+		model.addAttribute("mail_key", sendMail(useremail));
+	}
+	@PostMapping("/findPwCheck")
+	public void findPwCheck(Model model,
+			@RequestParam("useremail") String useremail, 
+			@RequestParam("userid") String userid) throws Exception {
+		log.info("findPwCheck......");
+		log.info("id : " + userid);
+		log.info("email : " + useremail);
+		
+		
+		model.addAttribute("userid", userid);
 		model.addAttribute("useremail", useremail);
 		model.addAttribute("mail_key", sendMail(useremail));
 	}

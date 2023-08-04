@@ -50,9 +50,10 @@
 		     	url : 'mail_keyCheck',
 		      	data: {mail_key:mail_key,useremail:useremail},
 		     	success : function(result){ 
-		     		alert("success")
+		     		alert('당신의 아이디 : ${userid}');
 		     		console.log($("#idArea").html());
-		     		$("#idArea").html('당신의 아이디 : ${userid}');
+		     		$("#idArea").html('당신의 아이디 : ${userid}'
+		     				+ '<input type="button" id="pwBtn" value="비밀번호 변경">');
 		      	},
 		      	error : function(result){
 		      		console.log(result.responseText);
@@ -62,8 +63,21 @@
 			alert('${mail_key}');
 		}
 	});
+	
 	home.on("click",function(){
-		location.href="/user/register";
+		location.href="/";
 	});
+	
+	$(document).on("click","#pwBtn", function(){	// 동적 추가된 요소에 이벤트 걸기
+		console.log("pwBtn");
+		form.attr("method","Post");
+		form.attr("action","");	// 비밀번호 변경 url로
+		
+		form.append($('<input>', {type: 'hidden', name: 'userid', value: '${userid}'}));
+		form.append($('<input>', {type: 'hidden', name: 'useremail', value: '${useremail}'}));
+		
+		form.submit();
+	});
+		
 </script>
 </html>
