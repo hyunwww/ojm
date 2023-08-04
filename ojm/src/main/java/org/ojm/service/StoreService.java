@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
+import org.ojm.domain.UserVO;
 
 public interface StoreService {
 	
@@ -23,7 +24,8 @@ public interface StoreService {
 	public int storeLike(int sno, int amount);
 	
 	
-	
+	//user관련 (임시 테스트용)
+	public UserVO getUserById(String id);
 	
 	//storeimg 관련
 	public int removeImg(int sino);

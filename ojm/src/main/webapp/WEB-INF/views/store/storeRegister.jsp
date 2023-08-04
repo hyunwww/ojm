@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -277,6 +278,13 @@
 </script>
 </head>
 <body>
+	<!-- 로그인 확인  -->
+	<sec:authorize access="isAnonymous()">
+		<script type="text/javascript">
+			alert("로그인이 필요한 서비스입니다.");
+			location.href='/user/login';
+		</script>
+	</sec:authorize>
 	<div id="wrapper">
 		<h2>register</h2>
 		<form action="#" id="regForm" method="post">

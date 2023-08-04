@@ -1,5 +1,6 @@
 package org.ojm.service;
 
+import org.ojm.domain.AuthVO;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.UserVO;
 import org.ojm.mapper.UserMapper;
@@ -32,14 +33,17 @@ public class UserServiceImpl implements UserService{
 		if(mapper.regUser(uvo)>0) {
 			mapper.regUserInfo(ivo);
 			mapper.newMailKey(uvo.getUseremail(), " ");
+			mapper.regUserAuth(new AuthVO(uvo.getUserid(), "ROLE_user"));
 		}else {
 			return -1;
 		}
 		return 1;
 	}
+	@Transactional
 	@Override
 	public int regUser(UserVO uvo) {	// 사업자
 		if(mapper.regUser(uvo)>0) {
+			mapper.regUserAuth(new AuthVO(uvo.getUserid(), "ROLE_business"));
 			return 1;
 		}else {
 			return -1;
@@ -73,6 +77,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int updateMailAuth(String email, String mail_key) { // 체크
 		return mapper.updateMailAuth(email, mail_key);
+	}
+	
+	@Override
+	public int idCheck(String userid) {	// 아이디 중복체크
+		return mapper.idCheck(userid);
 	}
 	
 }

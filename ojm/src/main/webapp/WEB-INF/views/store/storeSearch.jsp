@@ -90,7 +90,6 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript"> /* 현재 위치정보 및 거리계산 스크립트 */
 	var currPosition;	//현재 위치정보
-
 		navigator.geolocation.getCurrentPosition(
 				function(position) {
 					currPosition = position;

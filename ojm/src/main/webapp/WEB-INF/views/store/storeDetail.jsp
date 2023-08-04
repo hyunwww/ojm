@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,13 +90,15 @@
 	//필요 유저 정보 ?
 	var nowLike = '${isLike}';
 	var sno = '${store.sno}';
-	var uno = '${store.uno}';
 
 	var popMap;	//지도 객체
 	var kd = '${store.kd}';
 	var wd = '${store.wd}';
 	var bounds = new kakao.maps.LatLngBounds(); //지도 범위
 	$(function() {
+		var user = '${user}';
+		console.log(user);
+		
 		
 		// 마커 이미지의 주소(현재 위치)
 		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
@@ -159,6 +162,11 @@
 		
 		
 		
+		//리뷰버튼(비로그인) 이벤트
+		$("#revBtn").on("click", function() {
+			alert("로그인이 필요한 서비스입니다.");
+			location.href = '/user/login';
+		});
 		
 		
 		//뒤로가기 버튼 이벤트
@@ -181,7 +189,6 @@
 			      type: "get",
 			      url: "/store/likeStore",
 			      data: {sno : sno,
-			    	  	 uno : uno,
 			    	  	 current : nowLike},
 			      success: function (result, status, xhr) {
 			    	  if(result){
@@ -198,16 +205,11 @@
 			});
 		});
 		
-		//리뷰작성 버튼 이벤트
-		$("#revBtn").on("click", function() {
-			alert("작성 버튼 이벤트!");
-		});
 		
 		//예약하기 버튼 이벤트
 		$("#bookBtn").on("click", function() {
 			alert("예약 버튼 이벤트!");
 		});
-		
 		
 		//이미지 클릭 이벤트
 		$("#storeDetail img").on("click", function() {
@@ -308,9 +310,17 @@
 </script>
 </head>
 <body>
+
+	<sec:authorize access="isAuthenticated()">
+		<sec:authentication property="principal" var="user"/>
+	</sec:authorize>
+	
 	<!-- 매장 정보 -->
 	<div class="wrapper">
 		<h2>detail</h2>
+		<c:if test="${not empty user }">
+			<h3>${user }</h3>
+		</c:if>
 		<div id="storeDetail">
 			<div class="slide slide_wrap">
 			  <c:forEach var="img" items="${store.imgList }">
@@ -362,7 +372,13 @@
 		<div id="btnContainer" style="text-align: right; padding: 10px;">
 			<button id="backBtn">뒤로</button>
 			<button id="reportBtn" style="background-color: maroon;">신고</button>
-			<button id="open-modal">리뷰 작성</button>
+			
+			<sec:authorize access="isAuthenticated()">
+				<button id="open-modal">리뷰 작성</button>
+			</sec:authorize>
+			<sec:authorize access="isAnonymous()">
+				<button id="revBtn">리뷰 작성</button>
+			</sec:authorize>
 			<button id="bookBtn">예약</button>
 		</div>
 		
@@ -449,11 +465,13 @@
 		const modal = document.getElementById("modal");
 		const openModalBtn = document.getElementById("open-modal");
 		const closeModalBtn = document.getElementById("close-modal");
+		
 		// 모달창 열기
 		openModalBtn.addEventListener("click", () => {
 		  modal.style.display = "block";
 		  document.body.style.overflow = "hidden"; // 스크롤바 제거
 		});
+		
 		// 모달창 닫기
 		closeModalBtn.addEventListener("click", () => {
 		  modal.style.display = "none";

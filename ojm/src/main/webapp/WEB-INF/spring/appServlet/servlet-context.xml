@@ -26,5 +26,11 @@
 	
 	<!-- multipart -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></beans:bean>
-	
+	<!-- interceptor -->
+	<!-- <interceptors>
+		<interceptor>
+			<mapping path="/**"/>
+			<beans:bean id="customInterceptor" class="org.ojm.security.CustomInterceptor"/>
+		</interceptor>
+	</interceptors> -->
 </beans:beans>

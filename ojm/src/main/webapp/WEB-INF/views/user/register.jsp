@@ -19,7 +19,7 @@
 		location.href="reg_user";
 	});
 	$("#reg_buisness").on("click",function(){
-		location.href="reg_buisness";
+		location.href="regBuisness";
 	});
 </script>
 </html>

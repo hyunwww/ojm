@@ -1,12 +1,14 @@
 package org.ojm.controller;
 
 import java.io.File;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.ojm.domain.AuthVO;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
@@ -34,7 +36,6 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @RequestMapping("/store/*")
 @Log4j
-@SessionAttributes("uvo")
 public class StoreController {
 	
 	@Autowired
@@ -54,26 +55,30 @@ public class StoreController {
 							@RequestParam("addr") String addr,
 							@RequestParam("addrDet") String addrDet,
 							@RequestParam("openHour") String openHour,
-							@RequestParam("closeHour") String closeHour) {
+							@RequestParam("closeHour") String closeHour,
+							Principal principal) {
 		
 		log.info("register.. ");
-		
 		
 		if (storeInfo != null) {
 			
 			storeInfo.setSaddress(addr + " " + addrDet);
 			storeInfo.setOpenHour(openHour + " ~ " + closeHour);
 			
-			//user 권한 따라서 permmit 값 결정
-//			if (auth.equals("user")) {
-//				storeInfo.setSpermmit(0);
-//			}else{
-//				storeInfo.setSpermmit(1);	// 1 >> 승인 , 0 >> 대기
-//			}
-			
-			//security 적용 전까지 임시로 무조건 1 부여	
-			storeInfo.setSpermmit(1);	
-
+			//user 권한 따라서 permmit 값 결정,     1 >> 승인 0 >> 대기
+			if (principal != null) {
+				List<AuthVO> auth = service.getUserById(principal.getName()).getAuthList();
+				for (AuthVO avo : auth) {
+					if (avo.getAuth().equals("ROLE_user")) {	//일반 유저
+						storeInfo.setSpermmit(0);
+						break;
+					}else if (avo.getAuth().equals("ROLE")) {	//사업자
+						storeInfo.setSpermmit(1);
+						break;
+					}
+				}
+				
+			}
 			log.info(storeInfo);
 			
 			
@@ -139,30 +144,31 @@ public class StoreController {
 	
 	// 매장 상세정보 ( test 끝 )
 	@GetMapping("/detail")
-	public String detail(Model model, @RequestParam("sno") int sno,
-							@ModelAttribute("uvo")UserVO uvo) {
+	public String detail(Model model, @RequestParam("sno") int sno, Principal principal) {
 		
 		log.info("detail...." + sno);
-		
+		log.info("user : " + principal);
 		
 		//uno을 통해 좋아요 정보 받아와서 처리해야함.
 		// uno >> userinfo >> ulikestore 데이터 가공 후 현재 sno와 일치하는지 확인
 		boolean isLike = false;
-		InfoVO userInfo = uvo.getInfo();
 		
-		//이 아래에 판단하는 코드 작성 후 isLike에 대입
-		if (userInfo.getUlikestore() != null && !userInfo.getUlikestore().equals("")) {
-			log.info(userInfo.getUlikestore());
-			for (String no : userInfo.getUlikestore().split(",")) {
-				if (sno == Integer.parseInt(no)) {
-					isLike = true;
-					break;
+		
+		InfoVO userInfo = service.getUserById(principal.getName()).getInfo();
+		
+		if (principal != null) {	//로그인 정보가 있을경우에만 실행
+			//이 아래에 판단하는 코드 작성 후 isLike에 대입
+			if (userInfo.getUlikestore() != null && !userInfo.getUlikestore().equals("")) {
+				log.info(userInfo.getUlikestore());
+				for (String no : userInfo.getUlikestore().split(",")) {
+					if (sno == Integer.parseInt(no)) {
+						isLike = true;
+						break;
+					}
 				}
+			}else {
 			}
-		}else {
 		}
-		
-		
 		
 		
 		
@@ -224,37 +230,45 @@ public class StoreController {
 	@GetMapping(value = "/likeStore", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<Boolean> likeStore(@RequestParam("sno") int sno,
-											@RequestParam("uno") int uno,
 											@RequestParam("current")boolean current,
-											@ModelAttribute("uvo")UserVO uvo) {
+											Principal principal) {
 		
 		log.info("storelike process");
 		log.info("sno : " + sno);
-		log.info("uno : " + uno);
+		log.info("user : " + principal);
 		log.info("current : " + current);
-		//해당 매장 고유번호 user정보에 추가 후 유저정보 수정
-		if (current) {//좋아요 이미 누른 경우 제거
-			uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore().replace(String.valueOf(sno)+",", ""));
+		
+		if (principal != null) { //유저 로그인 판단
+			//유저
+			UserVO uvo = service.getUserById(principal.getName());
 			
-			//db
-			//service.storeLike(sno, -1);
-		}else {//좋아요 아닌 경우 추가
-			if (uvo.getInfo().getUlikestore() == null || uvo.getInfo().getUlikestore().isEmpty()) {
-				uvo.getInfo().setUlikestore(""+sno+",");
-			}else {
-				uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore() +sno+",");
+			//해당 매장 고유번호 user정보에 추가 후 유저정보 수정
+			if (current && uvo.getInfo().getUlikestore() != null) {//좋아요 이미 누른 경우 제거
+				uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore().replace(String.valueOf(sno)+",", ""));
+				
+				//db
+				//service.storeLike(sno, -1);
+			}else {//좋아요 아닌 경우 추가
+				if (uvo.getInfo().getUlikestore() == null || uvo.getInfo().getUlikestore().isEmpty()) {
+					uvo.getInfo().setUlikestore(""+sno+",");
+				}else {
+					uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore() +sno+",");
+				}
+				
+				//db
+				//service.storeLike(sno, 1);
 			}
+			log.info(uvo.getInfo().getUlikestore());
 			
-			//db
-			//service.storeLike(sno, 1);
+			//db에 변경사항 저장
+			
+			
+			//유저
+			//uService.modifyUser(uvo);
+			
 		}
-		log.info(uvo.getInfo().getUlikestore());
-		
-		//db에 변경사항 저장
 		
 		
-		//유저
-		//uService.modifyUser(uvo);
 		
 		
 		// 현재유저의 해당 매장 좋아요 여부 판단하여 true/false 전달

@@ -10,10 +10,12 @@ import java.util.UUID;
 import org.ojm.domain.MenuVO;
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
+import org.ojm.domain.UserVO;
 import org.ojm.mapper.MenuMapper;
 import org.ojm.mapper.ReviewMapper;
 import org.ojm.mapper.StoreImgMapper;
 import org.ojm.mapper.StoreMapper;
+import org.ojm.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +33,9 @@ public class StoreServiceImpl implements StoreService{
 	@Autowired
 	private StoreImgMapper iMapper;
 	@Autowired
-	private ReviewMapper rMapper ;
+	private ReviewMapper rMapper;
+	@Autowired
+	private UserMapper uMapper;
 	
 	@Override
 		public List<StoreVO> allStores() {
@@ -169,5 +173,12 @@ public class StoreServiceImpl implements StoreService{
 	@Override
 	public List<StoreVO> rank() {
 		return mapper.rank();
+	}
+	
+	
+	//테스트용 유저코드
+	@Override
+	public UserVO getUserById(String id) {
+		return uMapper.getUserByID(id);
 	}
 }
