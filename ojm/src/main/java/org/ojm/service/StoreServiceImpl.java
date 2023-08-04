@@ -164,4 +164,10 @@ public class StoreServiceImpl implements StoreService{
 	public int storeLike(int sno, int amount) {
 		return mapper.storeLike(sno, amount);
 	}
+	
+	// top10
+	@Override
+	public List<StoreVO> rank() {
+		return mapper.rank();
+	}
 }

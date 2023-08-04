@@ -69,7 +69,7 @@
 	}
 	.customInfo{
 		padding: 2px;
-		background-color: wheat;
+		background-color: whitesmoke;
 		border: 2px solid indianred;
 		border-radius: 5px; 
 		font-family: sans-serif;
@@ -85,6 +85,12 @@
 
 <!-- 지도 관련 스크립트 -->
 <script type="text/javascript">
+	
+	//필요 유저 정보 ?
+	var nowLike = '${isLike}';
+	var sno = '${store.sno}';
+	var uno = '${store.uno}';
+
 	var popMap;	//지도 객체
 	var kd = '${store.kd}';
 	var wd = '${store.wd}';
@@ -169,9 +175,7 @@
 		//좋아요 버튼 이벤트
 		$("#utilBox span").on("click", function() {
 			alert("좋아요 버튼 이벤트!");
-			var nowLike = '${isLike}';
-			var sno = '${store.sno}';
-			var uno = '${store.uno}';
+			console.log("nowLike : " + nowLike);
 			//uno, sno 전달 , 버튼 css 변경
 			$.ajax({
 			      type: "get",
@@ -180,14 +184,16 @@
 			    	  	 uno : uno,
 			    	  	 current : nowLike},
 			      success: function (result, status, xhr) {
-			    	  console.log(Object.values(result));
 			    	  if(result){
 			    		  $("#utilBox span").addClass("enabledLike");
 			    		  $("#utilBox span").removeAttr("id");
+			    		  nowLike = true;
 			    	  }else{
 			    		  $("#utilBox span").removeClass("enabledLike");
 			    		  $("#utilBox span").attr("id", "likeBtn");
+			    		  nowLike = false;
 			    	  }
+			    	  
 			      }
 			});
 		});

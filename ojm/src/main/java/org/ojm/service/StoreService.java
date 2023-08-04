@@ -12,6 +12,7 @@ public interface StoreService {
 	public List<StoreVO> searchStore(String input);
 	public List<StoreVO> searchStoreByUno(int uno);
 	public List<StoreVO> searchStoreWithFilter(Map<String, List<String>> map);
+	public List<StoreVO> rank();
 	public StoreVO storeInfo(int sno);
 	public int storeRegister(StoreVO store);
 	public List<StoreImgVO> getStoreImgs(int sno);

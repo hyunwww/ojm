@@ -12,6 +12,7 @@ public interface StoreMapper {
 	public List<StoreVO> searchStore(String input);
 	public List<StoreVO> searchStoreByUno(int uno);
 	public List<StoreVO> searchStoreByCate(Map<String, List<String>> map);
+	public List<StoreVO> rank();
 	public StoreVO storeInfo(int sno);
 	public int updateRate(int sno);
 	public int storePermit(int sno);

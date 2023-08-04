@@ -48,9 +48,19 @@
 		position: fixed;
 		top: 20%;
 		right: 10%;
-		background-color: orange;
+		background-color: lavenderblush;
 		width: 100px;
-		height: 200px;
+		height: auto;
+	}
+	.rankingArea table{
+		text-align: left;
+		border: 1px solid palevioletred;
+		border-collapse: collapse;
+		margin: auto;
+	}
+	.rankingArea td{
+		border: 1px solid palevioletred;
+		border-collapse: collapse;
 	}
 	#loading {
 	  display: inline-block;
@@ -68,10 +78,16 @@
 	@-webkit-keyframes spin {
 	  to { -webkit-transform: rotate(360deg); }
 	}
-	</style>
-  
+	.mapContainer{
+		display: none;
+		width: 85%;
+		height: 200px;
+		margin-left: auto;
+	}
+</style>
   
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript"> /* 현재 위치정보 및 거리계산 스크립트 */
 	var currPosition;	//현재 위치정보
 
@@ -173,6 +189,63 @@
 				    	  $("#searchResult").append(str);
 					}
 			    	  
+			    	  
+			    	//지도 표시=========================================================================================================
+			    	  	
+			    		
+			    		//map
+			    		var bounds = new kakao.maps.LatLngBounds();
+			    		var mapContainer = $(".mapContainer")[0];
+			    		var options = { //지도를 생성할 때 필요한 기본 옵션
+			    				center: new kakao.maps.LatLng(0, 0), //지도의 중심좌표.
+			    				level: 4, //지도의 레벨(확대, 축소 정도)
+			    			};
+
+			    		var map = new kakao.maps.Map(mapContainer, options); //지도 생성 및 객체 리턴
+			    		
+			    		/* 
+			    		// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+			    		var zoomControl = new kakao.maps.ZoomControl();
+			    		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+			    		 */
+			    		
+			    		for (var store of storeResult) {
+			    			//이미지 마커 생성 및 지도범위 설정
+			    			
+			    			// 마커 이미지의 주소
+				    		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
+				    		    markerImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
+				    		    markerImageOptions = { 
+				    		        offset : new kakao.maps.Point(13, 42)// 마커 좌표에 일치시킬 이미지 안의 좌표
+				    		    };
+				    		
+				    		// 마커 이미지를 생성한다
+				    		var markerImage = new kakao.maps.MarkerImage(markerImageUrl, markerImageSize, markerImageOptions);
+				    		var coords = new kakao.maps.LatLng(store.kd, store.wd);
+				    		var marker = new kakao.maps.Marker({
+				    	        map: map,
+				    	        position: coords,
+				    	        image : markerImage
+				    	    });
+				    		
+				    		//지도 범위 설정
+				    		bounds.extend(coords);
+				    		
+				    		if (storeResult.length > 0 && storeResult != null) {
+								$(".mapContainer").show();
+				    			map.relayout();
+				    			map.setBounds(bounds);
+							}
+			    			
+						}
+			    		
+			    		
+			    		
+			    			
+			    		
+			    		
+			    		
+			    		
 					  
 			      }
 			});
@@ -242,7 +315,33 @@
 		});
 		
 	});
-
+	
+	
+	function getRanking() {
+		
+		$.ajax({
+		      type: "get",
+		      url: "/store/rank",
+		      success: function (result, status, xhr) {
+		    	  console.log(result);
+		    	  if (result != null && result.length > 0) {
+		    		  $(".rankingArea table").empty();
+			    	  var str = "";
+			    	  for (var store of result) {
+			    		  str += "<tr>";
+			    		  str += "<td>";
+			    		  str += store.sname;
+			    		  str += "</td>";
+			    		  str += "<td>";
+			    		  str += store.slike;
+			    		  str += "</td>";
+			    		  str += "</tr>";
+						}
+			    	$(".rankingArea table").append(str);
+				}
+		      }
+		});
+	}
 
 </script>
 </head>
@@ -266,7 +365,9 @@
 				    	<option value="distance">거리</option>
 				    </select>
 				</div>
-				<h4>검색 결과</h4>
+				<h4 style="margin: 10px 0;">검색 결과</h4>
+				<div class="mapContainer">
+				</div>
 				<div id="searchResult">
 					<c:choose>
 						<c:when test="${not empty stores }">
@@ -352,6 +453,10 @@
 	
 	<div class="rankingArea">
 		<!-- 좋아요 순 랭킹 나열할 예정  -->
+		<p style="text-align: center; margin: 10px 0;">rank</p>
+		<table>
+		</table>
+		<button onclick="getRanking()">test</button>
 	</div>
 	
 </body>

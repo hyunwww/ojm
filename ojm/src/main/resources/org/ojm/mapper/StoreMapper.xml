@@ -31,6 +31,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from store where spermmit = 1
 	</select>
 	
+	<!-- top10  -->
+	<select id="rank" resultType="org.ojm.domain.StoreVO">
+		<![CDATA[
+			select * from 
+			(select * from store order by slike desc) 
+			where rownum <= 10
+		 ]]>
+	</select>
+	
 	<!-- 특정 매장의 정보 가져오기  -->
 	<select id="storeInfo" parameterType="int" resultType="org.ojm.domain.StoreVO">
 		select * from store where sno = #{sno}
@@ -61,6 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update store
 		set slike = slike + #{amount} 
 		where sno = #{sno}
+		
 	</update>
 	
 	<!-- 검색어로 매장 검색  -->

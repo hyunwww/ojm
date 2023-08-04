@@ -21,20 +21,26 @@ public class StoreMapperTest {
 	@Autowired
 	StoreMapper mapper;
 	
+//	@Test
+//	public void filterTest() {
+//		
+//		log.info("filter!");
+//		List<String> list = new ArrayList<String>();
+//		list.add("한식");
+//		list.add("일식");
+//		Map<String, List<String>> map = new HashMap<String, List<String>>();
+//		map.put("cateList", list);
+//		log.info(map);
+//		log.info(mapper.searchStoreByCate(map));
+//		
+//		
+//		
+//	}
+	
 	@Test
-	public void filterTest() {
+	public void rankTest() {
 		
-		log.info("filter!");
-		List<String> list = new ArrayList<String>();
-		list.add("한식");
-		list.add("일식");
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		map.put("cateList", list);
-		log.info(map);
-		log.info(mapper.searchStoreByCate(map));
-		
-		
-		
+		log.info(mapper.rank());
 	}
 	
 	

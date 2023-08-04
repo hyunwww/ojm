@@ -54,8 +54,7 @@ public class StoreController {
 							@RequestParam("addr") String addr,
 							@RequestParam("addrDet") String addrDet,
 							@RequestParam("openHour") String openHour,
-							@RequestParam("closeHour") String closeHour,
-							@RequestParam("auth") String auth) {
+							@RequestParam("closeHour") String closeHour) {
 		
 		log.info("register.. ");
 		
@@ -64,11 +63,17 @@ public class StoreController {
 			
 			storeInfo.setSaddress(addr + " " + addrDet);
 			storeInfo.setOpenHour(openHour + " ~ " + closeHour);
-			if (auth.equals("user")) {
-				storeInfo.setSpermmit(0);
-			}else{
-				storeInfo.setSpermmit(1);	// 1 >> 승인 , 0 >> 대기
-			}
+			
+			//user 권한 따라서 permmit 값 결정
+//			if (auth.equals("user")) {
+//				storeInfo.setSpermmit(0);
+//			}else{
+//				storeInfo.setSpermmit(1);	// 1 >> 승인 , 0 >> 대기
+//			}
+			
+			//security 적용 전까지 임시로 무조건 1 부여	
+			storeInfo.setSpermmit(1);	
+
 			log.info(storeInfo);
 			
 			
@@ -89,6 +94,14 @@ public class StoreController {
 		model.addAttribute("stores", list);
 		return "/store/storeSearch";
 	}
+	// top10 매장
+	@GetMapping(value = "/rank", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<List<StoreVO>> rank(){
+		return new ResponseEntity<List<StoreVO>>(service.rank(), HttpStatus.OK);
+	}
+	
+	
+	
 	//매장 검색( test끝 , 승인되지않은 매장은 결과에서 제외 )
 	@GetMapping("/search")
 	public String searchStore(@RequestParam("searchInput") String input, Model model) {
@@ -208,7 +221,7 @@ public class StoreController {
 	
 	
 	//매장 좋아요 적용 ( 테스트 미완 , parameter는 정상 전달 됨 )
-	@GetMapping(value = "/likeStore")
+	@GetMapping(value = "/likeStore", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<Boolean> likeStore(@RequestParam("sno") int sno,
 											@RequestParam("uno") int uno,

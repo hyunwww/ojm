@@ -348,7 +348,6 @@
 				</tr>
 			</table>
 			<input type="hidden" value="${uvo.uno }" name="uno">
-			<input type="hidden" value="${uvo.auth }" name="auth">
 		</form>
 		<table>
 			<tr>
