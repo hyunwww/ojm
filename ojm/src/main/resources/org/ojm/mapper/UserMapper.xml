@@ -71,9 +71,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				#{userid},
 				#{userpw},
 				#{username},
-				sysdate,
 				#{userphone},
-				#{useremail}
+				#{useremail},
+				sysdate
 				)
 	</insert>
 	<insert id="regUserInfo" parameterType="org.ojm.domain.InfoVO">

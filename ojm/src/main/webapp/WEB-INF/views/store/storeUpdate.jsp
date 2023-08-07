@@ -1,43 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-	div{
-		text-align: center;
+	#wrapper{
+		width: fit-content;
+		border: 1px solid black;
+		margin: auto;
 	}
-	input[name="smaxreserv"]{
-		display: none;
-	}
-	
-	
 	.thumbnail{
 		width: 100px;
 		background-size: contain;
-	}
-	#wrapper{
-		border: 1px solid black;
-		width: 800px;
-		margin: auto;
-	}
-	#storeTable{
-		width: -webkit-fill-available;
-		text-align: left;
-	}
-	#menuTable{
-		width: fit-content;
-		text-align: left;
-		
-	}
-	#mapContainer{
-		display: none;
-	}
-	#menuContainer li{
-		text-align: left;
 	}
 	.imgBox{
 		display: inline-block;
@@ -48,8 +25,6 @@
 		top: 0%;
 		right: 0%;
 	}
-	
-	
 	.modal {
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
@@ -85,25 +60,12 @@
             cursor: pointer;
         }
 </style>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript" src="../resources/js/menuAjax.js"></script>
 <script type="text/javascript">
-	var currentUno = "${uvo.uno}";
-	if (currentUno == 0) {
-		alert("로그인이 필요한 서비스입니다.");
-		location.href='/';
-	}
-	
+	var sno = '${store.sno}';
 	$(function() {
-		
-		
-		
-		//주소검색 버튼 이벤트
-		$("#searchBtn").on("click" , function() {
-			execPostcode();
-		});
+		getMenuList();
 		
 		$("input[name='deposit']").on("change", function() {
 			$("#depoInput").val($(this).val());
@@ -118,17 +80,6 @@
 			}else{
 				$("#depoInput").attr("disabled", false);
 				$("input[name='deposit']").attr("disabled", false);
-			}
-		});
-		
-		//예약 가능 ox
-		$("input[name='checkReserv']").on("change", function() {
-			console.log($(this)[0].checked);
-			if ($(this)[0].checked) {
-				$("input[name=smaxreserv]").show();
-			}else{
-				$("input[name=smaxreserv]").hide();
-				$("input[name=smaxreserv]").val("");
 			}
 		});
 		
@@ -147,8 +98,9 @@
 				}
 				
 				$("#regForm").attr("method", "post");
-				$("#regForm").attr("action", "/store/register");
+				$("#regForm").attr("action", "/store/update");
 				
+				//메뉴관련 데이터 처리
 				var menuInput = '';
 				for (var i = 0; i < menuList.length; i++) {
 					menuInput += '<input type="hidden" name="menuList['+i+'].mname" value="'+menuList[i].mname+'" />';
@@ -158,152 +110,59 @@
 				}
 				
 				
+				if (deleteTarget != null) {
+					//ajax를 통해 기존파일 삭제된 부분 처리
+					console.log("deleteTarget is not null");
+					
+					$.ajax({
+					      type: "post",
+					      url: "/store/deleteImg",
+					      data: JSON.stringify(deleteTarget),
+					      contentType: "application/json",
+					      success: function (result, status, xhr) {
+					    	  console.log(result);
+					      }
+					});
+					 
+				}
+				
+				
+				
+				//img파일이 담긴 formdata 전송 함수
 				sendFile(files, function() {
-					$("#regForm").append(menuInput);
+					if (menuInput != '') {
+						$("#regForm").append(menuInput);
+					}
 					$("#regForm").submit();
 				});
 				
 				
-			}else if ($(this).data("cmd") == 'back') {	// 뒤로가기 클릭 시 
-				location.href='/';
+			}else if ($(this).data("cmd") == 'goList') {	// 뒤로가기 클릭 시 
+				history.go(-1);
 			} 
 		});
 		
-		
-		
 	});
-	
-	
-	
-	//주소 검색
-	function execPostcode() {
-		new daum.Postcode({
-			oncomplete: function(data) {
-                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                var addr = ''; // 주소 변수
-                var extraAddr = ''; // 참고항목 변수
-
-                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                    addr = data.roadAddress;
-                } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                    addr = data.jibunAddress;
-                }
-
-                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-                if(data.userSelectedType === 'R'){
-                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                        extraAddr += data.bname;
-                    }
-                    // 건물명이 있고, 공동주택일 경우 추가한다.
-                    if(data.buildingName !== '' && data.apartment === 'Y'){
-                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                    }
-                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                    if(extraAddr !== ''){
-                        extraAddr = ' (' + extraAddr + ')';
-                    }
-                    // 조합된 참고항목을 해당 필드에 넣는다.
-                
-                } else {
-                }
-
-                // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                $("input[name='addr']").val(addr);
-                
-                
-              	//map
-              	$("#mapContainer").show();
-        		var mapContainer = $("#mapContainer")[0];
-        		var options = { //지도를 생성할 때 필요한 기본 옵션
-        				center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-        				level: 5 //지도의 레벨(확대, 축소 정도)
-        			};
-
-        		var map = new kakao.maps.Map(mapContainer, options); //지도 생성 및 객체 리턴
-        		// 마우스 드래그와 모바일 터치를 이용한 지도 이동을 막는다
-        		map.setDraggable(false);
-                
-                
-                // 주소-좌표 변환 객체를 생성합니다
-                var geocoder = new kakao.maps.services.Geocoder();
-                
-                geocoder.addressSearch(addr, function(result, status) {
-					
-                	if (status === kakao.maps.services.Status.OK) {
-                		var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                		// 결과값으로 받은 위치를 마커로 표시합니다
-                        var marker = new kakao.maps.Marker({
-                            map: map,
-                            position: coords
-                        });
-                		map.setCenter(coords);
-                		
-                		var kd = '<input type="hidden" name="kd" value="'+result[0].y+'">'
-                		var wd = '<input type="hidden" name="wd" value="'+result[0].x+'">'
-                		$("#regForm").append(kd);
-                		$("#regForm").append(wd);
-					}else{
-						alert("지도 오류");
-					}
-                	
-				});
-	
-               	
-            
-                        
-
-                
-                
-            },
-            onclose: function(state) {
-                //state는 우편번호 찾기 화면이 어떻게 닫혔는지에 대한 상태 변수 이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
-                if(state === 'FORCE_CLOSE'){
-					alert("주소 선택 안함.");
-                } else if(state === 'COMPLETE_CLOSE'){
-                	// 커서를 상세주소 필드로 이동한다.
-                    $("input[name='addrDet']").focus();
-                }
-            }
-		}).open();
-	}
-	
-	
 
 </script>
+
 </head>
 <body>
-	<!-- 로그인 확인  -->
-	<sec:authorize access="isAnonymous()">
-		<script type="text/javascript">
-			alert("로그인이 필요한 서비스입니다.");
-			location.href='/user/login';
-		</script>
-	</sec:authorize>
 	<div id="wrapper">
-		<h2>register</h2>
+		<h2 style="text-align: center;">register</h2>
 		<form action="#" id="regForm" method="post">
 			<table id="storeTable">
 				<tr>
 					<td>가게명</td>
-					<td><input type="text" name="sname"></td>
+					<td><input type="text" name="sname" value="${store.sname }" readonly="readonly"></td>
 				</tr>
 				<tr>
 					<td>주소</td>
-					<td><input type="text" name="addr" readonly="readonly">&nbsp;&nbsp;<button type="button" id="searchBtn">주소 검색</button></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input type="text" name="addrDet" placeholder="상세 주소"></td>
+					<td><input type="text" name="addr" readonly="readonly" value="${store.saddress }"></td>
 				</tr>
 				<tr>
 					<td>전화번호</td>
-					<td><input type="text" name="sphone"></td>
+					<td><input type="text" name="sphone" value="${store.sphone }"></td>
 				</tr>
 				<tr>
 					<td>카테고리</td>
@@ -318,27 +177,21 @@
 					</td>
 				</tr>
 				<tr>
-					<td>예약<input type="checkbox" value="1" name="checkReserv"></td>
-					<td>
-						<input type="number" name="smaxreserv" placeholder="예약 최대 가능 인원">
-					</td>
-				</tr>
-				<tr>
 					<td>영업시간</td>
-					<td><input type="text" name="openHour"> ~ <input type="number" name="closeHour"></td>
+					<td><input type="number" name="openHour" value="${openHour }"> ~ <input type="number" name="closeHour" value="${closeHour }"></td>
 				</tr>
 				<tr>
 					<td>사업자등록번호</td>
-					<td><input type="text" name="scrn"></td>
+					<td><input type="text" name="scrn" value="${store.scrn }"></td>
 				</tr>
 				<tr>
 					<td>예약금</td>
-					<td><input type="number" name="sdepo" id="depoInput" readonly="readonly">&nbsp;예약금 없음<input type="checkbox" name="sdepo" value="0" id="noDeposit"></td>
+					<td><input type="number" name="sdepo" id="depoInput" readonly="readonly" value="${store.sdepo }">&nbsp;예약금 없음<input type="checkbox" name="sdepo" value="0" id="noDeposit"></td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
-						<input type="range" id="deposit" name="deposit" min="0" max="100000" step="1000" value="0">
+						<input type="range" id="deposit" name="deposit" min="0" max="100000" step="1000" value="${store.sdepo }">
   					</td>
 				</tr>
 				<tr>
@@ -350,12 +203,13 @@
 				<tr>
 					<td colspan="2" style="text-align: right;">
 						<input type="button" value="등록" data-cmd="register">
-						<input type="reset" value="다시 작성">
-						<input type="button" value="메인으로" data-cmd="back">
+						<input type="button" value="목록으로" data-cmd="goList">
 					</td>
 				</tr>
 			</table>
+			<input type="hidden" value="${store.sno }" name="sno">
 			<input type="hidden" value="${uvo.uno }" name="uno">
+			<input type="hidden" value="${uvo.auth }" name="auth">
 		</form>
 		<table>
 			<tr>
@@ -372,7 +226,14 @@
 			</tr>
 		</table>
 		<div id="imgContainer">
-			
+			<c:forEach var="img" items="${store.imgList }">
+				<div class="imgBox">
+					<img alt="1" src="/images/${img.uuid }_${img.fileName}" class="thumbnail"
+					 data-name="${img.fileName }" data-type="local" data-inumber="${img.sino }"
+					 data-path="${img.uploadPath }" data-uuid="${img.uuid }">
+					<button class="imgBtn">x</button>
+				</div>
+			</c:forEach>
 		</div>
 		<div id="menuContainer">
 			<ul>
@@ -427,9 +288,29 @@
       	</form>
       </div>
     </div>
-
-</body>
-<script type="text/javascript"> /* modal 및 메뉴 추가 비동기로 */
+	<script type="text/javascript"> //기본값 불러오기
+		(function() {
+			
+			var storeCategory = '${store.scate}';
+			var categories = $("select[name='scate'] option")
+			if ('${store.sdeli}' == '0') {
+				$("input[name='sdeli']").attr("checked", true);	
+			}
+			console.log(categories.length);
+			for (var i = 0; i < categories.length; i++) {
+				if (categories[i].value == storeCategory) {
+					categories[i].setAttribute("selected", true);
+					console.log(categories[i]);
+				}
+			}
+			
+		})();
+	
+	
+	
+	</script>
+	
+	<script type="text/javascript"> /* modal 및 메뉴 추가 비동기로 */
 	var menuForm = $("#myModal form")[0];
 	
 		
@@ -495,11 +376,31 @@
 			});
 		});
         
-
+        function getMenuList() {
+			
+        	$.ajax({
+			      type: "get",
+			      url: "/menu/"+sno,
+			      dataType: 'json',
+			      success: function (result, status, xhr) {
+			    	  for (var menu of result) {
+			    		  menuService.add(menu);
+			    		  // 큰 문제는 아니지만 수정페이지에서 새로고침 시 일정 확률로 순서가 뒤바뀜
+					}
+			    	  
+			      }
+			});
+        	
+        	
+		}
+        
+        
+        
+		
 </script>
 <script type="text/javascript">	// 파일 업로드 스크립트
 	var files = [];
-	
+	var deleteTarget = [];
 	//파일 ajax를 통해 저장하는 함수
 	function sendFile(files, submit) {
 		var formData = new FormData();
@@ -563,11 +464,11 @@
 					return false;
 				}
 			}
-			fileThumbnails(files);
-			 
+			
+			fileThumbnails(inputFile[0].files);
+			console.log(files);
 			//썸네일 보여주기(업로드하려는 파일 시각화)
 			function fileThumbnails(files) {
-				 $("#imgContainer").empty();
 				 for (var image of files) {
 			          var reader = new FileReader();
 			          reader.fileName = image.name;
@@ -576,7 +477,6 @@
 					      var imgBox = $('<div class="imgBox"></div>');
 					      var btn = $('<button class="imgBtn">x</button>');
 					      img.setAttribute("data-name", event.target.fileName);
-					      console.log(event);
 				          img.setAttribute("src", event.target.result);
 				          img.classList.add('thumbnail');
 				          imgBox.append(img);
@@ -595,39 +495,42 @@
 			
 			console.log($(this).closest("div").find("img").data("name"));
 			
-			for (var i = 0; i < files.length; i++) {
-				if (files[i].name == $(this).closest("div").find("img").data("name")) {
-					files.splice(i,1);
-					$(this).closest("div").remove();
-					console.log(files);
-					return;
-					
+			//기존의 파일
+			if ($(this).closest("div").find("img").data("type") == 'local') {
+				alert("기존 파일입니다.");
+				
+				//기존 파일 삭제
+				var fName  = $(this).closest("div").find("img").data("name");
+				var uuid  = $(this).closest("div").find("img").data("uuid");
+				var path = $(this).closest("div").find("img").data("path");
+				var imgNo = $(this).closest("div").find("img").data("inumber");
+				deleteTarget.push({uuid : uuid,
+									uploadPath : path,
+									sino : imgNo,
+									fileName : fName});
+				console.log(deleteTarget);
+				$(this).closest("div").remove();
+				
+				
+				
+			}else{	//추가 이미지 파일
+				// submit할 배열에서 제거
+				for (var i = 0; i < files.length; i++) {
+					if (files[i].name == $(this).closest("div").find("img").data("name")) {
+						files.splice(i,1);
+						$(this).closest("div").remove();
+						console.log(files);
+						return;
+					}
 				}
+				
 			}
-			  
-		});
-		
-		
-		// 파일 삭제 버튼 클릭 이벤트 
-		$(".uploadResult ul").on("click", "button", function() {
-			var targetFile = $(this).data("file");
-			var targetLi = $(this).closest("li");
-			
-			
-			$.ajax({
-			      type: "post",
-			      url: "/deleteFile",
-			      data: {fileName : targetFile},
-			      dataType : 'text',
-			      success: function (result, status, xhr) {
-			    	 	targetLi.remove();
-			      }
-			});
-			 
 			
 		});
+		
 		
 		
 	});
 </script>
+</body>
 </html>

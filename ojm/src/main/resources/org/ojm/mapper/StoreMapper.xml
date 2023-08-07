@@ -21,13 +21,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{slike},
 			#{sstar},
 			#{spermmit}, 
-			#{openHour}
+			#{openHour},
+			#{smaxreserv}
 		)
 	</insert>
 	
 	<!-- 매장의 전체목록(승인 대기 상태의 매장은 제외) -->
 	<select id="allStore" resultType="org.ojm.domain.StoreVO">
 		select * from store where spermmit = 1
+	</select>
+	
+	<!-- top10  -->
+	<select id="rank" resultType="org.ojm.domain.StoreVO">
+		<![CDATA[
+			select * from 
+			(select * from store order by slike desc) 
+			where rownum <= 10
+		 ]]>
 	</select>
 	
 	<!-- 특정 매장의 정보 가져오기  -->
@@ -39,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateRate" parameterType="int">
 		update store
 		set sstar = 
-		(select nvl(round(avg(rvstar),1), 0) from review) 
+		(select nvl(round(avg(rvstar),1), 0) from review where sno = #{sno}) 
 		where sno = #{sno}
 	</update>
 	
@@ -56,15 +66,95 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<!-- 좋아요 수 제어  -->
-	<update id="storeLike" >
+	<update id="storeLike" parameterType="int">
 		update store
 		set slike = slike + #{amount} 
 		where sno = #{sno}
+		
 	</update>
 	
 	<!-- 검색어로 매장 검색  -->
 	<select id="searchStore" parameterType="String" resultType="org.ojm.domain.StoreVO">
 		select * from store where sname like #{input} and spermmit = 1
 	</select>
+	
+	<!-- 유저번호에 해당하는 매장 불러오기 -->
+	<select id="searchStoreByUno" parameterType="int" resultType="org.ojm.domain.StoreVO">
+		select * from store where uno = #{uno}
+	</select>
+	
+	<!-- 매장 정보 수정  -->
+	<update id="updateStore" parameterType="org.ojm.domain.StoreVO">
+		update store set scate = #{scate} , sdepo = #{sdepo} , sphone = #{sphone} , openhour = #{openHour} , scrn = #{scrn} 
+		where sno = #{sno}
+	</update>
+	
+	
+	<!-- 매장 필터링  -->
+	
+	<!-- review내용을 포함한 store 정보 -->
+	<resultMap type="org.ojm.domain.StoreVO" id="storeMap">
+		<result property="sno" column="sno"/>
+		<result property="uno" column="uno"/>
+		<result property="kd" column="kd"/>
+		<result property="wd" column="wd"/>
+		<result property="sname" column="sname"/>
+		<result property="saddress" column="saddress"/>
+		<result property="sphone" column="sphone"/>
+		<result property="scate" column="scate"/>
+		<result property="sdeli" column="sdeli"/>
+		<result property="scrn" column="scrn"/>
+		<result property="sdepo" column="sdepo"/>
+		<result property="slike" column="slike"/>
+		<result property="sstar" column="sstar"/>
+		<result property="spermmit" column="spermmit"/>
+		<result property="openHour" column="openhour"/>
+		<result property="smaxreserv" column="smaxreserv"/>
+		<collection property="revList" resultMap="reviewMap"></collection>
+	</resultMap>
+	
+	<!-- 리뷰 정보  -->
+	<resultMap type="org.ojm.domain.ReviewVO" id="reviewMap">
+		<result property="rvno" column="rvno"/>
+		<result property="sno" column="sno_1"/>
+		<result property="uno" column="uno_1"/>
+		<result property="rvstar" column="rvstar"/>
+		<result property="rvcontent" column="rvcontent"/>
+		<result property="rvlike" column="rvlike"/>
+		<result property="rvdate" column="rvdate"/>
+	</resultMap>
+	
+	<select id="searchStoreByCate" parameterType="Map" resultMap="storeMap">
+			select * from store s left join review r on s.sno = r.sno 
+			<choose>
+				<when test="cateList != null and cateList.size() > 0">
+					where scate in 
+					<foreach collection="cateList" item="cate" open="(" close=")" separator=",">
+						#{cate} 
+					</foreach> 
+					and 
+				</when>
+				<otherwise>
+					where 1 = 0 or 
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="location != null and location.size() > 0">
+					saddress like
+					<foreach collection="location" item="loc">
+						#{loc}
+					</foreach>
+				</when>
+				<otherwise>
+					1 = 1
+				</otherwise>
+			</choose>
+			
+			
+			
+	</select>
+	
+	
+	
 	
 </mapper>

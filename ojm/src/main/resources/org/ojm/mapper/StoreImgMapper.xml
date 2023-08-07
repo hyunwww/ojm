@@ -20,5 +20,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from storeimg where sno = #{sno}
 	</select>
 	
+	<delete id="removeImg" parameterType="int">
+		delete from storeimg where sino = #{sino}
+	</delete>
 	
 </mapper>
