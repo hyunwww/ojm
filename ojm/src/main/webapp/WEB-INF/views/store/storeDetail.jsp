@@ -318,9 +318,6 @@
 	<!-- 매장 정보 -->
 	<div class="wrapper">
 		<h2>detail</h2>
-		<c:if test="${not empty user }">
-			<h3>${user }</h3>
-		</c:if>
 		<div id="storeDetail">
 			<div class="slide slide_wrap">
 			  <c:forEach var="img" items="${store.imgList }">

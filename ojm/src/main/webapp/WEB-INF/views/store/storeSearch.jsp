@@ -90,6 +90,9 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript"> /* 현재 위치정보 및 거리계산 스크립트 */
 	var currPosition;	//현재 위치정보
+	
+	
+	
 		navigator.geolocation.getCurrentPosition(
 				function(position) {
 					currPosition = position;
@@ -127,6 +130,10 @@
 	$(function() {
 		
 		
+		
+		//순위 차트 불러오기
+		getRanking();
+		
 		//검색 버튼
 		$("#searchBtn").on("click", function() {
 			if ($("input[name='searchInput']").val() == '') {
@@ -146,6 +153,11 @@
 			
 			var selectedCate = $("input[name='scate']:checked");
 			var selectedLocation = $(".sideFilter select").val();
+			var distLimit = $(".sideFilter input[type='range']").val();
+			//범위 표시
+			$("#distLim").html("&nbsp;~ " + distLimit + "km");			
+			
+			
 			var scate = [];
 			// 카테고리 처리
 			for (var i = 0; i < selectedCate.length; i++) {
@@ -175,17 +187,21 @@
 				    	  for (var store of result) {
 				    		  //거리 정보 부여
 				    		  store.distance = getDistance(Number(store.kd), Number(store.wd), currPosition.coords.latitude, currPosition.coords.longitude)
-				    		  //출력될 태그 부여
+				    		//출력될 태그 부여
+				    		if (Number(store.distance) <= Number(distLimit) || Number(distLimit) == 0) {
 				    		  store.str = '<hr><p>이름 : <a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></p>';
-				    		  
-				    		  
 				    		  storeResult.push(store);
 				    		  str += '<hr><p>이름 : <a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></p>';
+							}
+				    		
+				    		  
+				    		
 						  }
 				    	  $("#searchResult").append(str);
-					}else{
-						  str += '<p>일치하는 결과가 없습니다.</p>';
-				    	  $("#searchResult").append(str);
+					}
+			    	  if (storeResult.length < 1) {
+			    		    str += '<p>일치하는 결과가 없습니다.</p>';
+							$("#searchResult").append(str);
 					}
 			    	  
 			    	  
@@ -211,47 +227,64 @@
 			    		for (var store of storeResult) {
 			    			//이미지 마커 생성 및 지도범위 설정
 			    			
-			    			// 마커 이미지의 주소
-				    		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
-				    		    markerImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
-				    		    markerImageOptions = { 
-				    		        offset : new kakao.maps.Point(13, 42)// 마커 좌표에 일치시킬 이미지 안의 좌표
-				    		    };
-				    		
-				    		// 마커 이미지를 생성한다
-				    		var markerImage = new kakao.maps.MarkerImage(markerImageUrl, markerImageSize, markerImageOptions);
-				    		var coords = new kakao.maps.LatLng(store.kd, store.wd);
-				    		var marker = new kakao.maps.Marker({
-				    	        map: map,
-				    	        position: coords,
-				    	        image : markerImage
-				    	    });
-				    		
-				    		//지도 범위 설정
-				    		bounds.extend(coords);
-				    		
-				    		if (storeResult.length > 0 && storeResult != null) {
+			    			var outFunc = function() {	//marker 이벤트 부여를 위한 클로저함수
+			    				// 마커 이미지의 주소
+					    		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
+					    		    markerImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
+					    		    markerImageOptions = { 
+					    		        offset : new kakao.maps.Point(13, 42)// 마커 좌표에 일치시킬 이미지 안의 좌표
+					    		    };
+					    		
+					    		// 마커 이미지를 생성한다
+					    		var markerImage = new kakao.maps.MarkerImage(markerImageUrl, markerImageSize, markerImageOptions);
+					    		var coords = new kakao.maps.LatLng(store.kd, store.wd);
+					    		var marker = new kakao.maps.Marker({
+					    	        map: map,
+					    	        position: coords,
+					    	        image : markerImage
+					    	    });
+					    		//지도 범위 설정
+					    		bounds.extend(coords);
+					    		
+					    		// 마커 이미지(이벤트 발생용)
+					    	    var overImageUrl = '/resources/img/icon/free-icon-restaurant-highlight-4552186.png', 
+					    		    overImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
+					    		    overImageOptions = { 
+					    	            offset : new kakao.maps.Point(13, 42)// 마커 좌표에 일치시킬 이미지 안의 좌표
+					    	        };
+					    	    var overImage = new kakao.maps.MarkerImage(overImageUrl, overImageSize, overImageOptions);
+					    		
+					    	    
+					    	   	function addE() {	//마커에 이벤트 부여
+						    		kakao.maps.event.addListener(marker, 'mouseout', function() {
+						    		    marker.setImage(markerImage);
+						    		    
+						    		});
+						    		kakao.maps.event.addListener(marker, 'mouseover', function() {
+						    		    marker.setImage(overImage);
+						    		    
+						    		});
+								}
+			    				
+			    				return addE();
+			    				
+							};
+							
+							outFunc();
+						}
+			    		 if (storeResult.length > 0 && storeResult != null) {
 								$(".mapContainer").show();
 				    			map.relayout();
 				    			map.setBounds(bounds);
-							}
-			    			
+						}else{
+							$(".mapContainer").hide();
 						}
-			    		
-			    		
-			    		
-			    			
-			    		
-			    		
-			    		
-			    		
-					  
 			      }
 			});
 		});
 		
 		// 결과 정렬
-		$("select[name='sort']").change(function() {
+		$("select[name='sort']").click(function() {
 			switch ($(this).val()) {
 			case 'review':
 				storeResult.sort(function(a, b) {
@@ -297,7 +330,7 @@
 			case 'distance':
 				storeResult.sort(function(a, b) {
 					return a.distance - b.distance;
-				})
+				});
 				console.log(storeResult);
 				var str = "";
 				for (var store of storeResult) {
@@ -307,7 +340,27 @@
 				$("#searchResult").append(str);
 				
 				break;
-
+			case 'name' :
+				storeResult.sort(function(a,b) {
+					if (a.sname > b.sname) {
+						return 1;
+					}
+					if (a.sname < b.sname) {
+						return -1;
+					}
+					if (a.sname === b.sname) {
+						return 0;
+					}
+				});
+				console.log(storeResult);
+				var str = "";
+				for (var store of storeResult) {
+					str += store.str;
+				}
+				$("#searchResult").empty();
+				$("#searchResult").append(str);				
+				break;
+				
 			default:
 				break;
 			}
@@ -322,7 +375,6 @@
 		      type: "get",
 		      url: "/store/rank",
 		      success: function (result, status, xhr) {
-		    	  console.log(result);
 		    	  if (result != null && result.length > 0) {
 		    		  $(".rankingArea table").empty();
 			    	  var str = "";
@@ -358,6 +410,7 @@
 					      <button type="button" id="mainBtn">goMain</button>
 				    </form>
 				    <select name="sort">
+				    	<option value="name">이름</option>
 				    	<option value="review">리뷰</option>
 				    	<option value="star">별점</option>
 				    	<option value="like">좋아요</option>
@@ -413,21 +466,9 @@
 				</div>
 				<br><hr>
 				<div class="category two">
-					<h5>one</h5>
-					<input type="checkbox" name="" value="check">1
-					<input type="checkbox" name="" value="check">2
-					<input type="checkbox" name="" value="check">3
-					<input type="checkbox" name="" value="check">4
-					<input type="checkbox" name="" value="check">5
-				</div>
-				<br><hr>
-				<div class="category three">
-					<h5>평균 평점</h5>
-					<input type="checkbox" name="" value="1">0~1<br>
-					<input type="checkbox" name="" value="2">1~2<br>
-					<input type="checkbox" name="" value="3">2~3<br>
-					<input type="checkbox" name="" value="4">3~4<br>
-					<input type="checkbox" name="" value="5">4~5
+					<h5>거리</h5>
+					<span id="distLim"></span>
+					<input type="range" value="0" min="0" max="50" step="1"  style="width: -webkit-fill-available">
 				</div>
 				<br><hr>
 				<div id="category four">
@@ -455,7 +496,6 @@
 		<p style="text-align: center; margin: 10px 0;">rank</p>
 		<table>
 		</table>
-		<button onclick="getRanking()">test</button>
 	</div>
 	
 </body>
