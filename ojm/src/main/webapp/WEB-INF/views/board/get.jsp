@@ -59,36 +59,34 @@
 		<hr>
 		
 		<!-- 댓글 입력 -->
-		<!-- 로그인 시에만 보이도록 기능 추가해야 함 -->
+		<c:if test="${not empty uvo.uno}">
 		<form>
 			<h3>댓글 작성</h3>
 				<table>
 				<tr>
 					<td>작성자</td>
-					<td><input name="brwriter" value="test" readonly="readonly"></td>
+					<td><input name="brwriter" value="${uvo.username }" readonly="readonly"></td>
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td><textarea id="brcontent" rows="5" cols="50" name="brcontent"></textarea></td>
+					<td><textarea class="brcontent" rows="5" cols="50" name="brcontent"></textarea></td>
 				</tr>		
 			</table>
 		</form>
-		<button name="replyregisterbtn" type="button">댓글 달기</button>
+		<button name="replyregisterbtn" type="submit">댓글 달기</button>
 		<hr>
+		</c:if>
 		
 		<!-- 댓글 출력 -->
 		<h3>댓글 목록</h3>
 		<table class="reply">
 			<tr>
-				<td>작성자</td>
-				<td>내용</td>
-				<td>작성일</td>
 			</tr>
 		</table>
 		<hr>
 		
 		<!-- 작성자 본인일 때에만 게시글 수정이 가능하도록 기능 추가해야 함 -->
-		<c:if test="${vo.uno eq 1}">
+		<c:if test="${vo.bwriter eq uvo.username }">
 			<button data-oper="modify">수정</button>
 		</c:if>
 		<button data-oper="list">목록</button>
@@ -98,6 +96,7 @@
 			<input type="hidden" name="pageNum" value="${cri.pageNum }">
 			<input type="hidden" name="amount" value="${cri.amount }">
 			<input type="hidden" name="total" value="${total }">
+			<input type="hidden" name="uno" value="${uvo.uno }">
 		</form>
 	</body>
 	
@@ -157,137 +156,96 @@
 		});
 	</script>
 	
+	<script type="text/javascript" src="/resources/js/reply.js"></script>
 	<!-- 댓글 관련 스크립트 -->
 	<script type="text/javascript">
-	var bnoValue = "${vo.bno }";
-	function displayTime(timeValue){
-		var today = new Date();
-		var gap = today.getTime() - timeValue;
-		var dateObj = new Date(timeValue);
-		var str = "";
 		
-		if(gap < (1000 * 60 * 60 * 24)){
-			var hh = dateObj.getHours();
-			var mi = dateObj.getMinutes();
-			var ss = dateObj.getSeconds();
-			return [(hh>9 ? '' : '0') + hh, ':', (mi > 9 ? '' : '0') + mi, ':', (ss > 9 ? '' : '0') + ss].join('');
-		}else{
-			var yy = dateObj.getFullYear();
-			var mm = dateObj.getMonth() + 1; // getMonth() is zero-based
-			var dd = dateObj.getDate();
-			return [yy, '/', (mm > 9 ? '' : '0')+mm, '/', (dd > 9 ? '' : '0') + dd].join('');
-		}
-	}
-		
-	
-	$(function() {
-		$("button[name='replyregisterbtn']").on('click', function(){
-			if (document.getElementById("brcontent").value=="") {
-				alert("내용을 입력하세요.");
-				return;
-			}else {
-				var brcontent = $("#brcontent").val();
-				BoardReplyService.add(
-					{brwriter : brwriter, brcontent : brcontent, bno : bnoValue},
-					function(){
-						BoardReplyService.getList({'bno' : bnoValue});
-					}
-				);
-			}
-		});
-		
-		
-	});
-	
-	
-		
-		var brwriter = $("input[name='brwriter']").val();
-		var BoardReplyService = (function(){
-		
-			
-			function add(reply, callback, error){
-				console.log('add reply...');
-				
-				$.ajax({
-					type : 'post',
-					url : '/replies/replyregister',
-					data : JSON.stringify(reply),
-					contentType : 'application/json; charset=utf-8',
-					success : function(result, status, xhr){
-						alert("댓글이 입력되었습니다."); 
-						if (callback) {
-							callback();
-							$("#brcontent").val("");
-						}
-					},
-					error : function(xhr, status, er){
-						if (error) {
-							error(er);
-						}
-					}
-				});
-			}
-			
-			function getReplyList(param){
-				console.log('getList reply...');
-				var bno = param.bno;
-				
-				$.ajax({
-					type : 'get',
-					url : '/replies/' + bno + '.json',
-					success : function(result, status, xhr){
-						var str = '<tr><td>작성자</td><td>내용</td><td>작성일</td></tr>';
-						for (var i = 0; i < result.length; i++) {
-							str += '<tr>';
-							str += '<td>' + result[i].brwriter + '</td>';
-							str += '<td>' + result[i].brcontent + '</td>';
-							str += '<td>' + displayTime(result[i].brdate) + '</td>';
-							str += '</tr>';
-						}
-						$(".reply").html(str);
-						
-					},
-					error : function(xhr, status, er){
-						if (error) {
-							error(er);
-						}
-					}
-				});
-			}
-			
-			return {
-				add : add,
-				getList : getReplyList,
-			};
-			
-		})();
-		
-
-		
-
-
 		$(function(){
-			var replyDiv = $(".reply");		// 댓글 리스트 div
-			BoardReplyService.getList({'bno' : bnoValue});		// 댓글 리스트 바인딩 함수 호출
+			var replyTable = $(".reply");			// 댓글 리스트 table
+			var bnoValue = "${vo.bno }";
+			var unoValue = "${uvo.uno}";
+			var userName = "${uvo.username}";
+			var brwriter = $('input[name = brwriter]').val();
+			var brcontent = $('textarea[name = brcontent]');
+			getList();		// 댓글 리스트 바인딩 함수 호출
+
+			// 댓글 등록 스크립트
+			$("button[name='replyregisterbtn']").on('click', function(){
+				if (brcontent.val() == "") {
+					alert("내용을 입력하세요.");
+					return;
+				}else {
+					var reply = {
+						brwriter : brwriter,
+						brcontent : brcontent.val(),
+						bno : bnoValue,
+						uno : unoValue
+					}
+					BoardReplyService.add(
+						reply,
+						function(result){
+							alert("댓글 등록이 완료되었습니다.");
+							brcontent.val("");
+							getList();
+						}
+					);
+				}
+			});
 			
 			// 댓글 리스트 바인딩 함수
-			/* function getList(){
+			function getList(){
 				BoardReplyService.getList(
 					{'bno' : bnoValue},
 					function(result){
-					var str = '<tr><td>작성자</td><td>내용</td><td>작성일</td></tr>';
-					for (var i = 0; i < result.length; i++) {
-						str += '<tr>';
-						str += '<td>' + result[i].brwriter + '</td>';
-						str += '<td>' + result[i].brcontent + '</td>';
-						str += '<td>' + displayTime(result[i].brdate) + '</td>';
-						str += '</tr>';
-					}
-					replyDiv.html(str);		// replyDiv에 str 추가
+						var str = '';
+						if (result == null || result.length == 0) {
+							replyTable.html('<h3>댓글이 없습니다.</h3>');
+						}else {
+							str += '<tr><td>댓글 번호</td><td>작성자</td><td>내용</td><td>작성일</td><td>삭제</td></tr>';
+							for (var i = 0; i < result.length; i++) {
+								str += '<tr>';
+								str += '<td data-brno="' + result[i].brno + '">' + result[i].brno + '</td>';
+								str += '<td>' + result[i].brwriter + '</td>';
+								str += '<td>' + result[i].brcontent + '</td>';
+								str += '<td>' + displayTime(result[i].brdate) + '</td>';
+								str += '<td>';
+								
+								if (result[i].brwriter == userName) {
+									str += '<button name="replydeletebtn">삭제</button>';								
+								}
+								
+								str += '</td>';
+								str += '</tr>';
+
+								replyTable.html(str);
+							}
+							
+							$("button[name='replydeletebtn']").on('click', function(){
+								
+								var str = "";
+								var tdArr = new Array();
+								var btn = $(this);
+								var tr = btn.parent().parent();
+								var td = tr.children();
+								var brno = td.eq(0).text();
+								
+								var param = {
+										brno : brno,
+										bno : bnoValue
+									}
+								
+								BoardReplyService.remove(
+									param,
+									function(result){
+										alert("댓글 삭제가 완료되었습니다.");
+										getList();
+									}
+								);
+							});
+						}
 					}
 				);
-			} */
+			}
 		});
-
 	</script>
 </html>

@@ -4,6 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<script src = "${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script>
 		<title>Insert title here</title>
 		<script type="text/javascript">
 			var currentUno = "${uvo.uno}";
@@ -30,11 +31,21 @@
 				</tr>
 				<tr>
 					<td>작성자</td>
-					<td><input name="bwriter" id="bwriter" value="${uvo.username }"></td>
+					<td><input name="bwriter" id="bwriter" value="${uvo.username }" readonly="readonly" style="background-color: #ccc"></td>
 				</tr>
-				<tr>
+				<tr>  
 					<td>내용</td>
-					<td><textarea rows="15" cols="100" name="bcontent" id="bcontent"></textarea></td>
+					<td>
+						<textarea rows="15" cols="100" name="bcontent" id="bcontent"></textarea>
+						<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+						<script type="text/javascript">
+							$(function() {
+								CKEDITOR.replace("bcontent",{
+						    		filebrowserUploadUrl : "${pageContext.request.contextPath }/adm/fileupload.do"
+								});
+							});
+						</script>
+					</td>
 				</tr>
 				<tr>
 					<!-- 파일 첨부 -->
@@ -76,9 +87,6 @@
 					return;
 				}else if (document.getElementById("bcate").value=="") {
 					alert("카테고리를 선택하세요.")
-					return;
-				}else if (document.getElementById("bwriter").value=="") {
-					alert("작성자를 입력하세요.");
 					return;
 				}else if (document.getElementById("bcontent").value=="") {
 					alert("내용을 입력하세요.");
