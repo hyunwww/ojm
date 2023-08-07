@@ -1,8 +1,8 @@
 package org.ojm.controller;
 
-
 import javax.mail.MessagingException;
 
+import org.ojm.domain.AuthVO;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.UserVO;
 import org.ojm.mail.MailHandler;
@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @Log4j
 @RequestMapping("/user")
-@SessionAttributes("uvo")	
+@SessionAttributes("uvo")
 // model에 속성을 추가할 때 괄호와 키 값이 같으면 세션에 추가해주는 어노테이션
 // 이 어노테이션이 붙어 있으면 model에서 해당 키값으로 찾을 때 세션에서 찾아줌
 // => 안붙어있는 다른 컨트롤러에서는 세션으로 조회 불가능
@@ -43,134 +44,201 @@ import lombok.extern.log4j.Log4j;
 // 메소드에 @ModelAttribute(key) String value를 파라미터로 넘기면
 // String value = (String)session.getAttribute(key) 와 유사하게 자동 바인딩 해줌
 public class UserController {
-	
+
 	@Setter(onMethod_ = @Autowired)
 	UserService service;
-	
+
+	@Autowired(required = false)
+	JavaMailSender mailSender;
+
 	@Autowired
-    JavaMailSender mailSender;
-	
+	BCryptPasswordEncoder passwordEncoder;
+
 	@GetMapping("/login")
 	public void userLogin() {
 		log.info("loginPage......");
 	}
-	@PostMapping("/login")
-	public String getLogin(@RequestParam("id") String id,
-							@RequestParam("pw") String pw,
-							Model model,
-							SessionStatus status) {
-		log.info("getLogin......" + status );
-		log.info("id : " + id);
-		log.info("pw : " + pw);
-		UserVO vo = service.login(id, pw);
-		log.info(vo);
-		
-		if(vo!=null) {
-			model.addAttribute("uvo", vo);
-			if(vo.getAuth().equals("user")) {
-				return "user/myPage/main";
-			}
-			return "redirect:/user/myPage/tmp";
-		}
-		return "redirect:login";
-	}
+	
+	// 시큐리티 커스텀 로그인 사용으로 더이상 사용 x
+	/*
+	 * @PostMapping("/login") public String getLogin(@RequestParam("id") String id,
+	 * 
+	 * @RequestParam("pw") String pw, Model model, SessionStatus status) {
+	 * log.info("getLogin......" + status ); log.info("id : " + id);
+	 * log.info("pw : " + pw); UserVO vo = service.login(id, pw); log.info(vo);
+	 * 
+	 * if(vo!=null) { model.addAttribute("uvo", vo);
+	 * 
+	 * if(vo.getAuthList().toString().c) { return "user/myPage/main"; }
+	 * 
+	 * return "redirect:/user/myPage/tmp"; } return "redirect:login"; }
+	 */
+	
 	@GetMapping("/register")
 	public String register() {
 		log.info("register......");
 		return "user/register";
 	}
+
 	@GetMapping("/reg_user")
 	public String userRegisterG() {
 		log.info("userRegister......");
 		return "user/userRegister";
 	}
+	
+	// authList 부분 때문에 uservo 자동 매핑이 안되어서 일단 하드 코딩. 해결방법 못찾음
 	@PostMapping("/regUser")
-	public String userRegisterP(UserVO uvo,InfoVO ivo,Model model) {
+	public String userRegisterP(InfoVO ivo, Model model,
+			@RequestParam("userid") String userid,
+			@RequestParam("userpw") String userpw, 
+			@RequestParam("username") String username,
+			@RequestParam("userbirth") String userbirth, 
+			@RequestParam("userphone") String userphone,
+			@RequestParam("useremail") String useremail) {
 		log.info("userRegister Post......");
-		log.info(uvo);
-		log.info(ivo);
-		
-		if(service.regUser(uvo,ivo)>0) {
+		UserVO uvo = new UserVO();
+
+		uvo.setUserid(userid);
+		uvo.setUserpw(passwordEncoder.encode(userpw));
+		uvo.setUsername(username);
+		uvo.setUserphone(userphone);
+		uvo.setUseremail(useremail);
+
+		if (service.regUser(uvo, ivo) > 0) {
 			model.addAttribute("register", "user");
-		}else {
+			//sendMail(useremail);		// 회원가입 시 인증메일 전송
+										// 유저테이블에 인증정보 컬럼 추가하고 첫메일인증 후에 로그인 가능하게
+										// 메일 인증해야 권한 생기게?
+										// 비동기로 권한이나 인증여부 체크 후 성공 시 login 요청?
+		} else {
 			model.addAttribute("register", "fail");
 		}
-		
-		
+
 		return "redirect:login";
 	}
-	
-	@GetMapping("/reg_buisness")
+
+	@GetMapping("/regBuisness")
 	public String buisnessRegisterG() {
 		log.info("buisnessRegister......");
 		return "user/buisnessRegister";
 	}
-	
-	@PostMapping("/reg_buisness")
-	public String buisnessRegisterP(UserVO uvo,Model model) {
+
+	@PostMapping("/regBuisness")
+	public String buisnessRegisterP(Model model, 
+			@RequestParam("userid") String userid,
+			@RequestParam("userpw") String userpw, 
+			@RequestParam("username") String username,
+			@RequestParam("userbirth") String userbirth, 
+			@RequestParam("userphone") String userphone,
+			@RequestParam("useremail") String useremail) {
 		log.info("buisnessRegister Post......");
-		log.info(uvo);
-		if(service.regUser(uvo)>0) {
+		UserVO uvo = new UserVO();
+
+		uvo.setUserid(userid);
+		uvo.setUserpw(passwordEncoder.encode(userpw));
+		uvo.setUsername(username);
+		uvo.setUserphone(userphone);
+		uvo.setUseremail(useremail);
+
+		if (service.regUser(uvo) > 0) {
 			model.addAttribute("register", "buisness");
-		}else {
+		} else {
 			model.addAttribute("register", "fail");
 		}
-		// 가입 성공 시 특정 메세지로 일반 유저,사업자 나누고 
+		// 가입 성공 시 특정 메세지로 일반 유저,사업자 나누고
 		// getRegister 페이지에서 성공/실패에 따라 페이지 나누면 좋을듯.
-		
-		
+
 		return "redirect:login";
 	}
-	
+
 	@GetMapping("/findID")
 	public void findID() {
 		log.info("findID......");
 	}
+	@GetMapping("/findPw")
+	public void findPw() {
+		log.info("findPw......");
+	}
+
 	@PostMapping("/findIDCheck")
-	public void findIDCheck(@RequestParam("useremail") String useremail,
-			@RequestParam("username") String username,Model model) throws Exception {
+	public void findIDCheck(@RequestParam("useremail") String useremail, @RequestParam("username") String username,
+			Model model) throws Exception {
 		log.info("findIDCheck......");
 		log.info("name : " + username);
 		log.info("email : " + useremail);
-		
+
 		String id = service.findID(username, useremail);
 		log.info("ID : " + id);
-		
-		if(id == null) {
+
+		if (id == null) {
 			return;
 		}
-		
-		// 메일 보내기
-		String mail_key = new TempKey().getKey(10,false);	// 몇자리인지
-		log.info("mail_key : " + mail_key);
-		
-		MailHandler sendMail = new MailHandler(mailSender);
-		sendMail.setSubject("인증메일 입니다.");
-		sendMail.setText("인증번호 : " + mail_key);
-        sendMail.setFrom("tmpAdmin@naver.com", "임시");
-        sendMail.setTo(useremail);
-        sendMail.send();
-        
-        service.updateMailKey(useremail, mail_key);
-		
-		model.addAttribute("userid",id);
-		model.addAttribute("useremail",useremail);
-		model.addAttribute("mail_key",mail_key);
+
+		model.addAttribute("userid", id);
+		model.addAttribute("useremail", useremail);
+		model.addAttribute("mail_key", sendMail(useremail));
 	}
+	@PostMapping("/findPwCheck")
+	public void findPwCheck(Model model,
+			@RequestParam("useremail") String useremail, 
+			@RequestParam("userid") String userid) throws Exception {
+		log.info("findPwCheck......");
+		log.info("id : " + userid);
+		log.info("email : " + useremail);
+		
+		
+		model.addAttribute("userid", userid);
+		model.addAttribute("useremail", useremail);
+		model.addAttribute("mail_key", sendMail(useremail));
+	}
+	
+	public String sendMail(String useremail) {	// 메일 보내기
+		String mail_key = new TempKey().getKey(10, false); // 몇자리인지
+		log.info("mail_key : " + mail_key);
+
+		MailHandler sendMail = null;
+		try {
+			sendMail = new MailHandler(mailSender);
+			sendMail.setSubject("인증메일 입니다.");
+			sendMail.setText("인증번호 : " + mail_key);
+			sendMail.setFrom("tmpAdmin@naver.com", "임시");
+			sendMail.setTo(useremail);
+			sendMail.send();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		service.updateMailKey(useremail, mail_key);
+		
+		return mail_key;
+	}
+	
+
 	// 인증코드 확인
 	@ResponseBody
-	@RequestMapping(value = "/mail_keyCheck",
-			method = RequestMethod.POST)
+	@RequestMapping(value = "/mail_keyCheck", method = RequestMethod.POST)
 	public ResponseEntity<String> mail_keyCheck(@RequestParam("mail_key") String mail_key,
-												@RequestParam("useremail") String useremail){
-		
+			@RequestParam("useremail") String useremail) {
+
 		log.info("email : " + useremail);
 		log.info("mail_key : " + mail_key);
-		
+
 		int check = service.updateMailAuth(useremail, mail_key);
-		
-		
-		return check == 1 ? new ResponseEntity<>("success", HttpStatus.OK) :
-				new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		log.info(check);
+
+		return check > 0 ? new ResponseEntity<>("success", HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	@ResponseBody
+	@RequestMapping(value = "/userIdCheck", method = RequestMethod.POST)
+	public ResponseEntity<String> userIdCheck(@RequestParam("userid") String userid) {
+		
+		log.info("userid : " + userid);
+		
+		int check = service.idCheck(userid);
+		
+		return check == 0 ? new ResponseEntity<>("success", HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 }

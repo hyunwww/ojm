@@ -22,7 +22,7 @@
 		<input type="reset" value="다시입력">
 		
 		
-		<input type="hidden" name="auth" value="buisness">
+		<input type="hidden" name="authList" value="buisness">
 	</form>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -51,7 +51,7 @@
 			return;
 		}
 		
-		f.action="reg_buisness" 
+		f.action="regBuisness" 
 		f.submit();
 	}
 	$('#userpw2').focusout(function() {
