@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>아이디 찾기</title>
+<title>비밀번호 찾기</title>
 </head>
 <body>
 	<c:choose>
@@ -20,6 +20,7 @@
 				</div>
 				<input type="button" name="checkBtn" value="확인">
 				<input type="button" name="registerBtn" value="홈으로">
+				<input type="hidden" name="userid" value="${userid }">
 			</form>
 		</c:otherwise>
 	</c:choose>
@@ -50,7 +51,9 @@
 		     	url : 'mail_keyCheck',
 		      	data: {mail_key:mail_key,useremail:useremail},
 		     	success : function(result){ 
-					// 비밀번호 변경 url로.
+		     		alert();
+					form.attr("action", "/user/changePw");
+					form.submit();
 		     	},
 		      	error : function(result){
 		      		console.log(result.responseText);

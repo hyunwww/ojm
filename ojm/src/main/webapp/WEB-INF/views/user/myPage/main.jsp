@@ -13,12 +13,13 @@ Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 Object principal = auth.getPrincipal();
 
 pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
+	// jsp 원래 있던 코드 그대로 쓰려고 (uvo 변수) 자바 코드 사용함
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원가입</title>
+<title>내 정보</title>
 <script type="text/javascript">
 
 </script>

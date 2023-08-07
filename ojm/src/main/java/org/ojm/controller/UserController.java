@@ -191,6 +191,22 @@ public class UserController {
 		model.addAttribute("useremail", useremail);
 		model.addAttribute("mail_key", sendMail(useremail));
 	}
+	@PostMapping("/changePw")	
+	public void changePw(@RequestParam("userid") String userid) {
+		log.info("changePw.... id : " + userid);
+	}
+	@ResponseBody		// pw 변경 확정
+	@RequestMapping(value = "/pwChange", method = RequestMethod.POST)
+	public ResponseEntity<String> pwChange(@RequestParam("userid") String userid,
+							@RequestParam("userpw") String userpw) {
+		
+		log.info("pwChange......userid : " + userid);
+		
+		int check = service.pwChange(userid,userpw);
+		
+		return check == 1 ? new ResponseEntity<>("success", HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
 	public String sendMail(String useremail) {	// 메일 보내기
 		String mail_key = new TempKey().getKey(10, false); // 몇자리인지

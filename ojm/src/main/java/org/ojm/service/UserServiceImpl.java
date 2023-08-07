@@ -84,4 +84,9 @@ public class UserServiceImpl implements UserService{
 		return mapper.idCheck(userid);
 	}
 	
+	@Override
+	public int pwChange(String userid, String userpw) {	// 비밀번호 변경
+		return mapper.pwChange(userid,userpw);
+	}
+	
 }

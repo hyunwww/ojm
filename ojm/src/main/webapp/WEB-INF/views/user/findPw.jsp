@@ -26,7 +26,7 @@
 		if(id.val()==''){
 			alert("아이디를 입력해주세요");
 			return;
-		}else if(email.val()==''){
+		}else if(email.val()==''){	// 메일 정규식 필요, 아이디 메일 일치여부 확인 필요
 			alert("이메일을 입력해주세요");
 			return;
 		}

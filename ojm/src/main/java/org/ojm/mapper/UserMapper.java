@@ -27,5 +27,7 @@ public interface UserMapper {
 	
 	public UserVO getUserByID(String userid);
 	public int idCheck(String userid);
+	public int pwChange(@Param("userid") String userid,
+			@Param("userpw") String userpw);
 	
 }
