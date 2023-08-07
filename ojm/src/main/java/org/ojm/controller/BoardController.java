@@ -57,7 +57,6 @@ public class BoardController {
 	@PostMapping("/register")
 	public String register(BoardVO vo, RedirectAttributes rttr) {
 		log.info("register...");
-		vo.setUno(1);
 		service.register(vo);
 		rttr.addFlashAttribute("result", "ok");
 		return "redirect:/board/list";

@@ -13,23 +13,23 @@
 			<table>
 				<tr>
 					<td>글 번호</td>
-					<td><input name="bno" value="${vo.bno }" readonly="readonly"></td>
-				</tr>
-				<tr>
-					<td>말머리</td>
-					<td><input name="bcate" value="${vo.bcate }"></td>
+					<td><input id="bno" name="bno" value="${vo.bno }" readonly="readonly"></td>
 				</tr>
 				<tr>
 					<td>제목</td>
-					<td><input name="btitle" value="${vo.btitle }"></td>
+					<td><input id="btitle" name="btitle" value="${vo.btitle }"></td>
+				</tr>
+				<tr>
+					<td>말머리</td>
+					<td><input id="bcate" name="bcate" value="${vo.bcate }"></td>
 				</tr>
 				<tr>
 					<td>작성자</td>
-					<td><input name="bwriter" value="${vo.bwriter }" readonly="readonly"></td>
+					<td><input id="bwriter" name="bwriter" value="${vo.bwriter }" readonly="readonly"></td>
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td><textarea rows="15" cols="100" name="bcontent">${vo.bcontent }</textarea></td>
+					<td><textarea rows="15" cols="100" id="bcontent" name="bcontent">${vo.bcontent }</textarea></td>
 				</tr>
 				<tr>
 					<!-- 첨부 파일 -->
@@ -41,16 +41,15 @@
 			</table>
 			<hr>
 			
-			<!-- 작성자 본인일 때에만 수정/삭제가 가능하도록 기능 추가해야 함 -->
 			<button type="submit" data-oper="modify">수정</button>
 			<button type="submit" data-oper="remove">삭제</button>
 			<button type="submit" data-oper="list">목록</button>
 		
-
 			<input type="hidden" name="bno" id="bno" value="${vo.bno }">
 			<input type="hidden" name="pageNum" value="${cri.pageNum }">
 			<input type="hidden" name="amount" value="${cri.amount }">
 			<input type="hidden" name="total" value="${total }">
+			<input type="hidden" name="uno" value="${uvo.uno }">
 		</form>
 	</body>
 	
@@ -63,6 +62,16 @@
 				e.preventDefault();		// 기본 이벤트 방지
 				var operation = $(this).data("oper")	// operation = 내가 누른 버튼의 data-oper
 				if (operation === "modify") {
+					if (document.getElementById("btitle").value=="") {
+						alert("제목을 입력하세요.");
+						return;
+					}else if (document.getElementById("bcate").value=="") {
+						alert("카테고리를 선택하세요.")
+						return;
+					}else if (document.getElementById("bcontent").value=="") {
+						alert("내용을 입력하세요.");
+						return;
+					}
 					formObj.attr('action', 'modify');
 					formObj.attr('method', 'post');
 				}else if (operation === "remove") {
