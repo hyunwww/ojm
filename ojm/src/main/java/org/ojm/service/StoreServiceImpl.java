@@ -1,17 +1,21 @@
 package org.ojm.service;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.ojm.domain.MenuVO;
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
+import org.ojm.domain.UserVO;
 import org.ojm.mapper.MenuMapper;
 import org.ojm.mapper.ReviewMapper;
 import org.ojm.mapper.StoreImgMapper;
 import org.ojm.mapper.StoreMapper;
+import org.ojm.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,14 +27,15 @@ import lombok.extern.log4j.Log4j;
 public class StoreServiceImpl implements StoreService{
 	
 	@Autowired
-	StoreMapper mapper;
-	
+	private StoreMapper mapper;
 	@Autowired
-	MenuMapper mMapper;
+	private MenuMapper mMapper;
 	@Autowired
-	StoreImgMapper iMapper;
+	private StoreImgMapper iMapper;
 	@Autowired
-	ReviewMapper rMapper ;
+	private ReviewMapper rMapper;
+	@Autowired
+	private UserMapper uMapper;
 	
 	@Override
 		public List<StoreVO> allStores() {
@@ -80,7 +85,7 @@ public class StoreServiceImpl implements StoreService{
 		
 		return iMapper.getImg(sno);
 	}
-
+	
 
 	@Override
 	public int storePermit(int sno) {
@@ -102,5 +107,78 @@ public class StoreServiceImpl implements StoreService{
 		
 		return result;
 	}
+	@Override
+	public List<StoreVO> searchStoreByUno(int uno) {
+		return mapper.searchStoreByUno(uno);
+	}
+	@Override
+	public int deleteStore(int sno) {
+		
+		return mapper.deleteStore(sno);
+	}
+
+	@Override
+	public int removeImg(int sino) {
+		return iMapper.removeImg(sino);
+	}
 	
+	@Override
+	@Transactional
+	public int updateStore(StoreVO store) {
+		
+		int result = 0;
+		//storeinfo
+		if (mapper.updateStore(store) > 0) {
+			
+			//메뉴
+			mMapper.deleteMenu(store.getSno());	//삭제
+			
+			if (store.getMenuList() != null && !store.getMenuList().isEmpty()) {
+				for (MenuVO menu : store.getMenuList()) {
+					menu.setSno(store.getSno());
+					mMapper.addMenu(menu);
+				}
+			}
+			//이미지
+			if (store.getImgList() != null && !store.getImgList().isEmpty()) {
+				for (StoreImgVO img : store.getImgList()) {
+					img.setSno(store.getSno());
+					iMapper.addImg(img);
+				}
+			}
+			result = 1;
+		}else {
+		}
+		return result;
+	}
+	
+	//필터링 적용
+	@Override
+	public List<StoreVO> searchStoreWithFilter(Map<String, List<String>> map) {
+		
+		List<StoreVO> result = mapper.searchStoreByCate(map);
+		
+		
+		
+		return result;
+	}
+	
+	//좋아요 적용
+	@Override
+	public int storeLike(int sno, int amount) {
+		return mapper.storeLike(sno, amount);
+	}
+	
+	// top10
+	@Override
+	public List<StoreVO> rank() {
+		return mapper.rank();
+	}
+	
+	
+	//테스트용 유저코드
+	@Override
+	public UserVO getUserById(String id) {
+		return uMapper.getUserByID(id);
+	}
 }

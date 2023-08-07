@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 
+
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -66,11 +67,7 @@
           </li>
           <li><a href="/store/storeList">Search</a></li>
           <li><a href="/store/register">Register</a></li>
-          <li>
-          	<c:if test="${not empty uvo }">
-	          <a href="/user/myPage/main">myPage</a>
-          	</c:if>
-          </li>
+          <li><a href="/user/myPage/main">myPage</a></li>
           <li><a href="/user/login">Login</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>

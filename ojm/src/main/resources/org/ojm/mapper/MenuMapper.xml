@@ -5,6 +5,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="org.ojm.mapper.MenuMapper"> <!-- 경로 표기법이 클래스명 표기법처럼 작성 -->
 	
+	
+	<!-- 메뉴 추가하기  -->
 	<insert id="addMenu" parameterType="org.ojm.domain.MenuVO">
 		insert into menu values(
 			seq_mno.nextval,
@@ -16,10 +18,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
 	</insert>
 	
+	<!-- 매장 메뉴 삭제  -->
+	<delete id="deleteMenu" parameterType="int">
+		delete from menu where sno = #{sno}
+	</delete>	
+	
+	<!-- 추가될 sno  -->
 	<select id="nextSno" resultType="int">
 		select max(sno) from store
 	</select>
 	
+	
+	<!-- 메뉴 목록 불러오기  -->
 	<select id="getMenu" parameterType="int" resultType="org.ojm.domain.MenuVO">
 		select * from menu where sno = #{sno}
 	</select>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,11 @@
 	div{
 		text-align: center;
 	}
+	input[name="smaxreserv"]{
+		display: none;
+	}
+	
+	
 	.thumbnail{
 		width: 100px;
 		background-size: contain;
@@ -84,12 +90,6 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript" src="../resources/js/menuAjax.js"></script>
 <script type="text/javascript">
-	var currentUno = "${uvo.uno}";
-	if (currentUno == 0) {
-		alert("로그인이 필요한 서비스입니다.");
-		location.href='/';
-	}
-	
 	$(function() {
 		
 		
@@ -115,13 +115,18 @@
 			}
 		});
 		
-		
-		$("#testBtn").on("click", async function() {
-			
-			
-			var result = await sendFile(files); //resolved 될 때까지 대기
-		    console.log(result);
+		//예약 가능 ox
+		$("input[name='checkReserv']").on("change", function() {
+			console.log($(this)[0].checked);
+			if ($(this)[0].checked) {
+				$("input[name=smaxreserv]").show();
+			}else{
+				$("input[name=smaxreserv]").hide();
+				$("input[name=smaxreserv]").val("");
+			}
 		});
+		
+		
 		//regForm 제어
 		$("form input").on("click", function() {
 			var regForm = $("#regForm")[0];
@@ -267,6 +272,15 @@
 </script>
 </head>
 <body>
+	<!-- 로그인 확인  -->
+	<sec:authorize access="isAnonymous()">
+		<script type="text/javascript">
+			alert("로그인이 필요한 서비스입니다.");
+			location.href='/user/login';
+		</script>
+	</sec:authorize>
+	
+	
 	<div id="wrapper">
 		<h2>register</h2>
 		<form action="#" id="regForm" method="post">
@@ -297,6 +311,12 @@
 							<option value="일식">jap</option>
 							<option value="아시아">asia</option>
 						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>예약<input type="checkbox" value="1" name="checkReserv"></td>
+					<td>
+						<input type="number" name="smaxreserv" placeholder="예약 최대 가능 인원">
 					</td>
 				</tr>
 				<tr>
@@ -332,7 +352,6 @@
 				</tr>
 			</table>
 			<input type="hidden" value="${uvo.uno }" name="uno">
-			<input type="hidden" value="${uvo.auth }" name="auth">
 		</form>
 		<table>
 			<tr>
@@ -547,11 +566,13 @@
 				 $("#imgContainer").empty();
 				 for (var image of files) {
 			          var reader = new FileReader();
+			          reader.fileName = image.name;
 			          reader.onload = function(event) {
 					      var img = document.createElement("img");
 					      var imgBox = $('<div class="imgBox"></div>');
 					      var btn = $('<button class="imgBtn">x</button>');
-					      img.setAttribute("data-name", image.name);
+					      img.setAttribute("data-name", event.target.fileName);
+					      console.log(event);
 				          img.setAttribute("src", event.target.result);
 				          img.classList.add('thumbnail');
 				          imgBox.append(img);
@@ -565,11 +586,11 @@
 			
 		}
 		
-		//썸네일에 있는 삭제버튼
+		//썸네일에 있는 삭제버튼 >> 해당 썸네일에 해당하는 파일을 files에서 지워줌 + 썸네일 제거
 		$("#imgContainer").on("click", "button", function() {
-			alert("deleteBtnEvent!");
-			/* 
+			
 			console.log($(this).closest("div").find("img").data("name"));
+			
 			for (var i = 0; i < files.length; i++) {
 				if (files[i].name == $(this).closest("div").find("img").data("name")) {
 					files.splice(i,1);
@@ -579,7 +600,7 @@
 					
 				}
 			}
-			 */
+			  
 		});
 		
 		

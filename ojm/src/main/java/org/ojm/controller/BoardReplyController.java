@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -51,20 +51,24 @@ public class BoardReplyController {
 	}
 	*/
 	
-	@PostMapping(value = "replyregister", consumes = "application/json", produces = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<String> register(@RequestBody BoardReplyVO vo){
-		log.info("reply register..." + vo);
-		vo.setUno(1);
-		int insertCount = service.register(vo);
+	@PostMapping(value = "/replyregister", consumes = "application/json", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> register(@RequestBody BoardReplyVO rvo){
+		log.info("reply register...");
+		log.info(rvo);
+		int insertCount = service.register(rvo);
 		return insertCount == 1 ? new ResponseEntity<>("success", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	
-	
-	@GetMapping(value = "{bno}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	@GetMapping(value = "/{bno}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<List<BoardReplyVO>> getList(@PathVariable("bno") int bno){
 		log.info("reply list...");
 		return new ResponseEntity<>(service.getList(bno), HttpStatus.OK);
 	}
 	
+	@DeleteMapping(value = "/{brno}/{bno}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> delete(@PathVariable("brno") int brno, @PathVariable("bno") int bno){
+		log.info("reply delete...");
+		int deleteCount = service.remove(brno, bno);
+		return deleteCount == 1 ? new ResponseEntity<>("success", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }
