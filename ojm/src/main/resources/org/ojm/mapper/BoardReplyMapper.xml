@@ -11,4 +11,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getList" resultType="org.ojm.domain.BoardReplyVO">
 		select * from boardreply where bno = #{bno} order by brno desc
 	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from boardreply where brno = #{param1}
+	</delete>
 </mapper>

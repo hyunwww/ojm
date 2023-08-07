@@ -26,17 +26,21 @@ public class BoardReplyServiceImpl implements BoardReplyService{
 	public int register(BoardReplyVO vo) {
 		int bno = vo.getBno();
 		int result = mapper.insert(vo);
-		if (bMapper.updateReplyCnt(bno, 1) > 0) {
-			System.out.println("success...");
-		}else {
-			System.out.println("fail...");
-		}
+		bMapper.updateReplyCnt(bno, 1);
 		return result;
 	}
 
 	@Override
 	public List<BoardReplyVO> getList(int bno) {
 		return mapper.getList(bno);
+	}
+
+	@Transactional
+	@Override
+	public int remove(int brno, int bno) {
+		int result = mapper.delete(brno, bno);
+		bMapper.updateReplyCnt(bno, -1);
+		return result;
 	}
 
 }

@@ -123,7 +123,7 @@
 				return;
 			}
 			if (result === 'ok') {			// 삽입되면
-				alert("게시글이 등록이 완료되었습니다.");
+				alert("게시글 등록이 완료되었습니다.");
 				return;
 			}
 			if (result === 'modify') {		// 수정
