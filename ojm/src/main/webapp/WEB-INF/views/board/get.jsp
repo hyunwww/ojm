@@ -1,7 +1,18 @@
+<%@page import="org.ojm.security.domain.CustomUser"%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
+<%@page import="org.springframework.security.core.Authentication"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+	Object principal = auth.getPrincipal();
+
+	pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
+   // jsp 원래 있던 코드 그대로 쓰려고 (uvo 변수) 자바 코드 사용함
+%>
 <!DOCTYPE html>
 <html>
 	<head>

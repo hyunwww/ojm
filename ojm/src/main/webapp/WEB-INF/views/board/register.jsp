@@ -1,19 +1,22 @@
+<%@page import="org.ojm.security.domain.CustomUser"%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
+<%@page import="org.springframework.security.core.Authentication"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+	Object principal = auth.getPrincipal();
+
+	pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
+   // jsp 원래 있던 코드 그대로 쓰려고 (uvo 변수) 자바 코드 사용함
+%>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
 		<script src = "${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script>
 		<title>Insert title here</title>
-		<script type="text/javascript">
-			var currentUno = "${uvo.uno}";
-			if (currentUno == 0) {
-				alert("로그인이 필요한 서비스입니다.");
-				location.href='/';
-			}
-		
-		</script>
 	</head>
 	<body>
 		<h1>게시글 등록</h1>
@@ -38,13 +41,13 @@
 					<td>
 						<textarea rows="15" cols="100" name="bcontent" id="bcontent"></textarea>
 						<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-						<script type="text/javascript">
+						<!-- <script type="text/javascript">
 							$(function() {
 								CKEDITOR.replace("bcontent",{
 						    		filebrowserUploadUrl : "${pageContext.request.contextPath }/adm/fileupload.do"
 								});
 							});
-						</script>
+						</script> -->
 					</td>
 				</tr>
 				<tr>

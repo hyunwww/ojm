@@ -90,12 +90,6 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript" src="../resources/js/menuAjax.js"></script>
 <script type="text/javascript">
-	var currentUno = "${uvo.uno}";
-	if (currentUno == 0) {
-		alert("로그인이 필요한 서비스입니다.");
-		location.href='/';
-	}
-	
 	$(function() {
 		
 		
@@ -285,6 +279,8 @@
 			location.href='/user/login';
 		</script>
 	</sec:authorize>
+	
+	
 	<div id="wrapper">
 		<h2>register</h2>
 		<form action="#" id="regForm" method="post">
