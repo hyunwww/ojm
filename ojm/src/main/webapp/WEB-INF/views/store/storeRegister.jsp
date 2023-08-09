@@ -122,7 +122,8 @@
 				$("input[name=smaxreserv]").show();
 			}else{
 				$("input[name=smaxreserv]").hide();
-				$("input[name=smaxreserv]").val("");
+				$("input[name=smaxreserv]").attr("disabled", true);
+				
 			}
 		});
 		
@@ -153,6 +154,7 @@
 				
 				
 				sendFile(files, function() {
+					
 					$("#regForm").append(menuInput);
 					$("#regForm").submit();
 				});
@@ -316,7 +318,7 @@
 				<tr>
 					<td>예약<input type="checkbox" value="1" name="checkReserv"></td>
 					<td>
-						<input type="number" name="smaxreserv" placeholder="예약 최대 가능 인원">
+						<input type="number" name="smaxreserv" placeholder="예약 최대 가능 인원" value="0">
 					</td>
 				</tr>
 				<tr>
@@ -351,7 +353,6 @@
 					</td>
 				</tr>
 			</table>
-			<input type="hidden" value="${uvo.uno }" name="uno">
 		</form>
 		<table>
 			<tr>

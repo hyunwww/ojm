@@ -10,25 +10,29 @@ import java.util.UUID;
 
 import org.ojm.domain.AuthVO;
 import org.ojm.domain.InfoVO;
+import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
+import org.ojm.security.domain.CustomUser;
 import org.ojm.service.StoreService;
 import org.ojm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.log4j.Log4j;
@@ -42,6 +46,8 @@ public class StoreController {
 	private StoreService service;
 	@Autowired
 	private UserService uService;
+	@Autowired
+	BCryptPasswordEncoder encoder;
 	
 	
 	@GetMapping("/register")
@@ -56,7 +62,7 @@ public class StoreController {
 							@RequestParam("addrDet") String addrDet,
 							@RequestParam("openHour") String openHour,
 							@RequestParam("closeHour") String closeHour,
-							Principal principal) {
+							@AuthenticationPrincipal CustomUser user) {
 		
 		log.info("register.. ");
 		
@@ -66,9 +72,9 @@ public class StoreController {
 			storeInfo.setOpenHour(openHour + " ~ " + closeHour);
 			
 			//user 권한 따라서 permmit 값 결정,     1 >> 승인 0 >> 대기
-			if (principal != null) {
-				List<AuthVO> auth = service.getUserById(principal.getName()).getAuthList();
-				for (AuthVO avo : auth) {
+			if (user != null) {
+				storeInfo.setUno(user.getUvo().getUno());
+				for (AuthVO avo : user.getUvo().getAuthList()) {
 					if (avo.getAuth().equals("ROLE_user")) {	//일반 유저
 						storeInfo.setSpermmit(0);
 						break;
@@ -77,8 +83,8 @@ public class StoreController {
 						break;
 					}
 				}
-				
 			}
+			
 			log.info(storeInfo);
 			
 			
@@ -153,10 +159,10 @@ public class StoreController {
 		// uno >> userinfo >> ulikestore 데이터 가공 후 현재 sno와 일치하는지 확인
 		boolean isLike = false;
 		
-		
-		InfoVO userInfo = service.getUserById(principal.getName()).getInfo();
-		
+		 
 		if (principal != null) {	//로그인 정보가 있을경우에만 실행
+			InfoVO userInfo = service.getUserById(principal.getName()).getInfo();
+			
 			//이 아래에 판단하는 코드 작성 후 isLike에 대입
 			if (userInfo.getUlikestore() != null && !userInfo.getUlikestore().equals("")) {
 				log.info(userInfo.getUlikestore());
@@ -303,17 +309,29 @@ public class StoreController {
 		model.addAttribute("store", service.storeInfo(sno));
 		return "/store/storeDelete";
 	}
+	
 	@PostMapping(value = "/delete", produces = "application/text; charset=UTF-8")
 	@ResponseBody
 	public ResponseEntity<String> storeDelete(@RequestParam("sno")int sno,
-												@RequestParam("pw")String pw) {
+												@RequestParam("pw")String pw,
+												@AuthenticationPrincipal CustomUser uvo) {
+		//@AuthenticationPrincipal 어노테이션 사용 시 유저정보 가져올 수 있음
+		log.warn("user : " + uvo);
+		
 		
 		log.info("delete store, pw : " + pw);
 		// 유저 pw 체크 후 검증성공 시 삭제, 실패 시 실패 메세지와 함께 오류status 전송 후 script 처리
-		
-		return new ResponseEntity<String>("삭제되었습니다." ,HttpStatus.OK);
-		
+		log.info("currentPw : " + uvo.getUvo().getUserpw());
+		if (encoder.matches(pw, uvo.getUvo().getUserpw())) {
+			log.info("일치");
+			return new ResponseEntity<String>("삭제되었습니다." ,HttpStatus.OK);
+		}else {
+			log.info("불일치");
+			return new ResponseEntity<String>("비밀번호가 일치하지 않습니다." ,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
+	
+	
 	
 	@GetMapping("/update")
 	public String goUpdate(@RequestParam("sno")int sno, Model model) {
@@ -373,5 +391,24 @@ public class StoreController {
 		}
 		
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
+	}
+	
+	
+	//신고 ( 데이터 넘어옴 )
+	@PostMapping(value = "/report", produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
+	public ResponseEntity<String> reportSubmit(ReportVO report, Principal principal){
+		
+		if(principal != null) {
+			report.setUno(service.getUserById(principal.getName()).getUno());	//신고 유저 정보 입력해주기
+		}
+		
+		
+		log.info("report >>" + report);
+		
+		// 아래에 신고 내용 처리 하는 코드 작성
+		
+		
+		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 }

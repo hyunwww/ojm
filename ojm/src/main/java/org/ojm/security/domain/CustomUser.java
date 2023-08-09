@@ -1,8 +1,10 @@
 package org.ojm.security.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import org.ojm.domain.AuthVO;
 import org.ojm.domain.UserVO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,4 +29,5 @@ public class CustomUser extends User{
 				collect(Collectors.toList()));
 		this.uvo = vo;
 	}
+	
 }

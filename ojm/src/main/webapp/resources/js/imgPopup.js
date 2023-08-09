@@ -84,7 +84,7 @@ $(function(){
 	      const clickedIndex = index;
 	      let step = clickedIndex - photoIndex;
 	      photoIndex = clickedIndex;
-	      bulletClassReset();
+	      bulletClassReset(); 
 	      bullets[clickedIndex].classList.add("on");
 	      // 클릭할 때마다 순서가 바뀌는 slides들 업뎃
 	      slides = document.querySelectorAll(".slides>li");
@@ -102,7 +102,27 @@ $(function(){
 	    });
 	  });
 	
-	
+	// 슬라이드랑 동기화
+	function syncSlide(index) {
+	      const clickedIndex = index;
+	      let step = clickedIndex - photoIndex;
+	      photoIndex = clickedIndex;
+	      bulletClassReset(); 
+	      bullets[clickedIndex].classList.add("on");
+	      // 클릭할 때마다 순서가 바뀌는 slides들 업뎃
+	      slides = document.querySelectorAll(".slides>li");
+	      let currentSlides = [...slides];
+	      if (step > 0) {
+	        // 이미지 슬라이드 step의 수 만큼 앞에서 자른다
+	        let sliceSlides = currentSlides.slice(undefined, step);
+	          // 잘린 슬라이드들 맨 뒤로 집어넣기..
+	        slide.append(...sliceSlides);
+	      } else {
+	        sliceSlides = currentSlides.slice(step);
+	        // 잘린 슬라이드들 맨 앞으로 집어넣기
+	        slide.prepend(...sliceSlides);
+	      }
+	}
 	
 	
 	
