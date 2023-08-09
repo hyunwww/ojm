@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.ojm.domain.MenuVO;
+import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
@@ -181,4 +182,9 @@ public class StoreServiceImpl implements StoreService{
 	public UserVO getUserById(String id) {
 		return uMapper.getUserByID(id);
 	}
+	@Override
+	public int reportSubmit(ReportVO rvo) {
+		return mapper.reportSubmit(rvo);
+	}
+	
 }

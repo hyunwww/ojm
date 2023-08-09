@@ -437,6 +437,7 @@
 		<div id="btnContainer" style="text-align: right; padding: 10px;">
 			<button id="backBtn">뒤로</button>
 			<button id="reportBtn" style="background-color: maroon;">신고</button>
+			<button id="delBtn" style="background-color: maroon;" onclick="location.href='/store/delete?sno=${store.sno}&uno=${store.uno }'">삭제test</button>
 			
 			<sec:authorize access="isAuthenticated()">
 				<button id="open-modal">리뷰 작성</button>

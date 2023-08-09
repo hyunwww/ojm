@@ -42,8 +42,13 @@
 			      success: function (result, status, xhr) {
 			    	  alert(result);
 			    	  
-			    	  //성공 시 store 삭제, 목록으로 이동
-			      }
+			    	  //성공 시 store 삭제, myPage목록으로 이동(현재는 홈으로 이동)
+			    	  location.href="/";
+			      },
+			      error: function(xhr, status, error) {
+			    	//실패 시 알림
+					alert(xhr.responseText);
+				}
 			});
 		
 			

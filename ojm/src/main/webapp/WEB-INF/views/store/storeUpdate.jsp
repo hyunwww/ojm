@@ -293,14 +293,13 @@
 			
 			var storeCategory = '${store.scate}';
 			var categories = $("select[name='scate'] option")
+			console.log('${store.sdeli}');
 			if ('${store.sdeli}' == '0') {
-				$("input[name='sdeli']").attr("checked", true);	
+				$("input[name='sdeli']")[1].setAttribute("checked", true);
 			}
-			console.log(categories.length);
 			for (var i = 0; i < categories.length; i++) {
 				if (categories[i].value == storeCategory) {
 					categories[i].setAttribute("selected", true);
-					console.log(categories[i]);
 				}
 			}
 			

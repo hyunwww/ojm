@@ -3,6 +3,7 @@ package org.ojm.service;
 import java.util.List;
 import java.util.Map;
 
+import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
@@ -21,6 +22,7 @@ public interface StoreService {
 	public int updateRate(int sno);
 	public int deleteStore(int sno);
 	public int updateStore(StoreVO store);
+	public int reportSubmit(ReportVO rvo);
 	public int storeLike(int sno, int amount);
 	
 	

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreVO;
 
 public interface StoreMapper {
@@ -16,6 +17,7 @@ public interface StoreMapper {
 	public StoreVO storeInfo(int sno);
 	public int updateRate(int sno);
 	public int storePermit(int sno);
+	public int reportSubmit(ReportVO rvo);
 	public int deleteStore(int sno);
 	public int updateStore(StoreVO store);
 	public int storeLike(@Param("sno") int sno, @Param("amount") int amount);

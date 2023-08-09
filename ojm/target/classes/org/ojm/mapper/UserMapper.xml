@@ -132,7 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="getUserByID" resultMap="userMap">
 		select 
-		    u.userid,u.userpw,u.username,u.userbirth,
+		    u.uno,u.userid,u.userpw,u.username,u.userbirth,
 		    u.userphone,u.useremail,a.auth,i.* 
 		from 
 		        usertable u 

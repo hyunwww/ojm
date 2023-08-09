@@ -7,83 +7,124 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-	html, body {
+html, body {
+	margin: 0;
+	height: 100%;
+	overflow: auto;
+}
+
+.wrapper {
+	width: 750px;
+	height: 100%;
+	margin: auto;
+}
+
+.header {
+	background-color: gray;
+	height: 10%;
+}
+
+.sideFilter {
+	background-color: silver;
+	position: absolute;
+	width: 15%;
+	height: 100%;
+	z-index: 5;
+}
+
+.content {
+	position: absolute;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+.mainContainer {
+	height: 100%;
+	position: relative;
+}
+
+.rankingArea {
+	position: fixed;
+	top: 20%;
+	right: 10%;
+	background-color: lavenderblush;
+	width: 100px;
+	height: auto;
+}
+
+.rankingArea table {
+	text-align: left;
+	border: 1px solid palevioletred;
+	border-collapse: collapse;
+	margin: auto;
+}
+
+.rankingArea td {
+	border: 1px solid palevioletred;
+	border-collapse: collapse;
+}
+
+#loading {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	border: 3px solid rgba(255, 255, 255, .3);
+	border-radius: 50%;
+	border-top-color: coral;
+	animation: spin 1s ease-in-out infinite;
+	-webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@
+keyframes spin {to { -webkit-transform:rotate(360deg);
 	
-	    margin: 0;
+}
+
+}
+@
+-webkit-keyframes spin {to { -webkit-transform:rotate(360deg);
 	
-	    height: 100%;
-	
-	    overflow: auto;
-	
-	}
-	.wrapper{
-		width: 750px;
-		height: 100%;
-		margin: auto; 
-	}
-	.header{
-		background-color: gray;
-		height: 10%;
-	}
-	.sideFilter{
-		background-color: silver;
-		position: absolute;
-		width: 15%;
-		height: 100%;
-		z-index: 5;
-	}	
-	.content{
-		position: absolute;
-		z-index: 1;
-		width: 100%;
-		height: 100%;
-		text-align: center;
-	}
-	.mainContainer{
-		height: 100%;
-		position: relative;
-		
-	}
-	.rankingArea{
-		position: fixed;
-		top: 20%;
-		right: 10%;
-		background-color: lavenderblush;
-		width: 100px;
-		height: auto;
-	}
-	.rankingArea table{
-		text-align: left;
-		border: 1px solid palevioletred;
-		border-collapse: collapse;
-		margin: auto;
-	}
-	.rankingArea td{
-		border: 1px solid palevioletred;
-		border-collapse: collapse;
-	}
-	#loading {
-	  display: inline-block;
-	  width: 50px;
-	  height: 50px;
-	  border: 3px solid rgba(255,255,255,.3);
-	  border-radius: 50%;
-	  border-top-color: coral;
-	  animation: spin 1s ease-in-out infinite;
-	  -webkit-animation: spin 1s ease-in-out infinite;
-	}
-	@keyframes spin {
-	  to { -webkit-transform: rotate(360deg); }
-	}
-	@-webkit-keyframes spin {
-	  to { -webkit-transform: rotate(360deg); }
-	}
-	.mapContainer{
-		display: none;
-		width: 85%;
-		height: 200px;
-		margin-left: auto;
-	}
+}
+
+}
+.mapContainer {
+	display: none;
+	width: 85%;
+	height: 200px;
+	margin-left: auto;
+}
+.card {
+	height: 200px;
+	width: -webkit-fill-available;
+	border-radius: 15px;
+	display: inline-block;
+	margin-top: 15px;
+	margin-left: 140px;
+	margin-bottom: 15px;
+	position: relative;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
+		rgba(0, 0, 0, 0.19);
+	overflow: hidden;
+}
+.card:focus{
+	border: 2px solid indianred;
+}
+
+.card-header {
+	-webkit-transition: 0.5s; /*사파리 & 크롬*/
+	-moz-transition: 0.5s; /*파이어폭스*/
+	-ms-transition: 0.5s; /*인터넷 익스플로러*/
+	-o-transition: 0.5s; /*오페라*/
+	transition: 0.5s;
+	width: 100%;
+	height: 50px;
+	border-radius: 15px 15px 0 0;
+	background-image: url("images/korea.jpeg");
+	background-size: 100% 280px;
+	background-repeat: no-repeat;
+}
 </style>
   
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
@@ -189,9 +230,19 @@
 				    		  store.distance = getDistance(Number(store.kd), Number(store.wd), currPosition.coords.latitude, currPosition.coords.longitude)
 				    		//출력될 태그 부여
 				    		if (Number(store.distance) <= Number(distLimit) || Number(distLimit) == 0) {
-				    		  store.str = '<hr><p>이름 : <a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></p>';
+				    			store.str = '';
+				    			store.str += '<div class="card" data-sno="'+store.sno+'" tabindex="0">';
+				    			store.str += '<div class="card-header">';
+				    			store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+				    			store.str += '<div class="card-body">';
+				    			store.str += '<p>'+store.saddress+'</p>';
+				    			store.str += '</div>';
+				    			store.str += '</div>';
+				    			store.str += '</div>';
+				    			
+								
 				    		  storeResult.push(store);
-				    		  str += '<hr><p>이름 : <a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></p>';
+				    		  str += store.str;
 							}
 				    		
 				    		  
@@ -229,6 +280,7 @@
 			    			
 			    			var outFunc = function() {	//marker 이벤트 부여를 위한 클로저함수
 			    				// 마커 이미지의 주소
+			    				var sno = store.sno;
 					    		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
 					    		    markerImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
 					    		    markerImageOptions = { 
@@ -292,6 +344,10 @@
 						    		kakao.maps.event.addListener(marker, 'mouseover', function() {
 						    		    marker.setImage(overImage);
 						    		    
+						    		});
+						    		kakao.maps.event.addListener(marker, 'click', function() {
+						    			console.log(sno);
+						    			$(".card[data-sno='"+sno+"']").focus();
 						    		});
 								}
 			    				
@@ -459,28 +515,14 @@
 					<c:choose>
 						<c:when test="${not empty stores }">
 							<c:forEach var="store" items="${stores }">
-								<hr><br>
-								<p>이름 : <a href="/store/detail?sno=${store.sno }">${store.sname }</a></p>
-								<p>주소 : ${store.saddress }</p>
-								<p>카테고리 : ${store.scate }</p>
-								<p>
-									<c:choose>
-										<c:when test="${store.sdepo != 0 }">
-											예약금 : ${store.sdepo }
-										</c:when>
-										<c:otherwise>
-											예약금 : 없음
-										</c:otherwise>
-									</c:choose>
-								</p>
-								<p><c:choose>
-									<c:when test="${store.sdeli eq 1 }">
-										배달 : o
-									</c:when>
-									<c:otherwise>
-										배달 : x
-									</c:otherwise>
-								</c:choose></p>
+								<div class="card">
+									<div class="card-header">
+										<h2><a href="/store/detail?sno=${store.sno }">${store.sname }</a></h2>
+									</div>
+									<div class="card-body">
+										<p>${store.saddress }</p>
+									</div>
+								</div>
 							</c:forEach>
 						</c:when>
 						<c:otherwise>
@@ -488,6 +530,9 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
+				
+				
+				
 			</div>
 			
 			<div class="sideFilter">

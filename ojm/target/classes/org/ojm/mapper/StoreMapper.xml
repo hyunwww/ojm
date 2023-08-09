@@ -154,6 +154,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			
 	</select>
 	
+	<insert id="reportSubmit" parameterType="org.ojm.domain.ReportVO">
+		insert into report values(
+			seq_rpno.nextval,
+			#{uno},
+			#{state},
+			#{rptitle},
+			#{rpcontent}
+		)
+	</insert>
 	
 	
 	

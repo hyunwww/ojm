@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -303,11 +304,24 @@ public class StoreController {
 		return "/store/myStore";
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delete")
-	public String goDelete(@RequestParam("sno") int sno,Model model) {
+	public String goDelete(@RequestParam("sno") int sno, Model model,
+							@RequestParam("uno")int uno,
+							@AuthenticationPrincipal CustomUser user) {
 		
-		model.addAttribute("store", service.storeInfo(sno));
-		return "/store/storeDelete";
+		if (user != null) {
+			if (user.getUvo().getUno() != uno) {	//유저 검증
+				return "redirect:/";
+			}else {
+				model.addAttribute("store", service.storeInfo(sno));
+				return "/store/storeDelete";
+			}
+		}else {
+			return "redirect:/";
+		}
+		
+		
 	}
 	
 	@PostMapping(value = "/delete", produces = "application/text; charset=UTF-8")
@@ -397,18 +411,17 @@ public class StoreController {
 	//신고 ( 데이터 넘어옴 )
 	@PostMapping(value = "/report", produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<String> reportSubmit(ReportVO report, Principal principal){
+	public ResponseEntity<String> reportSubmit(ReportVO report, @AuthenticationPrincipal CustomUser user){
 		
-		if(principal != null) {
-			report.setUno(service.getUserById(principal.getName()).getUno());	//신고 유저 정보 입력해주기
+		if(user != null) {
+			report.setUno(user.getUvo().getUno());	//신고 유저 정보 입력해주기
 		}
 		
 		
 		log.info("report >>" + report);
 		
 		// 아래에 신고 내용 처리 하는 코드 작성
-		
-		
+		service.reportSubmit(report);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 }
