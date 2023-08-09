@@ -14,7 +14,5 @@ public interface BoardService {
 	public boolean modify(BoardVO vo);
 	public int getTotal();
 	public List<BoardImgVO> getImgList(int bno);
-	public int updateBview(int bno);	// 조회수
 	public int updateBlike(int bno);	// 좋아요
-	public int getReplyCnt(int bno);	// 댓글 수 가져오기
 }

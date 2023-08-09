@@ -3,20 +3,29 @@
 <%@page import="org.springframework.security.core.Authentication"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-	Object principal = auth.getPrincipal();
-
-	pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
-   // jsp 원래 있던 코드 그대로 쓰려고 (uvo 변수) 자바 코드 사용함
+   Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      Object principal = auth.getPrincipal();
+      
+      try{
+         pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
+      }catch(Exception e){
+         pageContext.setAttribute("uvo", null);
+      }
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<script src = "${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script>
 		<title>Insert title here</title>
+		<script type="text/javascript">
+			var currentUno = "${uvo.uno}";
+			if (currentUno == 0) {
+				alert("로그인이 필요한 서비스입니다.");
+				location.href='/';
+			}
+		</script>
 	</head>
 	<body>
 		<h1>게시글 등록</h1>
@@ -30,7 +39,17 @@
 				</tr>
 				<tr>
 					<td>말머리</td>
-					<td><input name="bcate" id="bcate"></td>
+					<td>
+						<select name="bcate" id="bcate">
+							<option value="none" selected disabled hidden>말머리 선택</option>
+							<!-- 관리자 계정이 아니면 공지사항 보이지 않도록 수정해야 함 -->
+							<option value="공지사항">공지사항</option>
+							<option value="추천">추천</option>
+							<option value="정보">정보</option>
+							<option value="자유">자유</option>
+							<option value="기타">기타</option>
+						</select>							
+					</td>
 				</tr>
 				<tr>
 					<td>작성자</td>
@@ -40,14 +59,6 @@
 					<td>내용</td>
 					<td>
 						<textarea rows="15" cols="100" name="bcontent" id="bcontent"></textarea>
-						<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-						<!-- <script type="text/javascript">
-							$(function() {
-								CKEDITOR.replace("bcontent",{
-						    		filebrowserUploadUrl : "${pageContext.request.contextPath }/adm/fileupload.do"
-								});
-							});
-						</script> -->
 					</td>
 				</tr>
 				<tr>
@@ -88,7 +99,7 @@
 				if (document.getElementById("btitle").value=="") {
 					alert("제목을 입력하세요.");
 					return;
-				}else if (document.getElementById("bcate").value=="") {
+				}else if (document.getElementById("bcate").value=="none") {
 					alert("카테고리를 선택하세요.")
 					return;
 				}else if (document.getElementById("bcontent").value=="") {
@@ -197,7 +208,7 @@
 					
 					str += '<li data-path="' + uploadResultArr[i].uploadpath + '" data-uuid="' + uploadResultArr[i].uuid + '" data-filename="' + uploadResultArr[i].filename + '">';
 					str += '<div>';
-					str += '<span>' + uploadResultArr[i].filename + '</span>';
+					str += '<img alt="' + uploadResultArr[i].filename + '" src="/ojm/' + uploadResultArr[i].uploadpath + '/' + uploadResultArr[i].uuid + '_' + uploadResultArr[i].filename + '">';
 					str += '<button type="button" data-file="' + fileCallPath + '" data-type="file" >삭제</button><br>';
 					str += '</div>';
 					str += '</li>';

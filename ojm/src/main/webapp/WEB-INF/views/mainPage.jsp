@@ -61,7 +61,7 @@
           <li class="dropdown"><a href="#"><span>Community</span><i class="bi bi-chevron-down"></i></a>
           	<ul>
 			  <li><a href="/board/list">1</a></li>
-			  <li><a href="#">2</a></li>
+			  <li><a href="/qboard/qlist">2</a></li>
 			  <li><a href="#">3</a></li>
 			</ul>
           </li>

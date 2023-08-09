@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.ojm.mapper.QboardReplyMapper">
+	<insert id="qInsert" parameterType="org.ojm.domain.QboardReplyVO">
+		insert into qboardreply(qrno, qno, uno, qrwriter, qrcontent, qrdate) values(seq_qrno.nextval, #{qno}, #{uno}, #{qrwriter}, #{qrcontent}, sysdate)
+	</insert>
+	<select id="getQlist" resultType="org.ojm.domain.QboardReplyVO">
+		select * from qboardreply where qno = #{qno} order by qrno desc
+	</select>
+	<delete id="qDelete" parameterType="int">
+		delete from qboardreply where qrno = #{param1}
+	</delete>
+	<delete id="qDeleteAll" parameterType="int">
+		delete from qboardreply where qno = #{qno}
+	</delete>
+</mapper>
