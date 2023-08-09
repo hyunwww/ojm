@@ -254,6 +254,35 @@
 					    	        };
 					    	    var overImage = new kakao.maps.MarkerImage(overImageUrl, overImageSize, overImageOptions);
 					    		
+					    	 // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+					    	    var content = '<div class="customoverlay">' +
+					    	        '    <span class="title">'+store.sname+'</span>' +
+					    	        '</div>';
+
+
+					    	    // 커스텀 오버레이를 생성합니다
+					    	    var customOverlay = new kakao.maps.CustomOverlay({
+					    	        map: map,
+					    	        position: coords,
+					    	        content: content,
+					    	        yAnchor: 1 
+					    	    });
+					    	    
+					    	  	//지도 레벨 변동 감지
+				    			// 지도가 확대 또는 축소되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+				    			kakao.maps.event.addListener(map, 'zoom_changed', function() {        
+				    		    
+					    		    // 지도의 현재 레벨을 얻어옵니다
+					    		    var level = map.getLevel();
+					    		    if (level <= 6) {
+					    		    	customOverlay.setMap(map);
+									}else{
+					    		    	customOverlay.setMap(null);
+									}
+					    		    
+				    			});
+					    	    
+					    	    
 					    	    
 					    	   	function addE() {	//마커에 이벤트 부여
 						    		kakao.maps.event.addListener(marker, 'mouseout', function() {
@@ -272,6 +301,8 @@
 							
 							outFunc();
 						}
+			    			
+			    		 
 			    		 if (storeResult.length > 0 && storeResult != null) {
 								$(".mapContainer").show();
 				    			map.relayout();
@@ -282,6 +313,10 @@
 			      }
 			});
 		});
+		
+			
+		
+		
 		
 		// 결과 정렬
 		$("select[name='sort']").click(function() {

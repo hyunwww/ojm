@@ -20,12 +20,15 @@ public class CustomUserDetailService implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		log.warn("load user by userName : " + username); // username == id
-		
-		
+
 		UserVO vo = mapper.getUserByID(username);
-		
+		CustomUser uvo = null;
 		log.warn("member mapper : " + vo);
-		
-		return vo == null ? null : new CustomUser(vo);
+		if (vo != null) {
+			uvo = new CustomUser(vo);
+			log.warn(uvo);
+		}
+		return uvo;
+
 	}
 }

@@ -58,6 +58,26 @@
 	  display: none;
 	  z-index: 1;
 	}
+	.reportOverlay{
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  background-color: rgba(0, 0, 0, 0.8);
+	  display: none;
+	  z-index: 1;
+	}
+	.reportModal{
+		width: fit-content;
+		height: auto;
+		margin: auto;
+		background-color: white;
+		padding: 15px;
+		border-radius: 5px; 
+		position: relative;
+		top: 10%; 
+	}
 	p{
 		position: relative;
 	}
@@ -76,9 +96,9 @@
 		font-family: sans-serif;
 	
 	}
+	
 </style>
 <link rel="stylesheet" href="/resources/css/imgPopup.css">
-<link rel="stylesheet" href="/resources/css/slide.css">
 <link rel="stylesheet" href="/resources/css/reviewModal.css">
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
@@ -90,15 +110,13 @@
 	//필요 유저 정보 ?
 	var nowLike = '${isLike}';
 	var sno = '${store.sno}';
+	var slike = '${store.slike}';
 
 	var popMap;	//지도 객체
 	var kd = '${store.kd}';
 	var wd = '${store.wd}';
 	var bounds = new kakao.maps.LatLngBounds(); //지도 범위
 	$(function() {
-		var user = '${user}';
-		console.log(user);
-		
 		
 		// 마커 이미지의 주소(현재 위치)
 		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
@@ -177,8 +195,46 @@
 		
 		//신고 버튼 이벤트 
 		$("#reportBtn").on("click", function() {
-			alert("신고버튼이벤트");
+			$(".reportOverlay").show();
 		});
+		//신고 모달 내 버튼 이벤트
+		$(".reportOverlay input[value='뒤로']").click(function() {
+			$(".reportOverlay").hide();
+			$(".reportOverlay form")[0].reset();
+		});
+		$(".reportOverlay input[value='신고하기']").click(function() {
+			
+			var form = $(".reportOverlay form")[0];
+			if (form.rptitle.value == '') {
+				alert("제목 필수작성");
+				return;
+			}
+			if (form.rpcontent.value == '') {
+				alert("내용은 필수작성");
+				return;
+			}
+			
+			var check = confirm("신고내용을 제출하시겠습니까?"); // 확인 메세지
+			if (check) {
+				var formData = $(".reportOverlay form").serialize() ;
+
+				$.ajax({
+					type : 'post',
+					url : '/store/report',
+					data : formData,
+					error: function(xhr, status, error){
+						alert(error);
+					},
+					success : function(result){
+						alert("제출되었습니다.");
+						$(".reportOverlay").hide();
+						$(".reportOverlay form")[0].reset();
+					}
+				});
+			}
+		});
+		
+		
 		
 		//좋아요 버튼 이벤트
 		$("#utilBox span").on("click", function() {
@@ -191,13 +247,17 @@
 			      data: {sno : sno,
 			    	  	 current : nowLike},
 			      success: function (result, status, xhr) {
-			    	  if(result){
+			    	  if(result){// 좋아요 적용
 			    		  $("#utilBox span").addClass("enabledLike");
 			    		  $("#utilBox span").removeAttr("id");
+			    		  slike++;
+			    		  $("#utilBox span").html("좋아요 " + slike);
 			    		  nowLike = true;
-			    	  }else{
+			    	  }else{//해제
 			    		  $("#utilBox span").removeClass("enabledLike");
 			    		  $("#utilBox span").attr("id", "likeBtn");
+			    		  slike--;
+			    		  $("#utilBox span").html("좋아요 " + slike);
 			    		  nowLike = false;
 			    	  }
 			    	  
@@ -232,14 +292,19 @@
 		// 지도 모달 바깥 클릭 시 닫힘
         window.onclick = function(event) {
 			var mapOverlay = $(".map-overlay")[0];
+			var reportOverlay = $(".reportOverlay")[0];
             if (event.target == mapOverlay) {
             	$(".map-overlay").hide();
+            }
+            if (event.target == reportOverlay) {
+            	$(".reportOverlay").hide();
+            	$(".reportOverlay form")[0].reset();
             }
         }
 	});
 
 </script>
-<script type="text/javascript" src="/resources/js/slide.js"></script>
+
 <script type="text/javascript">  /* 현재 위치 및 거리 계산*/
 	var distance;	//현재 위치로부터의 거리
 	$(function() {
@@ -310,7 +375,6 @@
 </script>
 </head>
 <body>
-
 	<sec:authorize access="isAuthenticated()">
 		<sec:authentication property="principal" var="user"/>
 	</sec:authorize>
@@ -319,16 +383,20 @@
 	<div class="wrapper">
 		<h2>detail</h2>
 		<div id="storeDetail">
-			<div class="slide slide_wrap">
-			  <c:forEach var="img" items="${store.imgList }">
-			      <div class="slide_item item">
-			      	<img alt="${img.sino }" src="/images/${img.uuid }_${img.fileName}" style="height: -webkit-fill-available">
-			      </div>
-			  </c:forEach>
-		      <div class="slide_prev_button slide_button">◀</div>
-		      <div class="slide_next_button slide_button">▶</div>
-		      <ul class="slide_pagination"></ul>
-		    </div>
+			<c:if test="${not empty store.imgList }">
+				<link rel="stylesheet" href="/resources/css/slide.css"><!-- 이미지슬라이드 css  -->
+				<script type="text/javascript" src="/resources/js/slide.js"></script><!-- 이미지슬라이드 js  -->
+				<div class="slide slide_wrap">
+				  <c:forEach var="img" items="${store.imgList }">
+				      <div class="slide_item item">
+				      	<img alt="${img.sino }" src="/images/${img.uuid }_${img.fileName}" style="height: -webkit-fill-available">
+				      </div>
+				  </c:forEach>
+			      <div class="slide_prev_button slide_button">◀</div>
+			      <div class="slide_next_button slide_button">▶</div>
+			      <ul class="slide_pagination"></ul>
+			    </div>
+			</c:if>
 			<p>이름 : ${store.sname }<span id="distance"></span></p>
 			<p>주소 : ${store.saddress }</p>
 			<p>영업시간 : ${store.openHour }</p>
@@ -447,9 +515,30 @@
 		<div class="mapModal"></div>
 	</div>
 	
-	
-	
-	
+	<!-- 신고  -->
+	<div class="reportOverlay">
+		<div class="reportModal">
+			<form action="#" method="post">
+				<p>제목</p>
+				<p><input type="text" name="rptitle"></p>
+				<p>사유</p>
+				<p>
+					<select name="state">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+					</select>
+				</p>
+				<p>내용</p>
+				<textarea rows="12" cols="30" name="rpcontent" style="resize: none;"></textarea>
+				<br><br>
+				<div style="text-align: right;">
+					<input type="button" value="뒤로">
+					<input type="button" value="신고하기">
+				</div>
+			</form>
+		</div>
+	</div>	
 	
 	
 	
