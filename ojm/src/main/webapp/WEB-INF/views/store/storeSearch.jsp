@@ -96,7 +96,7 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 	margin-left: auto;
 }
 .card {
-	height: 200px;
+	height: auto;
 	width: -webkit-fill-available;
 	border-radius: 15px;
 	display: inline-block;
@@ -107,6 +107,7 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
 		rgba(0, 0, 0, 0.19);
 	overflow: hidden;
+	padding: 15px;
 }
 .card:focus{
 	border: 2px solid indianred;
@@ -124,6 +125,20 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 	background-image: url("images/korea.jpeg");
 	background-size: 100% 280px;
 	background-repeat: no-repeat;
+}
+.card-footer{
+	text-align: right;
+	height: auto;
+	width: 100%;
+}
+.attTag{
+	width: auto;
+	height: auto;
+	background-color: indianred;
+	border-radius : 5px; 
+	color: white;
+	padding: 3px;
+	font-size: 11px;
 }
 </style>
   
@@ -234,9 +249,17 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 				    			store.str += '<div class="card" data-sno="'+store.sno+'" tabindex="0">';
 				    			store.str += '<div class="card-header">';
 				    			store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+				    			store.str += '</div>';
 				    			store.str += '<div class="card-body">';
 				    			store.str += '<p>'+store.saddress+'</p>';
 				    			store.str += '</div>';
+				    			store.str += '<div class="card-footer">';
+				    			if (store.sdeli == 1) {
+				    				store.str += '<i class="attTag">예약</i> ';
+								}
+				    			if (store.smaxreserv > 0) {
+				    				store.str += '<i class="attTag">배달</i> ';
+								}
 				    			store.str += '</div>';
 				    			store.str += '</div>';
 				    			
@@ -521,6 +544,11 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 									</div>
 									<div class="card-body">
 										<p>${store.saddress }</p>
+									</div>
+									<div class="card-footer">
+										<i class="attTag">tag1</i>
+										<i class="attTag">tag2</i>
+										<i class="attTag">tag3</i>
 									</div>
 								</div>
 							</c:forEach>

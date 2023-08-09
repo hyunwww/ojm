@@ -78,6 +78,11 @@
 		position: relative;
 		top: 10%; 
 	}
+	.recContainer{
+		width: 100%;
+		height: auto;
+		border: 1px solid black;
+	}
 	p{
 		position: relative;
 	}
@@ -96,14 +101,39 @@
 		font-family: sans-serif;
 	
 	}
+	.card {
+	height: auto;
+	width: -webkit-fill-available;
+	border-radius: 15px;
+	display: inline-block;
+	position: relative;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
+		rgba(0, 0, 0, 0.19);
+	overflow: hidden;
+	padding: 15px;
+	background-color: floralwhite;
+}
+	.owl-next, .owl-prev{
+		background-color: rgba(245, 126, 100, 0.6);
+		color: white;
+		border-radius : 10px; 
+		width: auto;
+		display: inline-block;
+		padding: 10px;
+		cursor: pointer;
+	}
+	
+	
 	
 </style>
 <link rel="stylesheet" href="/resources/css/imgPopup.css">
 <link rel="stylesheet" href="/resources/css/reviewModal.css">
+<link rel="stylesheet" href="/resources/css/owl.theme.default.min.css">
+<link rel="stylesheet" href="/resources/css/owl.carousel.min.css">
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript" src="/resources/js/imgPopup.js"></script>
-
+<script type="text/javascript" src="/resources/js/owl.carousel.min.js"></script>
 <!-- 지도 관련 스크립트 -->
 <script type="text/javascript">
 	
@@ -307,10 +337,11 @@
 
 <script type="text/javascript">  /* 현재 위치 및 거리 계산*/
 	var distance;	//현재 위치로부터의 거리
+	var currentPosition;
 	$(function() {
 		navigator.geolocation.getCurrentPosition(
 				function(position) {
-					
+					currentPosition = position.coords;
 					// 마커 이미지 생성
 					var targetImageUrl = '/resources/img/icon/free-icon-location-pointer-2098567.png', 
 					    targetImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
@@ -371,7 +402,94 @@
 			return dist.toFixed(1);
 		}
 	}
-
+</script>
+<script type="text/javascript">/* 거리 기반 추천 로직 */
+	$(function() {
+		//슬라이더
+		recommendByDistance();
+		
+		
+		 
+	});
+	
+	
+	function recommendByDistance() {
+		
+		var scate = ['${store.scate}'];
+		var saddr = '${store.saddress}';
+		//지역과 카테고리 기준으로 불러오기
+		$.ajax({
+		      type: "get",
+		      url: "/store/search/filter",
+		      data: {scate : scate,
+		    	  	location : saddr.split(" ")[0]},
+		      success: function (result, status, xhr) {
+		    	
+		    	  
+		    	  for (var store of result) {
+		    		if (sno == store.sno) {
+						continue;
+					}
+		    		//내 위치로부터 거리 *distance 는 현재 매장에 대한 정보
+		    		var dist = getDistance(kd, wd, store.kd, store.wd);
+		    		if (dist <= 5) {
+		    			
+		    			for (var i = 0; i < 7; i++) {
+			    			var str = '';
+			    			str += '<div class="card item">';
+			    			str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+			    			str += '</div>';
+			    			
+			    			$(".owl-carousel").append(str);
+						}
+		    			
+					}
+		    		
+		    		$('.owl-carousel').owlCarousel({
+		    		    loop: false,
+		    		    mousedrag : false,
+		    		    touchdrag : false,
+		    		    pulldrag : false,
+		    		    margin: 50,
+		    		    items : 1,
+		    		    nav:false,
+		    		    dots:false,
+		    		    responsive:{
+		    		        0:{
+		    		            items:1
+		    		        },
+		    		        600:{
+		    		            items:2
+		    		        },
+		    		        1000:{
+		    		            items:3
+		    		        }
+		    		    }
+		    		});
+		    		
+		    		// Go to the next item
+		    		$('.owl-next').click(function() {
+		    		    $(".owl-carousel").trigger('next.owl.carousel');
+		    		})
+		    		// Go to the previous item
+		    		$('.owl-prev').click(function() {
+		    		    // With optional speed parameter
+		    		    // Parameters has to be in square bracket '[]'
+		    		     $(".owl-carousel").trigger('prev.owl.carousel', [300]);
+		    		})
+		    		
+				}
+		    	  
+		    	  
+		      },
+		      error: function(xhr, state, error) {
+				
+			}
+		});
+	
+		
+	}
+	
 </script>
 </head>
 <body>
@@ -438,7 +556,7 @@
 			<button id="backBtn">뒤로</button>
 			<button id="reportBtn" style="background-color: maroon;">신고</button>
 			<button id="delBtn" style="background-color: maroon;" onclick="location.href='/store/delete?sno=${store.sno}&uno=${store.uno }'">삭제test</button>
-			
+			<button id="recommendBtn" onclick="recommendByDistance()">recTest</button>
 			<sec:authorize access="isAuthenticated()">
 				<button id="open-modal">리뷰 작성</button>
 			</sec:authorize>
@@ -462,6 +580,20 @@
 				</c:forEach>
 			</c:if>
 		</div>
+		<br><br>
+		
+		<!-- 비슷한 매장  -->
+		<h3>recommend</h3>
+		<div id="owlContainer">
+			<div class="owl-carousel owl-theme owl-loaded">
+		    </div>
+		    <div class="owl-nav">
+		        <div class="owl-prev">prev</div>
+		        <div class="owl-next">next</div>
+		    </div>
+		</div>
+		
+		
 	</div>
 	
 	

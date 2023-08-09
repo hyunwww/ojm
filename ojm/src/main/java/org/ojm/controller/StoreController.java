@@ -46,8 +46,6 @@ public class StoreController {
 	@Autowired
 	private StoreService service;
 	@Autowired
-	private UserService uService;
-	@Autowired
 	BCryptPasswordEncoder encoder;
 	
 	
@@ -408,7 +406,7 @@ public class StoreController {
 	}
 	
 	
-	//신고 ( 데이터 넘어옴 )
+	//신고
 	@PostMapping(value = "/report", produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public ResponseEntity<String> reportSubmit(ReportVO report, @AuthenticationPrincipal CustomUser user){
