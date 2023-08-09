@@ -50,7 +50,6 @@
 		<input type="reset" value="다시입력">
 		
 		
-		<input type="hidden" name="auth" value="user">
 		<input type="hidden" name="ulikestore" value="">
 		<input type="hidden" name="ulikejob" value="">
 	</form>
@@ -64,25 +63,6 @@
 	function check(f){	// 빈칸 체크
 		console.log(f);
 		
-		// 체크박스 값 가져와서 문자열로 저장하기
-		
-/* 		alert(typeof("f.uads"))
-		
-		var uads = "";
-		for(var ck of f.uads){
-			if(ck.checked){
-				uads+=ck.value + ",";
-			}
-		}
-		uads = uads.slice(0, -1);	// 마지막 쉼표 제거
-		
-		var ufavor = "";
-		for(var ck of f.ufavor){
-			if(ck.checked){
-				ufavor+=ck.value + ",";
-			}
-		}
-		ufavor = ufavor.slice(0, -1);  */
 		if(f.userid.value==''){
 			alert("아이디를 입력해주세요.");
 			return;

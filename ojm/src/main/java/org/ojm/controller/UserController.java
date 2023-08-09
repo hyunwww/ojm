@@ -1,6 +1,5 @@
 package org.ojm.controller;
 
-import javax.mail.MessagingException;
 
 import org.ojm.domain.AuthVO;
 import org.ojm.domain.InfoVO;
@@ -10,7 +9,6 @@ import org.ojm.mail.TempKey;
 import org.ojm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,13 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -86,23 +82,15 @@ public class UserController {
 		return "user/userRegister";
 	}
 	
-	// authList 부분 때문에 uservo 자동 매핑이 안되어서 일단 하드 코딩. 해결방법 못찾음
+	// authList 부분 때문에 uservo 자동 바인딩이 안되어서 일단 하드 코딩. 해결방법 못찾음
+	// authList가 아니라 userbirth가 date 형식인데 형식에 안맞게 넘어와서 안됐었던 것
+	// 일단 userVO에서 birth를 String으로 변경. service에서 날짜형식으로 변환할 것.
+	// 그리고 view단에서 권한을 name=auth로 넘기지 말고 authList[0].auth 처럼 인덱스를 부여해 배열로 넘겨야함
 	@PostMapping("/regUser")
-	public String userRegisterP(InfoVO ivo, Model model,
-			@RequestParam("userid") String userid,
-			@RequestParam("userpw") String userpw, 
-			@RequestParam("username") String username,
-			@RequestParam("userbirth") String userbirth, 
-			@RequestParam("userphone") String userphone,
-			@RequestParam("useremail") String useremail) {
+	public String userRegisterP(InfoVO ivo, Model model,UserVO uvo) {
 		log.info("userRegister Post......");
-		UserVO uvo = new UserVO();
 
-		uvo.setUserid(userid);
-		uvo.setUserpw(passwordEncoder.encode(userpw));
-		uvo.setUsername(username);
-		uvo.setUserphone(userphone);
-		uvo.setUseremail(useremail);
+		uvo.setUserpw(passwordEncoder.encode(uvo.getUserpw()));
 
 		if (service.regUser(uvo, ivo) > 0) {
 			model.addAttribute("register", "user");

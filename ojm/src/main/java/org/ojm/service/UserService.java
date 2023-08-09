@@ -1,10 +1,16 @@
 package org.ojm.service;
 
+import java.util.List;
+
+import org.ojm.domain.BoardVO;
+import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
+import org.ojm.domain.ReviewVO;
 import org.ojm.domain.UserVO;
 
 public interface UserService {
 	public UserVO login(String id, String pw);
+	public int getUno(String userid);
 	public int regUser(UserVO uvo);				// 사업자
 	public int regUser(UserVO uvo,InfoVO ivo);	// 일반 회원
 	
@@ -19,4 +25,12 @@ public interface UserService {
 	
 	public int idCheck(String userid);
 	public int pwChange(String userid,String userpw);
+	
+	
+	
+	
+	// myPage 
+	public List<BoardVO> getList(Criteria cri, int uno);
+	public List<ReviewVO> getReviews(Criteria cri,int uno);
+	public int getRvCnt(int uno);
 }

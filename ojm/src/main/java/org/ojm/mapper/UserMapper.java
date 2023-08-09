@@ -1,13 +1,19 @@
 package org.ojm.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.ojm.domain.AuthVO;
+import org.ojm.domain.BoardVO;
+import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
+import org.ojm.domain.ReviewVO;
 import org.ojm.domain.UserVO;
 
 public interface UserMapper {
 	public UserVO login(@Param("id") String id, @Param("pw") String pw);
 	public UserVO loginBusiness(@Param("id") String id, @Param("pw") String pw);
+	public int getUno(String userid);
 	
 	public int regUser(UserVO uvo);
 	public int regUserInfo(InfoVO ivo);
@@ -30,4 +36,10 @@ public interface UserMapper {
 	public int pwChange(@Param("userid") String userid,
 			@Param("userpw") String userpw);
 	
+	
+	
+	// myPage
+	public List<BoardVO> getListWithPaging(@Param("cri") Criteria cri,@Param("uno") int uno);
+	public List<ReviewVO> getReviews(@Param("cri") Criteria cri,@Param("uno") int uno);
+	public int getRvCnt(int uno);
 }

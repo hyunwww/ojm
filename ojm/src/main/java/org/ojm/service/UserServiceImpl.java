@@ -1,7 +1,12 @@
 package org.ojm.service;
 
+import java.util.List;
+
 import org.ojm.domain.AuthVO;
+import org.ojm.domain.BoardVO;
+import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
+import org.ojm.domain.ReviewVO;
 import org.ojm.domain.UserVO;
 import org.ojm.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +29,10 @@ public class UserServiceImpl implements UserService{
 		}
 		
 		return mapper.login(id,pw);
+	}
+	@Override
+	public int getUno(String userid) {
+		return mapper.getUno(userid);
 	}
 	
 	@Transactional
@@ -89,4 +98,20 @@ public class UserServiceImpl implements UserService{
 		return mapper.pwChange(userid,userpw);
 	}
 	
+	
+	
+	
+	// myPage
+	@Override
+	public List<BoardVO> getList(Criteria cri, int uno) {
+		return mapper.getListWithPaging(cri, uno);
+	}
+	@Override
+	public List<ReviewVO> getReviews(Criteria cri,int uno) {
+		return mapper.getReviews(cri,uno);
+	}
+	@Override
+	public int getRvCnt(int uno) {
+		return mapper.getRvCnt(uno);
+	}
 }

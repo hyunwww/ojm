@@ -8,5 +8,6 @@
 </head>
 <body>
 
+	<br><br><jsp:include page="myPageFooter.jsp"></jsp:include>
 </body>
 </html>
