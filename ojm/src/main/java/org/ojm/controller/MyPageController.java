@@ -7,6 +7,7 @@ import org.ojm.domain.InfoVO;
 import org.ojm.domain.PageDTO;
 import org.ojm.domain.UserVO;
 import org.ojm.service.BoardService;
+import org.ojm.service.QboardService;
 import org.ojm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,10 @@ public class MyPageController {
 	UserService service;
 	@Setter(onMethod_ = @Autowired)
 	BoardService bs;
+	@Setter(onMethod_ = @Autowired)
+	QboardService qs;
 	
+	// 일반유저
 	@GetMapping("/main")
 	public String myPageMain(Principal pr,Model model) {
 		log.info("myPageMain...... id : " + pr.getName());
@@ -62,8 +66,12 @@ public class MyPageController {
 		return "user/myPage/jboard";
 	}
 	@GetMapping("/qboard")
-	public String myPageQboard() {
-		log.info("myPageMain...... ");
+	public String myPageQboard(Model model,Criteria cri, @ModelAttribute("uno") int uno) {
+		log.info("myPageQboard...... ");
+		
+		model.addAttribute("qlist", service.getQlist(cri,uno));
+		model.addAttribute("total", qs.getQtotal());
+		model.addAttribute("pageMaker", new PageDTO(cri, qs.getQtotal()));
 		return "user/myPage/qboard";
 	}
 	@GetMapping("/review")
@@ -75,14 +83,6 @@ public class MyPageController {
 		model.addAttribute("pageMaker", new PageDTO(cri, service.getRvCnt(uno)));
 		return "user/myPage/review";
 	}
-	@GetMapping("/tmp")
-	public String myPageTmp(@ModelAttribute("uvo") UserVO vo) {
-		log.info("myPageMain...... uno : " + vo.getUno());
-		log.info("임시페이지");
-		return "user/myPage/tmp";
-	}
-	
-	
 	@RequestMapping(value = "/modify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
 			method = RequestMethod.POST)
 	public ResponseEntity<String> modify(UserVO uvo,InfoVO ivo){
@@ -95,5 +95,40 @@ public class MyPageController {
 		
 		return modifyCount == 1 ? new ResponseEntity<>("success", HttpStatus.OK) :
 				new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
+	
+	
+	// 사업자
+	@GetMapping("/b/main")
+	public String b_main(Principal pr,Model model) {
+		log.info("myPageBmain...... id : " + pr.getName());
+		
+		model.addAttribute("uno", service.getUno(pr.getName()));
+		
+		return "user/myPage/b/main";
+	}
+	@GetMapping("/b/book")
+	public String b_book() {
+		log.info("myPageBbook......");
+		
+		
+		return "user/myPage/b/book";
+	}
+	@GetMapping("/b/store")
+	public String b_store(Principal pr,Model model) {
+		log.info("myPageBstore......id : " + pr.getName());
+		
+		model.addAttribute("slist", service.getStoreList(service.getUno(pr.getName())));
+		
+		return "user/myPage/b/store";
+	}
+	@GetMapping("/b/jboard")
+	public String b_jboard() {
+		log.info("myPageBjboard......");
+		
+		
+		return "user/myPage/b/jboard";
 	}
 }

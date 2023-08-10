@@ -180,8 +180,9 @@ public class UserController {
 		model.addAttribute("mail_key", sendMail(useremail));
 	}
 	@PostMapping("/changePw")	
-	public void changePw(@RequestParam("userid") String userid) {
+	public void changePw(Model model,@RequestParam("userid") String userid) {
 		log.info("changePw.... id : " + userid);
+		model.addAttribute("userid",userid);
 	}
 	@ResponseBody		// pw 변경 확정
 	@RequestMapping(value = "/pwChange", method = RequestMethod.POST)
@@ -190,7 +191,7 @@ public class UserController {
 		
 		log.info("pwChange......userid : " + userid);
 		
-		int check = service.pwChange(userid,userpw);
+		int check = service.pwChange(userid,passwordEncoder.encode(userpw));
 		
 		return check == 1 ? new ResponseEntity<>("success", HttpStatus.OK)
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

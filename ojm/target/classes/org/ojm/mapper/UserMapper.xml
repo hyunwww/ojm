@@ -132,7 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="getUserByID" resultMap="userMap">
 		select 
-		    u.userid,u.userpw,u.username,u.userbirth,
+		    u.uno,u.userid,u.userpw,u.username,u.userbirth,
 		    u.userphone,u.useremail,a.auth,i.* 
 		from 
 		        usertable u 
@@ -185,5 +185,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<select id="getRvCnt" resultType="int">
 		select count(*) from review where uno=#{uno}
+	</select>
+	<select id="getQlist" resultType="org.ojm.domain.QboardVO">
+		<![CDATA[
+			select qno, qtitle, qwriter, qcate, qhide, qdate, qupdatedate, qreplycnt, qview
+			from
+				(select /*+INDEX_DESC(qboard pk_qboard) */
+				rownum rn, qno, qtitle, qwriter, qcate, qhide, qdate, qupdatedate, qreplycnt, qview from qboard
+				where]]>
+				<![CDATA[
+				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
+				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+		]]>
+	</select>
+	<select id="getStoreList" resultType="org.ojm.domain.StoreVO">
+		select * from store where uno=#{uno}
 	</select>
 </mapper>
