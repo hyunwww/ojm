@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserVO {
 	private int uno;
-	private String userbirth;
+	private Date userbirth;
 	private String userid,userpw,username,userphone,useremail;
 	private InfoVO info;
 	private List<AuthVO> authList;

@@ -3,9 +3,11 @@ package org.ojm.service;
 import java.util.List;
 
 import org.ojm.domain.BoardImgVO;
+import org.ojm.domain.BoardLikeVO;
 import org.ojm.domain.BoardVO;
 import org.ojm.domain.Criteria;
 import org.ojm.mapper.BoardImgMapper;
+import org.ojm.mapper.BoardLikeMapper;
 import org.ojm.mapper.BoardMapper;
 import org.ojm.mapper.BoardReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Autowired
 	private BoardImgMapper imgMapper;
+	
+	@Autowired
+	private BoardLikeMapper blMapper;
 	
 	@Override
 	public List<BoardVO> getList(Criteria cri) {
@@ -81,8 +86,18 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int updateBlike(int bno) {
-		log.info("updateBlike...");		
-		return mapper.updateBlike(bno);
+	public int bCountLike(int bno, int uno) {
+		return blMapper.bCountLike(bno, uno);
 	}
+
+	@Override
+	public int bLikeUp(int bno, int uno) {
+		return blMapper.bLikeUp(bno, uno);
+	}
+
+	@Override
+	public int bLikeDown(int bno, int uno) {
+		return blMapper.bLikeDown(bno, uno);
+	}
+
 }
