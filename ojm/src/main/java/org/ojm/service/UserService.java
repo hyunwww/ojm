@@ -5,6 +5,7 @@ import java.util.List;
 import org.ojm.domain.BoardVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
+import org.ojm.domain.QboardVO;
 import org.ojm.domain.ReviewVO;
 import org.ojm.domain.UserVO;
 
@@ -33,4 +34,5 @@ public interface UserService {
 	public List<BoardVO> getList(Criteria cri, int uno);
 	public List<ReviewVO> getReviews(Criteria cri,int uno);
 	public int getRvCnt(int uno);
+	public List<QboardVO> getQlist(Criteria cri, int uno);
 }

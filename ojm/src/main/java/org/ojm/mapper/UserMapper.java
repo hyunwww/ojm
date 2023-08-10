@@ -7,6 +7,7 @@ import org.ojm.domain.AuthVO;
 import org.ojm.domain.BoardVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
+import org.ojm.domain.QboardVO;
 import org.ojm.domain.ReviewVO;
 import org.ojm.domain.UserVO;
 
@@ -42,4 +43,5 @@ public interface UserMapper {
 	public List<BoardVO> getListWithPaging(@Param("cri") Criteria cri,@Param("uno") int uno);
 	public List<ReviewVO> getReviews(@Param("cri") Criteria cri,@Param("uno") int uno);
 	public int getRvCnt(int uno);
+	public List<QboardVO> getQlist(@Param("cri") Criteria cri,@Param("uno") int uno);
 }

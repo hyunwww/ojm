@@ -55,7 +55,7 @@
 				</c:choose>
 			</tbody>
 		</table>
-		
+		<hr>
 		<!-- page -->
 		<div>
 			<ul>
@@ -76,7 +76,7 @@
 				</c:if>
 			</ul>
 		</div>
-		<hr>
+		
 		<form action="board" method="get" id="actionForm">
 			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">

@@ -6,6 +6,7 @@ import org.ojm.domain.AuthVO;
 import org.ojm.domain.BoardVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
+import org.ojm.domain.QboardVO;
 import org.ojm.domain.ReviewVO;
 import org.ojm.domain.UserVO;
 import org.ojm.mapper.UserMapper;
@@ -113,5 +114,9 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int getRvCnt(int uno) {
 		return mapper.getRvCnt(uno);
+	}
+	@Override
+	public List<QboardVO> getQlist(Criteria cri, int uno) {
+		return mapper.getQlist(cri,uno);
 	}
 }
