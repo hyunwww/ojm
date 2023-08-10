@@ -71,7 +71,7 @@
 	$(document).on("click","#pwBtn", function(){	// 동적 추가된 요소에 이벤트 걸기
 		console.log("pwBtn");
 		form.attr("method","Post");
-		form.attr("action","");	// 비밀번호 변경 url로
+		form.attr("action","changePw");	// 비밀번호 변경 url로
 		
 		form.append($('<input>', {type: 'hidden', name: 'userid', value: '${userid}'}));
 		form.append($('<input>', {type: 'hidden', name: 'useremail', value: '${useremail}'}));

@@ -4,7 +4,7 @@ $(function(){
 	let slides = document.querySelectorAll(".slides > li");
 	let slidePhoto = document.querySelectorAll(".slides > li>img");
 	const slide = document.querySelector(".slides");
-	const thumbnails = document.querySelectorAll(".box__gallery > li");
+	const thumbnails = document.querySelectorAll(".slide_item > img");
 	const photoCount = slides.length;
 	const duration = 400;
 	let bullets = 0;

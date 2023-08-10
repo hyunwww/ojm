@@ -6,7 +6,9 @@ import org.ojm.domain.AuthVO;
 import org.ojm.domain.BoardVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
+import org.ojm.domain.QboardVO;
 import org.ojm.domain.ReviewVO;
+import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
 import org.ojm.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,5 +115,13 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int getRvCnt(int uno) {
 		return mapper.getRvCnt(uno);
+	}
+	@Override
+	public List<QboardVO> getQlist(Criteria cri, int uno) {
+		return mapper.getQlist(cri,uno);
+	}
+	@Override
+	public List<StoreVO> getStoreList(int uno) {
+		return mapper.getStoreList(uno);
 	}
 }

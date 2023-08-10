@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>내 구인구직</title>
 </head>
 <body>
-	임시 관리자 페이지
-	${vo.userid }
+
+	<br><br><jsp:include page="myPageBfooter.jsp"></jsp:include>
 </body>
 </html>

@@ -451,20 +451,23 @@
 					}
 		    		//내 위치로부터 거리 *distance 는 현재 매장에 대한 정보
 		    		var dist = getDistance(kd, wd, store.kd, store.wd);
+		    		var empty = true;
 		    		if (dist <= 5) {
-		    			
-		    			for (var i = 0; i < 5; i++) {
-			    			var str = '';
-			    			str += '<div class="card item">';
-			    			str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
-			    			str += '</div>';
-			    			
-			    			$(".owl-carousel").append(str);
-						}
-		    			
+		    			empty = false;
+				    	var str = '';
+				    	str += '<div class="card item">';
+				    	str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+				    	str += '</div>';
+				    	
+					    $(".owl-carousel").append(str);
 					}
 		    		
-		    		$('.owl-carousel').owlCarousel({
+		    		
+		    		
+				}
+		    	
+		    	
+		    	  $('.owl-carousel').owlCarousel({
 		    		    loop: false,
 		    		    mousedrag : false,
 		    		    touchdrag : false,
@@ -473,6 +476,7 @@
 		    		    items : 1,
 		    		    nav:false,
 		    		    dots:false,
+		    		    center:true,
 		    		    responsive:{
 		    		        0:{
 		    		            items:1
@@ -491,7 +495,7 @@
 		    			console.log(e.item.count);
 		    			if (e.item.index == 0) {
 							$(".owl-prev").addClass("owl-lastItem");
-						}else if (e.item.index == e.item.count-3) {
+						}else if (e.item.index == e.item.count - 1) {
 							$(".owl-next").addClass("owl-lastItem");
 						}else{
 							$(".owl-next").removeClass("owl-lastItem");
@@ -508,11 +512,12 @@
 		    		    // With optional speed parameter
 		    		    // Parameters has to be in square bracket '[]'
 		    		     $(".owl-carousel").trigger('prev.owl.carousel', [300]);
-		    		});
+		    		});  
+		    	  	
+		    		if ($(".owl-stage .card").length < 2) {
+						$(".owl-next").addClass("owl-lastItem");
+					}
 		    		
-				}
-		    	  
-		    	  
 		      },
 		      error: function(xhr, state, error) {
 				
@@ -714,14 +719,8 @@
 					+ '%';
 		}
 		const modal = document.getElementById("modal");
-		const openModalBtn = document.getElementById("open-modal");
 		const closeModalBtn = document.getElementById("close-modal");
 		
-		// 모달창 열기
-		openModalBtn.addEventListener("click", () => {
-		  modal.style.display = "block";
-		  document.body.style.overflow = "hidden"; // 스크롤바 제거
-		});
 		
 		// 모달창 닫기
 		closeModalBtn.addEventListener("click", () => {
