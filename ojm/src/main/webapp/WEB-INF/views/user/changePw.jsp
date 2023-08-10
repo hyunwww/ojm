@@ -19,12 +19,16 @@
 	function change(f){
 		if(f.pw.value==''){
 			alert("비밀번호를 입력해주세요.");
+			return;
 		}else if(f.pw2.value=='' || f.pw.value != f.pw2.value){
 			alert("비밀번호를 확인해주세요.");
+			return;
 		}
 		
 		var userid = f.userid.value;
 		var userpw = f.userpw.value;
+		console.log(userid);
+		console.log(userpw);
 		
 		$.ajax({	
 	      	type : 'post',
@@ -32,7 +36,7 @@
 	      	data: {userid:userid,userpw:userpw},
 	     	success : function(result){ 
 	     		alert("비밀번호를 변경했습니다.");
-	     		location.href="redirect:/login"
+	     		location.href="http://localhost:8080/user/login"
 	      	},
 	      	error : function(result){
 	      		console.log(result.responseText);

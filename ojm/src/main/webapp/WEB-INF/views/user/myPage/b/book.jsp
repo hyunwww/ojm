@@ -7,7 +7,6 @@
 <title>내 예약내역</title>
 </head>
 <body>
-
 	<br><br><jsp:include page="myPageBfooter.jsp"></jsp:include>
 </body>
 </html>
