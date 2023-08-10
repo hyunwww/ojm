@@ -140,6 +140,14 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 	padding: 3px;
 	font-size: 11px;
 }
+.bubble{
+	background-color: white;
+	border: 1px solid indianred;
+	width: auto;
+	height: auto;
+
+
+}
 </style>
   
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
@@ -329,8 +337,9 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 					    	        };
 					    	    var overImage = new kakao.maps.MarkerImage(overImageUrl, overImageSize, overImageOptions);
 					    		
-					    	 // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-					    	    var content = '<div class="customoverlay">' +
+					    	    
+					    	 	// 커스텀 오버레이에 표출될 내용
+					    	    var content = '<div class="bubble">' +
 					    	        '    <span class="title">'+store.sname+'</span>' +
 					    	        '</div>';
 
@@ -340,7 +349,8 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 					    	        map: map,
 					    	        position: coords,
 					    	        content: content,
-					    	        yAnchor: 1 
+					    	        yAnchor: 0.4,
+					    	        xAnchor: 0.4
 					    	    });
 					    	    
 					    	  	//지도 레벨 변동 감지
@@ -350,8 +360,10 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 					    		    // 지도의 현재 레벨을 얻어옵니다
 					    		    var level = map.getLevel();
 					    		    if (level <= 6) {
+					    		    	//오버레이 표시
 					    		    	customOverlay.setMap(map);
 									}else{
+										//오버레이 숨기기
 					    		    	customOverlay.setMap(null);
 									}
 					    		    

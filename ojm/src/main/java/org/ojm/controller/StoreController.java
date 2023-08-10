@@ -54,7 +54,7 @@ public class StoreController {
 		
 		return "/store/storeRegister";
 	}
-	//등록(사업자 기준) , test 끝
+	//등록(사업자 기준)
 	@PostMapping(value = "/register")
 	public String register(StoreVO storeInfo,
 							@RequestParam("addr") String addr,
@@ -176,10 +176,46 @@ public class StoreController {
 		}
 		
 		
+		StoreVO svo = service.storeInfo(sno);
+		String result = "";
 		
+		if (svo.getDayOff() != null && !svo.getDayOff().equals("")) {
+			log.info("데이터 있음");
+			for (String day : svo.getDayOff().split("")) {
+				switch (day) {
+				case "1":
+					result += "월요일,";
+					break;
+				case "2":
+					result += "화요일,";
+					break;
+				case "3":
+					result += "수요일,";
+					break;
+				case "4":
+					result += "목요일,";
+					break;
+				case "5":
+					result += "금요일,";
+					break;
+				case "6":
+					result += "토요일,";
+					break;
+				case "0":
+					result += "일요일,";
+					break;
+				default:
+					break;
+				}
+			}
+			model.addAttribute("dayOff", result.substring(0, result.length()-1));
+		}else {
+			result = "없음";
+			model.addAttribute("dayOff", result);
+		}
 		log.info("현재 매장 좋아요 여부 : " + isLike); 
 		model.addAttribute("isLike", isLike);
-		model.addAttribute("store" , service.storeInfo(sno));
+		model.addAttribute("store" , svo);
 		return "/store/storeDetail";
 	}
 	
@@ -271,13 +307,20 @@ public class StoreController {
 			//유저
 			//uService.modifyUser(uvo);
 			
+			
+			
+			// 현재유저의 해당 매장 좋아요 여부 판단하여 true/false 전달
+			return new ResponseEntity<Boolean>(!current, HttpStatus.OK);
+		}else {	//비로그인 유저
+			
+			//에러 처리
+			return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+			
 		}
 		
 		
 		
 		
-		// 현재유저의 해당 매장 좋아요 여부 판단하여 true/false 전달
-		return new ResponseEntity<Boolean>(!current, HttpStatus.OK);
 	}
 	
 	
@@ -344,22 +387,38 @@ public class StoreController {
 	}
 	
 	
-	
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/update")
-	public String goUpdate(@RequestParam("sno")int sno, Model model) {
+	public String goUpdate(@RequestParam("sno")int sno, Model model,
+							@AuthenticationPrincipal CustomUser user,
+							@RequestParam("uno")int uno) {
 		
-		StoreVO storeInfo = service.storeInfo(sno);
-		model.addAttribute("store", storeInfo);
-		String[] time = storeInfo.getOpenHour().split(" ");
-		model.addAttribute("openHour", time[0]);
-		model.addAttribute("closeHour", time[2]);
-		return "/store/storeUpdate";
+		if (user != null) {
+			if (user.getUvo().getUno() != uno) {	//유저 검증
+				return "redirect:/";
+			}else {
+				
+				StoreVO storeInfo = service.storeInfo(sno);
+				model.addAttribute("store", storeInfo);
+				String[] time = storeInfo.getOpenHour().split(" ");
+				model.addAttribute("openHour", time[0]);
+				model.addAttribute("closeHour", time[2]);
+				return "/store/storeUpdate";
+			}
+		}else {
+			return "redirect:/";
+		}
+		
 	}
 	
 	@PostMapping("/update")
 	public String updateStore(StoreVO storeInfo,
 								@RequestParam("openHour")String open,
 								@RequestParam("closeHour")String close) {
+		
+		
+		
+		
 		
 		log.info("updating store >>> " + storeInfo);
 		String time = open + " ~ " + close;

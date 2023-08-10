@@ -121,9 +121,24 @@
 		display: inline-block;
 		padding: 10px;
 		cursor: pointer;
+		position: relative;
+		transform: translateY(-50%);
 	}
-	
-	
+.owl-prev {
+  left: -24rem;
+  top: -3rem;
+  z-index: 5;
+}
+
+.owl-next {
+  right: -24rem;
+  top: -3rem;
+  z-index: 5;
+}
+.owl-lastItem{
+	background-color: rgba(245, 126, 100, 0.2);
+
+}
 	
 </style>
 <link rel="stylesheet" href="/resources/css/imgPopup.css">
@@ -268,7 +283,8 @@
 		
 		//좋아요 버튼 이벤트
 		$("#utilBox span").on("click", function() {
-			alert("좋아요 버튼 이벤트!");
+			
+			
 			console.log("nowLike : " + nowLike);
 			//uno, sno 전달 , 버튼 css 변경
 			$.ajax({
@@ -291,7 +307,10 @@
 			    		  nowLike = false;
 			    	  }
 			    	  
-			      }
+			      },
+			      error: function(xhr, status, error) {
+					alert("로그인이 필요한 서비스입니다.");
+				}
 			});
 		});
 		
@@ -434,7 +453,7 @@
 		    		var dist = getDistance(kd, wd, store.kd, store.wd);
 		    		if (dist <= 5) {
 		    			
-		    			for (var i = 0; i < 7; i++) {
+		    			for (var i = 0; i < 5; i++) {
 			    			var str = '';
 			    			str += '<div class="card item">';
 			    			str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
@@ -466,17 +485,30 @@
 		    		        }
 		    		    }
 		    		});
-		    		
+		    		//이벤트 부여
+		    		$('.owl-carousel').on('changed.owl.carousel', function(e) {
+		    			console.log(e.item.index);
+		    			console.log(e.item.count);
+		    			if (e.item.index == 0) {
+							$(".owl-prev").addClass("owl-lastItem");
+						}else if (e.item.index == e.item.count-3) {
+							$(".owl-next").addClass("owl-lastItem");
+						}else{
+							$(".owl-next").removeClass("owl-lastItem");
+							$(".owl-prev").removeClass("owl-lastItem");
+						}
+		    			
+		    		});
 		    		// Go to the next item
 		    		$('.owl-next').click(function() {
 		    		    $(".owl-carousel").trigger('next.owl.carousel');
-		    		})
+		    		});
 		    		// Go to the previous item
 		    		$('.owl-prev').click(function() {
 		    		    // With optional speed parameter
 		    		    // Parameters has to be in square bracket '[]'
 		    		     $(".owl-carousel").trigger('prev.owl.carousel', [300]);
-		    		})
+		    		});
 		    		
 				}
 		    	  
@@ -517,6 +549,7 @@
 			</c:if>
 			<p>이름 : ${store.sname }<span id="distance"></span></p>
 			<p>주소 : ${store.saddress }</p>
+			<p>휴무일 : ${dayOff }</p>
 			<p>영업시간 : ${store.openHour }</p>
 			<p>예약금 : ${store.sdepo }</p>
 			<p>
@@ -556,7 +589,6 @@
 			<button id="backBtn">뒤로</button>
 			<button id="reportBtn" style="background-color: maroon;">신고</button>
 			<button id="delBtn" style="background-color: maroon;" onclick="location.href='/store/delete?sno=${store.sno}&uno=${store.uno }'">삭제test</button>
-			<button id="recommendBtn" onclick="recommendByDistance()">recTest</button>
 			<sec:authorize access="isAuthenticated()">
 				<button id="open-modal">리뷰 작성</button>
 			</sec:authorize>
@@ -588,7 +620,7 @@
 			<div class="owl-carousel owl-theme owl-loaded">
 		    </div>
 		    <div class="owl-nav">
-		        <div class="owl-prev">prev</div>
+		        <div class="owl-prev owl-lastItem">prev</div>
 		        <div class="owl-next">next</div>
 		    </div>
 		</div>

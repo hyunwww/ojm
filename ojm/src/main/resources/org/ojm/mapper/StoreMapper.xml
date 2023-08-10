@@ -22,7 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{sstar},
 			#{spermmit}, 
 			#{openHour},
-			#{smaxreserv}
+			#{smaxreserv},
+			#{dayOff}
 		)
 	</insert>
 	

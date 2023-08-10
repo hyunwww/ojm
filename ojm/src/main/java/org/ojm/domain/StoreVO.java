@@ -13,7 +13,7 @@ public class StoreVO {
 	
 	private int sno, uno, sdeli, slike, spermmit, smaxreserv;
 	private double sstar;
-	private String sname, saddress, wd, kd, sphone, scate,scrn,sdepo,openHour;
+	private String sname, saddress, wd, kd, sphone, scate,scrn,sdepo,openHour,dayOff;
 	
 	
 	//menuList

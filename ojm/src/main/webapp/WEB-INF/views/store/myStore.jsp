@@ -32,7 +32,7 @@
 				<p>
 					<a href="/store/detail?sno=${store.sno }">${store.sname }</a>
 					<a href="/store/delete?sno=${store.sno }">삭제</a>
-					<a href="/store/update?sno=${store.sno }">수정</a>
+					<a href="/store/update?sno=${store.sno }&uno=${store.uno }">수정</a>
 				</p>
 				<hr>
 			</c:forEach>

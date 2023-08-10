@@ -13,6 +13,21 @@
 	input[name="smaxreserv"]{
 		display: none;
 	}
+	.dayOff{
+		border: 1px solid black;
+		border-collapse: collapse;
+		background-color: rgba(171, 171, 171, 0.5);
+	}
+	.dayOff td{
+		border: 1px solid black;
+		padding: 5px;
+		 
+	}
+	.dayClicked{
+		background-color: cadetblue;
+		color: white;
+	}
+	
 	
 	
 	.thumbnail{
@@ -126,6 +141,12 @@
 				
 			}
 		});
+		//휴무
+		$(".dayOff td").click(function() {
+			$(this).toggleClass("dayClicked");
+		});
+		
+		
 		
 		
 		//regForm 제어
@@ -154,7 +175,39 @@
 				
 				
 				sendFile(files, function() {
-					
+					var dayInput = '';
+					for (var i = 0; i < $(".dayOff td").length; i++) {
+						if ($(".dayOff td")[i].classList.contains("dayClicked")) {
+							var day = $(".dayOff td")[i].innerHTML;
+							switch (day) {
+							case '월':
+								dayInput += 1;
+								break;
+							case '화':
+								dayInput += 2;
+								break;
+							case '수':
+								dayInput += 3;
+								break;
+							case '목':
+								dayInput += 4;
+								break;
+							case '금':
+								dayInput += 5;
+								break;
+							case '토':
+								dayInput += 6;
+								break;
+							case '일':
+								dayInput += 0;
+								break;
+							default:
+								break;
+							}
+							
+						}
+					}
+					$("#regForm").append('<input type="hidden" name="dayOff" value="'+dayInput+'"/>');
 					$("#regForm").append(menuInput);
 					$("#regForm").submit();
 				});
@@ -319,6 +372,22 @@
 					<td>예약<input type="checkbox" value="1" name="checkReserv"></td>
 					<td>
 						<input type="number" name="smaxreserv" placeholder="예약 최대 가능 인원" value="0">
+					</td>
+				</tr>
+				<tr>
+					<td>휴무</td>
+					<td>
+						<table class="dayOff">
+							<tr>
+								<td>월</td>
+								<td>화</td>
+								<td>수</td>
+								<td>목</td>
+								<td>금</td>
+								<td>토</td>
+								<td>일</td>
+							</tr>
+						</table>
 					</td>
 				</tr>
 				<tr>
