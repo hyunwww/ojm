@@ -21,13 +21,13 @@
 	$(".btn").on("click",function(){
 		var tv = this.value;
 		if(tv=='main'){
-			location.href="/user/myPage/b_main";
+			location.href="/user/myPage/b/main";
 		}else if(tv=='store'){
-			location.href="/user/myPage/b_store";
+			location.href="/user/myPage/b/store";
 		}else if(tv=='book'){
-			location.href="/user/myPage/b_book";
+			location.href="/user/myPage/b/book";
 		}else if(tv=='jboard'){
-			location.href="/user/myPage/b_jboard";
+			location.href="/user/myPage/b/jboard";
 		}
 	});
 </script>

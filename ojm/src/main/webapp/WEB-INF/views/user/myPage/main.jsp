@@ -14,6 +14,7 @@ Object principal = auth.getPrincipal();
 
 pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
 	// jsp 원래 있던 코드 그대로 쓰려고 (uvo 변수) 자바 코드 사용함
+	// 시큐리티로 인증되지 않은 사용자는 접근이 불가능하기에 예외처리도 필요없음.
 %>
 <!DOCTYPE html>
 <html>

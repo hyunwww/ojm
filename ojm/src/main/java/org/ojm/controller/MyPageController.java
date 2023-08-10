@@ -117,9 +117,10 @@ public class MyPageController {
 		return "user/myPage/b/book";
 	}
 	@GetMapping("/b/store")
-	public String b_store() {
-		log.info("myPageBstore......");
+	public String b_store(Principal pr,Model model) {
+		log.info("myPageBstore......id : " + pr.getName());
 		
+		model.addAttribute("slist", service.getStoreList(service.getUno(pr.getName())));
 		
 		return "user/myPage/b/store";
 	}

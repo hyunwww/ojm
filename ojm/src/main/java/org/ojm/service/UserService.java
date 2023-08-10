@@ -7,6 +7,7 @@ import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.QboardVO;
 import org.ojm.domain.ReviewVO;
+import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
 
 public interface UserService {
@@ -31,8 +32,13 @@ public interface UserService {
 	
 	
 	// myPage 
+	// user
 	public List<BoardVO> getList(Criteria cri, int uno);
 	public List<ReviewVO> getReviews(Criteria cri,int uno);
 	public int getRvCnt(int uno);
 	public List<QboardVO> getQlist(Criteria cri, int uno);
+	
+	
+	// business
+	public List<StoreVO> getStoreList(int uno);
 }
