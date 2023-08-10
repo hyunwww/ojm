@@ -159,6 +159,7 @@
 			
 			// $(this) 의 요소 중 href의 속성 값 (value)
 			actionForm.attr('action', 'get'); // 경로 변경
+			actionForm.append("<input type='hidden' name='uno' value='" + ${uvo.uno} +"'>");	// uno 저장
 			actionForm.append("<input type='hidden' name='bno' value='" + $(this).attr('href') + "'>");	// bno 저장
 			actionForm.submit();
 		});

@@ -55,11 +55,6 @@
 				<td>내용</td>
 				<td><textarea rows="15" cols="100" name="bcontent" readonly="readonly" style="background-color: #ccc">${vo.bcontent }</textarea></td>
 			</tr>
-			<tr>
-				<td colspan="2">
-					<button name="blike">좋아요</button> ${vo.blike }
-				</td>
-			</tr>
 			
 			<!-- 첨부 이미지 -->
 			<tr>
@@ -68,17 +63,24 @@
 					<ul></ul>
 				</td>
 			</tr>
-			 
-			<!-- 
-			<tr>
-				<td>이미지</td>
-				<td class = 'uploadResult'>
-					<c:forEach var="imgList" items="${imgList }">
-						<img alt="${imgList.filename }" src="C:\\ojm/${imgList.uploadpath}/${imgList.uuid }_${imgList.filename }">
-					</c:forEach>
-				</td>
-			</tr>
-			 -->
+			<c:choose>
+				<c:when test="${not empty uvo.uno and like == 0}">
+					<tr id="blike">
+						<td colspan="2">
+							<input class="like" type="hidden" value="${like }">
+							<button name="blikeBtn">추천</button>
+						</td>
+					</tr>
+				</c:when>
+				<c:when test="${not empty uvo.uno and like == 1}">
+					<tr id="blike">
+						<td colspan="2">
+							<input class="like" type="hidden" value="${like }">
+							<button name="blikeBtn">추천 취소</button>
+						</td>
+					</tr>
+				</c:when>
+			</c:choose>
 			 
 		</table>
 		<hr>
@@ -128,9 +130,67 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<!-- 좋아요 버튼 클릭 이벤트 스크립트 -->
 	<script type="text/javascript">
-		$("button[name='blike']").on("click", function(){
-			
+		var bno = "${vo.bno }";
+		var uno = "${uvo.uno}";
+
+		$(function(){
+			$("#blike").on("click","button[name='blikeBtn']", function(){
+				if ($(".like").val() == 1) {
+					down();
+				}else if ($(".like").val() == 0) {
+					up();
+				};
+				
+			});
+		
 		});
+		
+		function down(down, callback, error){
+			$.ajax({
+				type : 'post',
+				url : '/like/bLikeDown',
+				contentType : 'application/json; charset=utf-8',
+				data : JSON.stringify(
+					{
+						"bno" : bno,
+						"uno" : uno
+					}
+				),
+				success : function(result, status, xhr){
+					$('#blike').load(location.href+' #blike');
+					$(".like").val(0);
+				},
+				error : function(xhr, status, er){
+					if (error) {
+						error(er);
+					}
+				}
+			});
+		}
+		
+		function up(up, callback, error){
+				$.ajax({
+					type : 'post',
+					url : '/like/bLikeUp',
+					contentType : 'application/json; charset=utf-8',
+					data : JSON.stringify(
+						{
+							"bno" : bno,
+							"uno" : uno
+						}
+					),
+					success : function(result, status, xhr){
+						$('#blike').load(location.href+' #blike');
+						$(".like").val(1);
+					},
+					error : function(xhr, status, er){
+						if (error) {
+							error(er);
+						}
+					}
+				});
+			}
+		
 	</script>
 	
 	<!-- 화면 이동 스크립트 -->

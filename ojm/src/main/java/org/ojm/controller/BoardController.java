@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.ojm.domain.BoardImgVO;
+import org.ojm.domain.BoardLikeVO;
 import org.ojm.domain.BoardVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.PageDTO;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -70,8 +72,9 @@ public class BoardController {
 	}
 	
 	@GetMapping("/get")
-	public String get(@RequestParam("bno") int bno, Model model, Criteria cri) {
+	public String get(@RequestParam("bno") int bno, @RequestParam("uno") int uno, Model model, Criteria cri) {
 		log.info("get...");
+		model.addAttribute("like", service.bCountLike(bno, uno));
 		model.addAttribute("vo", service.get(bno));
 		model.addAttribute("imgList", service.getImgList(bno));
 		model.addAttribute("cri", cri);
