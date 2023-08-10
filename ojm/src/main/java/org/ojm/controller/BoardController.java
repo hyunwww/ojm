@@ -73,6 +73,7 @@ public class BoardController {
 	public String get(@RequestParam("bno") int bno, Model model, Criteria cri) {
 		log.info("get...");
 		model.addAttribute("vo", service.get(bno));
+		model.addAttribute("imgList", service.getImgList(bno));
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", service.getTotal());
 		return "board/get";
@@ -80,7 +81,7 @@ public class BoardController {
 	
 	@GetMapping("/modify")
 	public String modify(@RequestParam("bno") int bno, Model model, Criteria cri) {
-		log.info("modify...");
+		log.info("modifyPage...");
 		model.addAttribute("vo", service.get(bno));
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", service.getTotal());
@@ -97,7 +98,7 @@ public class BoardController {
 	}
 	
 	@PostMapping("/remove")
-	public String remov(@RequestParam("bno") int bno, RedirectAttributes rttr) {
+	public String remove(@RequestParam("bno") int bno, RedirectAttributes rttr) {
 		log.info("remove...");
 		List<BoardImgVO> imgList = service.getImgList(bno);
 		if (service.remove(bno)) {

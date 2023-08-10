@@ -24,55 +24,60 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 
 </script>
 </head>
+
 <body>
-	<form action="" method="post">
-		id<input type="text" name="userid" value="${uvo.userid }" readonly="readonly"><br>
-		pw<input type="text" name="userpw" id="userpw" ><br>
-		pw확인<input type="text" id="userpw2"><b id="pwchecked"></b><br>
-		이름<input type="text" name="username" value="${uvo.username }" readonly="readonly"><br>
-		생일<input type="text" name="userbirth" value="${uvo.userbirth }" readonly="readonly"><br>
-		번호<input type="text" name="userphone" value="${uvo.userphone }"><br>
-		이메일<input type="text" name="useremail" value="${uvo.useremail }"><br>
-		닉네임<input type="text" name="nickname" value="${uvo.info.nickname }" readonly="readonly"><br>
-		주소<input type="text" name="uaddress" value="${uvo.info.uaddress }" readonly="readonly" onclick="findAddr()"><br>
-		<!-- 주소찾기 api로 새 창에서 동작 후 채워줄 것 
-			배달기능까지 추가한다면 상세주소까지.
-		-->
-		성별 : 
-		<c:choose>
-			<c:when test="${uvo.info.ugender eq 'male' }">
-				남
-			</c:when>
-			<c:otherwise>
-				여
-			</c:otherwise>
-		</c:choose>
-		<br>
-		광고여부	<input type="checkbox" value="sms" name="uads">sms
-				<input type="checkbox" value="mail" name="uads">e-mail<br>
-				<input type="checkbox" value="" name="uads" hidden="hidden" checked="checked">
-		
-		알러지	<input type='checkbox' name='ualer' value='aler1' />갑각류
-				<input type='checkbox' name='ualer' value='aler2' />견과
-				<input type='checkbox' name='ualer' value='aler3' />달걀
-				<input type='checkbox' name='ualer' value='' hidden="hidden" checked="checked"/>
-				<br>
-		<input type='checkbox' name='ualer' value='ualeretc' />
-		<textarea rows="3" cols="10" name="ualeretc" placeholder="기타 알레르기 직접 입력"></textarea>
-		<br>
-		관심 음식 카테고리	<input type='checkbox' name='ufavor' value='favor1' />한식
-				<input type='checkbox' name='ufavor' value='favor2' />양식
-				<input type='checkbox' name='ufavor' value='favor3' />중식
-				<input type='checkbox' name='ufavor' value='' hidden="hidden" checked="checked"/>
-				<br>
-		
-		
-		
-		<input type="button" value="수정하기" id="modifyBtn" onclick="check(this.form)">
-		<input type="button" value="홈으로" id="homeBtn" onclick="location.href='/'">
-		
-		<input type="hidden" name="uno" value="${uvo.uno }">
-	</form>
+	<div id="content">
+		<form action="" method="post">
+			id<input type="text" name="userid" value="${uvo.userid }" readonly="readonly"><br>
+			pw<input type="text" name="userpw" id="userpw" ><br>
+			pw확인<input type="text" id="userpw2"><b id="pwchecked"></b><br>
+			이름<input type="text" name="username" value="${uvo.username }" readonly="readonly"><br>
+			생일<input type="text" name="userbirth" value="${uvo.userbirth }" readonly="readonly"><br>
+			번호<input type="text" name="userphone" value="${uvo.userphone }"><br>
+			이메일<input type="text" name="useremail" value="${uvo.useremail }"><br>
+			닉네임<input type="text" name="nickname" value="${uvo.info.nickname }" readonly="readonly"><br>
+			주소<input type="text" name="uaddress" value="${uvo.info.uaddress }" readonly="readonly" onclick="findAddr()"><br>
+			<!-- 주소찾기 api로 새 창에서 동작 후 채워줄 것 
+				배달기능까지 추가한다면 상세주소까지.
+			-->
+			성별 : 
+			<c:choose>
+				<c:when test="${uvo.info.ugender eq 'male' }">
+					남
+				</c:when>
+				<c:otherwise>
+					여
+				</c:otherwise>
+			</c:choose>
+			<br>
+			광고여부	<input type="checkbox" value="sms" name="uads">sms
+					<input type="checkbox" value="mail" name="uads">e-mail<br>
+					<input type="checkbox" value="" name="uads" hidden="hidden" checked="checked">
+			
+			알러지	<input type='checkbox' name='ualer' value='aler1' />갑각류
+					<input type='checkbox' name='ualer' value='aler2' />견과
+					<input type='checkbox' name='ualer' value='aler3' />달걀
+					<input type='checkbox' name='ualer' value='' hidden="hidden" checked="checked"/>
+					<br>
+			<input type='checkbox' name='ualer' value='ualeretc' />
+			<textarea rows="3" cols="10" name="ualeretc" placeholder="기타 알레르기 직접 입력"></textarea>
+			<br>
+			관심 음식 카테고리	<input type='checkbox' name='ufavor' value='favor1' />한식
+					<input type='checkbox' name='ufavor' value='favor2' />양식
+					<input type='checkbox' name='ufavor' value='favor3' />중식
+					<input type='checkbox' name='ufavor' value='' hidden="hidden" checked="checked"/>
+					<br>
+			
+			
+			
+			<input type="button" value="수정하기" id="modifyBtn" onclick="check(this.form)">
+			<input type="button" value="홈으로" id="homeBtn" onclick="location.href='/'">
+			
+			<input type="hidden" name="uno" value="${uvo.uno }">
+		</form>
+	</div>
+	<jsp:include page="myPageFooter.jsp"></jsp:include>
+	
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -111,8 +116,6 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 			$("#pwchecked").html("비밀번호를 확인해주십시오");
 		}
 	});
-	
-	
 	
 	
 	

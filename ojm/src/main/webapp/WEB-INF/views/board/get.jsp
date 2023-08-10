@@ -6,12 +6,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
-	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-	Object principal = auth.getPrincipal();
-
-	pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
-   // jsp 원래 있던 코드 그대로 쓰려고 (uvo 변수) 자바 코드 사용함
+   Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      Object principal = auth.getPrincipal();
+      
+      try{
+         pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
+      }catch(Exception e){
+         pageContext.setAttribute("uvo", null);
+      }
 %>
 <!DOCTYPE html>
 <html>
@@ -35,23 +37,23 @@
 		<table>
 			<tr>
 				<td>글 번호</td>
-				<td><input name="bno" value="${vo.bno }" readonly="readonly"></td>
-			</tr>
-			<tr>
-				<td>말머리</td>
-				<td><input name="bcate" value="${vo.bcate }" readonly="readonly"></td>
+				<td><input name="bno" value="${vo.bno }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
 			<tr>
 				<td>제목</td>
-				<td><input name="btitle" value="${vo.btitle }" readonly="readonly"></td>
+				<td><input name="btitle" value="${vo.btitle }" readonly="readonly" style="background-color: #ccc"></td>
+			</tr>
+			<tr>
+				<td>말머리</td>
+				<td><input name="bcate" value="${vo.bcate }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
 			<tr>
 				<td>작성자</td>
-				<td><input name="bwriter" value="${vo.bwriter }" readonly="readonly"></td>
+				<td><input name="bwriter" value="${vo.bwriter }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
 			<tr>
 				<td>내용</td>
-				<td><textarea rows="15" cols="100" name="bcontent" readonly="readonly">${vo.bcontent }</textarea></td>
+				<td><textarea rows="15" cols="100" name="bcontent" readonly="readonly" style="background-color: #ccc">${vo.bcontent }</textarea></td>
 			</tr>
 			<tr>
 				<td colspan="2">
@@ -59,13 +61,25 @@
 				</td>
 			</tr>
 			
-			<!-- 첨부 파일 -->
+			<!-- 첨부 이미지 -->
 			<tr>
-				<td>첨부 파일</td>
+				<td>이미지</td>
 				<td class = 'uploadResult'>
 					<ul></ul>
 				</td>
 			</tr>
+			 
+			<!-- 
+			<tr>
+				<td>이미지</td>
+				<td class = 'uploadResult'>
+					<c:forEach var="imgList" items="${imgList }">
+						<img alt="${imgList.filename }" src="C:\\ojm/${imgList.uploadpath}/${imgList.uuid }_${imgList.filename }">
+					</c:forEach>
+				</td>
+			</tr>
+			 -->
+			 
 		</table>
 		<hr>
 		
@@ -76,7 +90,7 @@
 				<table>
 				<tr>
 					<td>작성자</td>
-					<td><input name="brwriter" value="${uvo.username }" readonly="readonly"></td>
+					<td><input name="brwriter" value="${uvo.username }" readonly="readonly" style="background-color: #ccc"></td>
 				</tr>
 				<tr>
 					<td>내용</td>
@@ -134,7 +148,6 @@
 				operForm.attr('action', '/board/list');
 				operForm.submit();
 			});
-			
 		})
 	</script>
 	
@@ -153,13 +166,7 @@
 					$(result).each(function(i, obj){
 						// 인코딩
 						var fileCallPath = encodeURIComponent(obj.uploadpath + "/" + obj.uuid + "_" + obj.filename);
-						
-						str += '<li>'
-						str += '<a href = "/download?filename=' + fileCallPath + '">';
-						str += obj.filename;
-						str += '</a>'
-						str += '<span data-file="' + fileCallPath + '"></span>';
-						str += '</li>';
+						str += '<img alt="' + obj.filename + '" src="/ojm/' + obj.uploadpath + '/' + obj.uuid + '_' + obj.filename + '">';
 					});
 					$(".uploadResult ul").html(str);
 				}			

@@ -15,4 +15,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="delete" parameterType="int">
 		delete from boardreply where brno = #{param1}
 	</delete>
+	
+	<delete id="deleteAll" parameterType="int">
+		delete from boardreply where bno = #{bno}
+	</delete>
 </mapper>

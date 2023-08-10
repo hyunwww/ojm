@@ -77,7 +77,7 @@ public class StoreController {
 					if (avo.getAuth().equals("ROLE_user")) {	//일반 유저
 						storeInfo.setSpermmit(0);
 						break;
-					}else if (avo.getAuth().equals("ROLE")) {	//사업자
+					}else if (avo.getAuth().equals("ROLE_business")) {	//사업자
 						storeInfo.setSpermmit(1);
 						break;
 					}

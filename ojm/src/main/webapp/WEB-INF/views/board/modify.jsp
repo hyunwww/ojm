@@ -1,5 +1,18 @@
+<%@page import="org.ojm.security.domain.CustomUser"%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
+<%@page import="org.springframework.security.core.Authentication"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+   Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      Object principal = auth.getPrincipal();
+      
+      try{
+         pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
+      }catch(Exception e){
+         pageContext.setAttribute("uvo", null);
+      }
+%>
 <!DOCTYPE html>
 	<html>
 	<head>
@@ -13,7 +26,7 @@
 			<table>
 				<tr>
 					<td>글 번호</td>
-					<td><input id="bno" name="bno" value="${vo.bno }" readonly="readonly"></td>
+					<td><input id="bno" name="bno" value="${vo.bno }" readonly="readonly" style="background-color: #ccc"></td>
 				</tr>
 				<tr>
 					<td>제목</td>
@@ -21,11 +34,21 @@
 				</tr>
 				<tr>
 					<td>말머리</td>
-					<td><input id="bcate" name="bcate" value="${vo.bcate }"></td>
+					<td>
+						<select name="bcate" id="bcate">
+							<option value="none" selected disabled hidden>말머리 선택</option>
+							<!-- 관리자 계정이 아니면 공지사항 보이지 않도록 수정해야 함 -->
+							<option value="공지사항">공지사항</option>
+							<option value="추천">추천</option>
+							<option value="정보">정보</option>
+							<option value="자유">자유</option>
+							<option value="기타">기타</option>
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<td>작성자</td>
-					<td><input id="bwriter" name="bwriter" value="${vo.bwriter }" readonly="readonly"></td>
+					<td><input id="bwriter" name="bwriter" value="${vo.bwriter }" readonly="readonly" style="background-color: #ccc"></td>
 				</tr>
 				<tr>
 					<td>내용</td>
@@ -65,7 +88,7 @@
 					if (document.getElementById("btitle").value=="") {
 						alert("제목을 입력하세요.");
 						return;
-					}else if (document.getElementById("bcate").value=="") {
+					}else if (document.getElementById("bcate").value=="none") {
 						alert("카테고리를 선택하세요.")
 						return;
 					}else if (document.getElementById("bcontent").value=="") {
@@ -95,7 +118,6 @@
 			});
 		});
 	</script>
-	
 	<!-- 첨부 파일 스크립트 -->
 	<script type="text/javascript">
 		$(function(){

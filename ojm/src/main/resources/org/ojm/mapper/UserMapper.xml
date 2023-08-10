@@ -151,4 +151,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="pwChange">
 		update usertable set userpw=#{userpw} where userid=#{userid}
 	</update>
+	
+	<select id="getUno" resultType="int">
+		select uno from usertable where userid=#{userid}
+	</select>
+	
+	
+	
+	<!-- myPage -->
+	<select id="getListWithPaging" resultType="org.ojm.domain.BoardVO">
+		<![CDATA[
+			select bno, bcate, btitle, bwriter, bdate, bupdatedate, bview, blike, breplycnt
+			from
+				(select /*+INDEX_DESC(board pk_board) */
+				rownum rn, bno, bcate, btitle, bwriter, bdate, bupdatedate, bview, blike, breplycnt from board
+				where]]>
+				<![CDATA[
+				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
+				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+		]]>
+	</select>
+	<select id="getReviews" resultType="org.ojm.domain.ReviewVO">
+		<![CDATA[
+			select rvno, sno, uno, rvcontent, rvlike, rvdate
+			from
+				(select /*+INDEX_DESC(review pk_review) */
+				rownum rn, rvno, sno, uno, rvcontent, rvlike, rvdate from review
+				where]]>
+				<![CDATA[
+				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
+				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+		]]>
+	</select>
+	<select id="getRvCnt" resultType="int">
+		select count(*) from review where uno=#{uno}
+	</select>
 </mapper>

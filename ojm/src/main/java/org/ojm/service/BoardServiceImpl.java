@@ -7,6 +7,7 @@ import org.ojm.domain.BoardVO;
 import org.ojm.domain.Criteria;
 import org.ojm.mapper.BoardImgMapper;
 import org.ojm.mapper.BoardMapper;
+import org.ojm.mapper.BoardReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,9 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Autowired
 	private BoardMapper mapper;
+	
+	@Autowired
+	private BoardReplyMapper brMapper;
 	
 	@Autowired
 	private BoardImgMapper imgMapper;
@@ -46,7 +50,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public BoardVO get(int bno) {
 		log.info("get...");
-		log.info(mapper.updateBview(bno));
+		mapper.updateBview(bno);
 		return mapper.read(bno);
 	}
 
@@ -54,6 +58,7 @@ public class BoardServiceImpl implements BoardService{
 	public boolean remove(int bno) {
 		log.info("remove...");
 		imgMapper.deleteAll(bno);
+		brMapper.deleteAll(bno);
 		return mapper.delete(bno) == 1;
 	}
 
@@ -76,21 +81,8 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int updateBview(int bno) {
-		log.info("updateBview...");
-		return mapper.updateBview(bno);
-	}
-
-	@Override
 	public int updateBlike(int bno) {
 		log.info("updateBlike...");		
 		return mapper.updateBlike(bno);
 	}
-
-	@Override
-	public int getReplyCnt(int bno) {
-		log.info("getReplyCnt...");
-		return mapper.getReplyCnt(bno);
-	}
-
 }
