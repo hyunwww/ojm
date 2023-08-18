@@ -29,7 +29,6 @@
 	}
 	
 	
-	
 	.thumbnail{
 		width: 100px;
 		background-size: contain;
@@ -135,10 +134,22 @@
 			console.log($(this)[0].checked);
 			if ($(this)[0].checked) {
 				$("input[name=smaxreserv]").show();
+				$("input[name=smaxreserv]").attr("disabled", false);
 			}else{
 				$("input[name=smaxreserv]").hide();
 				$("input[name=smaxreserv]").attr("disabled", true);
 				
+			}
+		});
+		$(".upBtn").click(function() {
+			var value = $("#reserveValue").text();
+			
+			$("#reserveValue").html(++value);
+		});
+		$(".downBtn").click(function() {
+			var value = $("#reserveValue").text();
+			if (value > 0) {
+				$("#reserveValue").html(--value);
 			}
 		});
 		//휴무
@@ -371,7 +382,10 @@
 				<tr>
 					<td>예약<input type="checkbox" value="1" name="checkReserv"></td>
 					<td>
+						<button type="button" class="downBtn">-</button>
 						<input type="number" name="smaxreserv" placeholder="예약 최대 가능 인원" value="0">
+						<span id="reserveValue">0</span>
+						<button type="button" class="upBtn">+</button>
 					</td>
 				</tr>
 				<tr>

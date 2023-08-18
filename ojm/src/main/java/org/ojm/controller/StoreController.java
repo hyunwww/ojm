@@ -48,7 +48,19 @@ public class StoreController {
 	@Autowired
 	BCryptPasswordEncoder encoder;
 	
-	
+	@GetMapping("/goTest")
+	public String goTest() {
+		return "testPage";
+		
+	}
+	@GetMapping("/detailTest")
+	public String goTestDetail(@RequestParam("sno")int sno, Model model) {
+		
+		
+		model.addAttribute("store", service.storeInfo(sno));
+		return "/store/testDetail";
+		
+	}
 	@GetMapping("/register")
 	public String goRegister() {
 		
@@ -393,6 +405,7 @@ public class StoreController {
 							@AuthenticationPrincipal CustomUser user,
 							@RequestParam("uno")int uno) {
 		
+		log.info("goUpdate!");
 		if (user != null) {
 			if (user.getUvo().getUno() != uno) {	//유저 검증
 				return "redirect:/";

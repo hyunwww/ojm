@@ -129,8 +129,8 @@
 
     </div>
   </section><!-- End Hero -->
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+	
+	
 
   <!-- Vendor JS Files -->
   <script src="/resources/vendor/aos/aos.js"></script>
