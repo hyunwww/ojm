@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,8 @@ public class MyPageController {
 	BoardService bs;
 	@Setter(onMethod_ = @Autowired)
 	QboardService qs;
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 	
 	// 일반유저
 	@GetMapping("/main")
@@ -88,12 +91,13 @@ public class MyPageController {
 	public ResponseEntity<String> modify(UserVO uvo,InfoVO ivo){
 		log.info(uvo);
 		log.info("modify .... uno : " + uvo.getUno());
+		uvo.setUserpw(passwordEncoder.encode(uvo.getUserpw()));
 		uvo.setInfo(ivo);
 		int modifyCount = service.modifyUser(uvo);
 		log.info("modifyCount : " + modifyCount);
 		
 		
-		return modifyCount == 1 ? new ResponseEntity<>("success", HttpStatus.OK) :
+		return modifyCount == 1 ? new ResponseEntity<>("회원정보를 수정했습니다.", HttpStatus.OK) :
 				new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	

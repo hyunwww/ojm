@@ -85,12 +85,10 @@ public class UserController {
 	// authList 부분 때문에 uservo 자동 바인딩이 안되어서 일단 하드 코딩. 해결방법 못찾음
 	// authList가 아니라 userbirth가 date 형식인데 형식에 안맞게 넘어와서 안됐었던 것
 	// 일단 userVO에서 birth를 String으로 변경. service에서 날짜형식으로 변환할 것.
-	// 그리고 view단에서 권한을 name=auth로 넘기지 말고 authList[0].auth 처럼 인덱스를 부여해 배열로 넘겨야함
+	// 그리고 view단에서 권한을 name=auth로 넘기지 말고 authList[0].auth 처럼 인덱스를 부여해 배열로 넘겨야함 - service에서 권한부여하게함
 	@PostMapping("/regUser")
 	public String userRegisterP(InfoVO ivo, Model model,UserVO uvo) {
 		log.info("userRegister Post......");
-
-		uvo.setUserpw(passwordEncoder.encode(uvo.getUserpw()));
 
 		if (service.regUser(uvo, ivo) > 0) {
 			model.addAttribute("register", "user");
