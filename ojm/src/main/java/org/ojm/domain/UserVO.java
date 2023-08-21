@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserVO {
 	private int uno;
-	private Date userbirth;
+	private String userbirth;	// date형식으로 안넘겨줘서 임시로 string 처리
 	private String userid,userpw,username,userphone,useremail;
 	private InfoVO info;
 	private List<AuthVO> authList;

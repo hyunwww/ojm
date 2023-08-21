@@ -72,9 +72,11 @@ public class BoardController {
 	}
 	
 	@GetMapping("/get")
-	public String get(@RequestParam("bno") int bno, @RequestParam("uno") int uno, Model model, Criteria cri) {
+	public String get(@RequestParam("bno") int bno, @RequestParam(value="uno",required = false) Integer uno, Model model, Criteria cri) {
 		log.info("get...");
-		model.addAttribute("like", service.bCountLike(bno, uno));
+		if(uno != null) {
+			model.addAttribute("like", service.bCountLike(bno, uno));
+		}
 		model.addAttribute("vo", service.get(bno));
 		model.addAttribute("imgList", service.getImgList(bno));
 		model.addAttribute("cri", cri);

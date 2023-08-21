@@ -63,7 +63,7 @@
           	<ul>
 			  <li><a href="/board/list">1</a></li>
 			  <li><a href="/qboard/qlist">2</a></li>
-			  <li><a href="#">3</a></li>
+			  <li><a href="/job/jlist">3</a></li>
 			</ul>
           </li>
           <li><a href="/store/storeList">Search</a></li>

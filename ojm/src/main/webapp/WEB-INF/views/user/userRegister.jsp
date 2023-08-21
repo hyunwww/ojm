@@ -14,7 +14,7 @@
 		pw<input type="text" name="userpw" id="userpw"><br>
 		pw확인<input type="text" id="userpw2"><b id="pwchecked"></b><br>
 		이름<input type="text" name="username"><br>
-		생일<input type="text" name="userbirth"><br>
+		생일<input type="text" name="userbirth" placeholder="생년월일 6자리" maxlength="6"><br>
 		번호<input type="text" name="userphone"><br>
 		이메일<input type="text" name="useremail"><br>
 		닉네임<input type="text" name="nickname"><br>
@@ -48,6 +48,7 @@
 		
 		<input type="button" value="회원가입" id="regBtn" onclick="check(this.form)">
 		<input type="reset" value="다시입력">
+		<input type="button" value="홈으로" id="homeBtn">
 		
 		
 		<input type="hidden" name="ulikestore" value="">
@@ -61,7 +62,6 @@
 	var idChecked = false;
 	
 	function check(f){	// 빈칸 체크
-		console.log(f);
 		
 		if(f.userid.value==''){
 			alert("아이디를 입력해주세요.");
@@ -79,13 +79,25 @@
 			alert("이름을 입력해주세요.");
 			return;
 		}else if(f.userbirth.value==''){
-			alert("생일을 입력해주세요.");
+			alert("생년월일을 입력해주세요.");
+			return;
+		}else if(!checkBirth(f.userbirth.value)){
+			alert("올바른 생년월일을 입력해주세요.");
 			return;
 		}else if(f.userphone.value==''){
 			alert("번호를 입력해주세요.");
 			return;
+		}else if(!checkPhone(f.userphone.value)){
+			alert("번호를 확인해주세요.");
+			return;
 		}else if(f.useremail.value==''){
 			alert("이메일를 입력해주세요.");
+			return;
+		}else if(f.nickname.value==''){
+			alert("닉네임를 입력해주세요.");
+			return;
+		}else if(!checkEmail(f.useremail.value)){
+			alert("올바른 메일 주소를 입력해주세요.");
 			return;
 		}else if(f.uaddress.value==''){
 			alert("주소를 입력해주세요.");
@@ -94,6 +106,10 @@
 		f.action="regUser";
 		f.submit();
 	}
+	
+	$("#homeBtn").on("click",function(){
+		location.href="/";
+	});
 	
 	$('#userpw2').focusout(function() {
 		if($(this).val()==$("#userpw").val()){
@@ -106,6 +122,10 @@
 	function idCheck(){	// id 중복체크
 		var userid = $("#userid").val();
 		console.log(userid);
+		if(userid==''){
+			alert("아이디를 입력해주세요.");
+			return;
+		}
 		
 		$.ajax({	
 	      	type : 'post',
@@ -123,7 +143,19 @@
 		});
 	}
 	
-	
+	// 유효성 검사용
+	function checkEmail(email) {
+		var ex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+		return ex.test(email);
+	}
+	function checkPhone(phone){
+		var ex = /^(010|011|016|017|018|019)([0-9]{3,4}[0-9]{4})$/;
+		return ex.test(phone);
+	}
+	function checkBirth(birth){
+		var ex = /^([0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
+		return ex.test(birth);
+	}
 	
 	
 	function findAddr(){		// 주소 찾기 
