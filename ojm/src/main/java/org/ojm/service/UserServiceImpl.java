@@ -12,6 +12,7 @@ import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
 import org.ojm.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService{
 	@Autowired
 	UserMapper mapper;
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 	
 	@Override
 	public UserVO login(String id, String pw) {
@@ -40,7 +43,7 @@ public class UserServiceImpl implements UserService{
 	@Transactional
 	@Override
 	public int regUser(UserVO uvo,InfoVO ivo) {	// 일반유저
-		
+		uvo.setUserpw(passwordEncoder.encode(uvo.getUserpw()));
 		if(mapper.regUser(uvo)>0) {
 			mapper.regUserInfo(ivo);
 			mapper.newMailKey(uvo.getUseremail(), " ");
@@ -53,6 +56,7 @@ public class UserServiceImpl implements UserService{
 	@Transactional
 	@Override
 	public int regUser(UserVO uvo) {	// 사업자
+		uvo.setUserpw(passwordEncoder.encode(uvo.getUserpw()));
 		if(mapper.regUser(uvo)>0) {
 			mapper.regUserAuth(new AuthVO(uvo.getUserid(), "ROLE_business"));
 			return 1;

@@ -20,8 +20,7 @@
 		<!-- <security:intercept-url pattern="/user/myPage/b_*" access="hasRole('ROLE_business')"/> 정규식? 처럼도 가능.-->
 		<security:intercept-url pattern="/user/myPage/b/**" access="hasRole('ROLE_business')"/>
 		<security:intercept-url pattern="/user/myPage/**" access="hasRole('ROLE_user')"/>
-		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_user')"/>
-		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_admin')"/>
+		<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_admin')"/>
 		
 		<!-- 로그인 -->
 		<security:form-login login-processing-url="/user/login" login-page="/user/login" authentication-success-handler-ref="customLoginSuccess"/>	<!-- 로그인 -->
