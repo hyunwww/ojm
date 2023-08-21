@@ -1,156 +1,104 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<!DOCTYPE html><%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<style type="text/css">
-html, body {
-	margin: 0;
-	height: 100%;
-	overflow: auto;
-}
+<%@ include file="testHeader.jsp" %>
 
-.wrapper {
-	width: 750px;
-	height: 100%;
-	margin: auto;
-}
+<!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs" style="margin-top: 70px;">
+      <div class="container">
 
-.header {
-	background-color: gray;
-	height: 10%;
-}
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>매장 찾기</h2>
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li>Blog Single</li>
+          </ol>
+        </div>
 
-.sideFilter {
-	background-color: silver;
-	position: absolute;
-	width: 15%;
-	height: 100%;
-	z-index: 5;
-}
+      </div>
+    </section><!-- End Breadcrumbs -->
 
-.content {
-	position: absolute;
-	z-index: 1;
-	width: 100%;
-	height: 100%;
-	text-align: center;
-}
-
-.mainContainer {
-	height: 100%;
-	position: relative;
-}
-
-.rankingArea {
-	position: fixed;
-	top: 20%;
-	right: 10%;
-	background-color: lavenderblush;
-	width: 100px;
-	height: auto;
-}
-
-.rankingArea table {
-	text-align: left;
-	border: 1px solid palevioletred;
-	border-collapse: collapse;
-	margin: auto;
-}
-
-.rankingArea td {
-	border: 1px solid palevioletred;
-	border-collapse: collapse;
-}
-
-#loading {
-	display: inline-block;
-	width: 50px;
-	height: 50px;
-	border: 3px solid rgba(255, 255, 255, .3);
-	border-radius: 50%;
-	border-top-color: coral;
-	animation: spin 1s ease-in-out infinite;
-	-webkit-animation: spin 1s ease-in-out infinite;
-}
-
-@
-keyframes spin {to { -webkit-transform:rotate(360deg);
-	
-}
-
-}
-@
--webkit-keyframes spin {to { -webkit-transform:rotate(360deg);
-	
-}
-
-}
-.mapContainer {
-	display: none;
-	width: 85%;
-	height: 200px;
-	margin-left: auto;
-}
-.card {
-	height: auto;
-	width: -webkit-fill-available;
-	border-radius: 15px;
-	display: inline-block;
-	margin-top: 15px;
-	margin-left: 140px;
-	margin-bottom: 15px;
-	position: relative;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
-		rgba(0, 0, 0, 0.19);
-	overflow: hidden;
-	padding: 15px;
-}
-.card:focus{
-	border: 2px solid indianred;
-}
-
-.card-header {
-	-webkit-transition: 0.5s; /*사파리 & 크롬*/
-	-moz-transition: 0.5s; /*파이어폭스*/
-	-ms-transition: 0.5s; /*인터넷 익스플로러*/
-	-o-transition: 0.5s; /*오페라*/
-	transition: 0.5s;
-	width: 100%;
-	height: 50px;
-	border-radius: 15px 15px 0 0;
-	background-image: url("images/korea.jpeg");
-	background-size: 100% 280px;
-	background-repeat: no-repeat;
-}
-.card-footer{
-	text-align: right;
-	height: auto;
-	width: 100%;
-}
-.attTag{
-	width: auto;
-	height: auto;
-	background-color: indianred;
-	border-radius : 5px; 
-	color: white;
-	padding: 3px;
-	font-size: 11px;
-}
-.bubble{
-	background-color: white;
-	border: 1px solid indianred;
-	width: auto;
-	height: auto;
+<section id="structure" class="blog">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-2 d-flex flex-column flex-shrink-0 p-3">
+				<div class="sidebar sideFilter blog">
+					<h3 class="sidebar-title">title</h3>
+					<div class="sidebar-item search-form">
+						<form action="#">
+							<input type="text" name="keyword">
+							<button type="submit">
+								<i class="bi bi-search"></i>
+							</button>
+						</form>
+					</div>
+					<h3 class="sidebar-title">categories</h3>
+					<div class="sidebar-item text-dark">
+						<input type="checkbox" name="scate" value="한식">한식
+						<input type="checkbox" name="scate" value="일식">일식
+						<input type="checkbox" name="scate" value="중식">중식
+						<br><br>
+						<input type="checkbox" name="scate" value="양식">양식
+						<input type="checkbox" name="scate" value="아시아">아시아
+					</div>
+					<div class="border-top py-3"></div>
+					<h3 class="sidebar-title">location</h3>
+					<div class="sidebar-item text-dark">
+						<select name="location">
+							<option value="">지역 선택</option>
+							<option value="서울">서울</option>
+							<option value="경기도">경기도</option>
+							<option value="충청북도">충청북도</option>
+							<option value="충청남도">충청남도</option>
+							<option value="제주도">제주도</option>
+							<option value="전라북도">전라북도</option>
+							<option value="전라남도">전라남도</option>
+							<option value="경상남도">경상남도</option>
+							<option value="경상북도">경상북도</option>
+							<option value="강원도">강원도</option>
+						</select>
+					</div>
+					<div class="border-top py-3"></div>
+					<h3 class="sidebar-title">dist</h3>
+					<div class="sidebar-item text-dark">
+						<span id="distLim"></span>
+						<input type="range" value="0" min="0" max="50" step="1"  style="width: -webkit-fill-available">
+					</div>
+					
+				</div>
+			</div>
+			<div class="col-lg-7 p-3 min-vh-100">
+				<div class="mapContainer"></div>
+					<div style="text-align: right; padding: 10px;">
+						<select class="form-select form-select-sm" name="sort" style="width: 15%; display: inline-block;">
+							<option selected>정렬기준</option>
+							<option value="review">리뷰</option>
+							<option value="star">평점</option>
+							<option value="distance">거리</option>
+							<option value="like">좋아요</option>
+							<option value="name">이름</option>
+						</select>	
+					</div>
+				<section id="searchResult" class="testimonial">
+					<div class="row mx-auto">
+					</div>
+				</section>
+			</div>
+			<div class="col p-3">
+				<div class="row mx-auto align-items-center">
+					<div class="col-12 card rankingArea">
+						<table>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 
 
-}
-</style>
-  
-<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<!-- =====================================script===========================================================================================  -->
+
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript"> /* 현재 위치정보 및 거리계산 스크립트 */
 	var currPosition;	//현재 위치정보
@@ -233,7 +181,7 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 			}
 			
 			//ajax 처리가 끝날 때까지 로딩 표시
-			$("#searchResult").html('<div id="loading"></div>');
+			$("#searchResult row").html('<div id="loading"></div>');
 			
 			
 			$.ajax({
@@ -244,7 +192,7 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 			      success: function (result, status, xhr) {
 			    	  
 			    	  
-			    	  $("#searchResult").empty();
+			    	  $("#searchResult .row").empty();
 			    	  var str = "";
 			    	  storeResult = [];
 			    	  if (result.length > 0) {
@@ -254,20 +202,10 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 				    		//출력될 태그 부여
 				    		if (Number(store.distance) <= Number(distLimit) || Number(distLimit) == 0) {
 				    			store.str = '';
-				    			store.str += '<div class="card" data-sno="'+store.sno+'" tabindex="0">';
-				    			store.str += '<div class="card-header">';
+				    			store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
+				    			store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
 				    			store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
-				    			store.str += '</div>';
-				    			store.str += '<div class="card-body">';
 				    			store.str += '<p>'+store.saddress+'</p>';
-				    			store.str += '</div>';
-				    			store.str += '<div class="card-footer">';
-				    			if (store.sdeli == 1) {
-				    				store.str += '<i class="attTag">예약</i> ';
-								}
-				    			if (store.smaxreserv > 0) {
-				    				store.str += '<i class="attTag">배달</i> ';
-								}
 				    			store.str += '</div>';
 				    			store.str += '</div>';
 				    			
@@ -279,11 +217,12 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 				    		  
 				    		
 						  }
-				    	  $("#searchResult").append(str);
+				    	  $("#searchResult .row").append(str);
+				    	  console.log(storeResult);
 					}
 			    	  if (storeResult.length < 1) {
 			    		    str += '<p>일치하는 결과가 없습니다.</p>';
-							$("#searchResult").append(str);
+							$("#searchResult .row").append(str);
 					}
 			    	  
 			    	  
@@ -381,8 +320,7 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 						    		    
 						    		});
 						    		kakao.maps.event.addListener(marker, 'click', function() {
-						    			console.log(sno);
-						    			$(".card[data-sno='"+sno+"']").focus();
+						    			$("#searchResult div[data-sno='"+sno+"']").focus();
 						    		});
 								}
 			    				
@@ -521,102 +459,7 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 	}
 
 </script>
-</head>
-<body>
-	<div class="wrapper">
-		<div class="header">
-			<p>header</p>
-		</div>
-		<div class="mainContainer">
-			<div class="content">
-				<div id="searchBox">
-					<form method="get" action="/store/search">
-					      <input type="text" name="searchInput" placeholder="검색어 입력">
-					      <button type="button" title="Search" id="searchBtn">search</button>
-					      <button type="button" id="mainBtn">goMain</button>
-				    </form>
-				    <select name="sort">
-				    	<option value="name">이름</option>
-				    	<option value="review">리뷰</option>
-				    	<option value="star">별점</option>
-				    	<option value="like">좋아요</option>
-				    	<option value="distance">거리</option>
-				    </select>
-				</div>
-				<h4 style="margin: 10px 0;">검색 결과</h4>
-				<div class="mapContainer">
-				</div>
-				<div id="searchResult">
-					<c:choose>
-						<c:when test="${not empty stores }">
-							<c:forEach var="store" items="${stores }">
-								<div class="card">
-									<div class="card-header">
-										<h2><a href="/store/detail?sno=${store.sno }">${store.sname }</a></h2>
-									</div>
-									<div class="card-body">
-										<p>${store.saddress }</p>
-									</div>
-									<div class="card-footer">
-										<i class="attTag">tag1</i>
-										<i class="attTag">tag2</i>
-										<i class="attTag">tag3</i>
-									</div>
-								</div>
-							</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<p>일치 결과 없음</p>
-						</c:otherwise>
-					</c:choose>
-				</div>
-				
-				
-				
-			</div>
-			
-			<div class="sideFilter">
-				<div class="category one">
-					<h5>카테고리</h5>
-					<input type="checkbox" name="scate" value="한식">한식
-					<input type="checkbox" name="scate" value="일식">일식
-					<input type="checkbox" name="scate" value="중식">중식
-					<input type="checkbox" name="scate" value="양식">양식
-					<input type="checkbox" name="scate" value="아시아">아시아
-				</div>
-				<br><hr>
-				<div class="category two">
-					<h5>거리</h5>
-					<span id="distLim"></span>
-					<input type="range" value="0" min="0" max="50" step="1"  style="width: -webkit-fill-available">
-				</div>
-				<br><hr>
-				<div id="category four">
-					<h5>location</h5>
-					<select name="location">
-						<option value="">지역 선택</option>
-						<option value="서울">서울</option>
-						<option value="경기도">경기도</option>
-						<option value="충청북도">충청북도</option>
-						<option value="충청남도">충청남도</option>
-						<option value="제주도">제주도</option>
-						<option value="전라북도">전라북도</option>
-						<option value="전라남도">전라남도</option>
-						<option value="경상남도">경상남도</option>
-						<option value="경상북도">경상북도</option>
-						<option value="강원도">강원도</option>
-					</select>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="rankingArea">
-		<!-- 좋아요 순 랭킹 나열할 예정  -->
-		<p style="text-align: center; margin: 10px 0;">rank</p>
-		<table>
-		</table>
-	</div>
-	
-</body>
-</html>
+
+
+
+						<%@ include file="testFooter.jsp"%>

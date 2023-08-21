@@ -18,7 +18,6 @@ var menuService = (function() {
       data: JSON.stringify(info),
       contentType: "application/json; charset=utf-8",
       success: function (result, status, xhr) {
-      	console.log(result);
       	menuList.push(result);
         var str = "<li>";
         str += result.mname;
@@ -37,11 +36,28 @@ var menuService = (function() {
     });
   }
 	
+	function getMenuList() {
+			
+        	$.ajax({
+			      type: "get",
+			      url: "/menu/"+sno,
+			      dataType: 'json',
+			      success: function (result, status, xhr) {
+			    	  for (var menu of result) {
+			    		  menuService.add(menu);
+			    		  // 큰 문제는 아니지만 수정페이지에서 새로고침 시 일정 확률로 순서가 뒤바뀜
+					}
+			    	  
+			      }
+			});
+        	
+        	
+		}
 	
 	
 	
-	
-  return { add : add
+  return { add : add,
+  			getMenuList : getMenuList
   			};
 
 })();
