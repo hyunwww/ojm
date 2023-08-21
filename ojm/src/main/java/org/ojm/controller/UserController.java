@@ -112,26 +112,15 @@ public class UserController {
 	}
 
 	@PostMapping("/regBuisness")
-	public String buisnessRegisterP(Model model, 
-			@RequestParam("userid") String userid,
-			@RequestParam("userpw") String userpw, 
-			@RequestParam("username") String username,
-			@RequestParam("userbirth") String userbirth, 
-			@RequestParam("userphone") String userphone,
-			@RequestParam("useremail") String useremail) {
+	public String buisnessRegisterP(Model model,UserVO uvo) {
 		log.info("buisnessRegister Post......");
-		UserVO uvo = new UserVO();
-
-		uvo.setUserid(userid);
-		uvo.setUserpw(passwordEncoder.encode(userpw));
-		uvo.setUsername(username);
-		uvo.setUserphone(userphone);
-		uvo.setUseremail(useremail);
 
 		if (service.regUser(uvo) > 0) {
 			model.addAttribute("register", "buisness");
 		} else {
-			model.addAttribute("register", "fail");
+			model.addAttribute("register", "fail"
+					
+					);
 		}
 		// 가입 성공 시 특정 메세지로 일반 유저,사업자 나누고
 		// getRegister 페이지에서 성공/실패에 따라 페이지 나누면 좋을듯.

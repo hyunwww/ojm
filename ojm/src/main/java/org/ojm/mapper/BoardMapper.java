@@ -16,6 +16,7 @@ public interface BoardMapper {
 	public int updateReplyCnt(@Param("bno") int bno, @Param("amount") int amount);
 	public int getMaxBno();
 	public int updateBview(int bno);	// 조회수
-	public int updateBlike(int bno);	// 좋아요
+	public int updateBlikeUp(int bno);		// 좋아요 up
+	public int updateBlikeDown(int bno);	// 좋아요 down
 	public int getReplyCnt(int bno);	// 댓글 수 가져오기
 }

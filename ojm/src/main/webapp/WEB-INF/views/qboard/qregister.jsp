@@ -126,7 +126,7 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 				return;
 			}
 		});
-	});
+		});
 	</script>
 	
 	

@@ -17,36 +17,28 @@
 			<thead>
 				<tr>  
 					<th>번호</th>
-					<th>말머리</th>
 					<th>제목</th>
-					<th>작성자</th>
 					<th>작성일</th>
-					<th>수정일</th>
-					<th>조회</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:choose>
 					<c:when test="${empty qlist }">
 						<tr>
-							<td colspan="7">게시글이 없습니다.</td>
+							<td colspan="5">게시글이 없습니다.</td>
 						</tr>
 					</c:when>
 					<c:otherwise>
 						<c:forEach var="qboard" items="${qlist }">
 							<tr>
 								<td><c:out value="${qboard.qno }"></c:out></td>
-								<td><c:out value="${qboard.qcate }"></c:out></td>
 								<td>
 									<a class="qmove" href='/qboard/qget?qno=<c:out value="${qboard.qno }"/>'>
 										<c:out value="${qboard.qtitle }"></c:out>
 										<b>[<c:out value="${qboard.qreplycnt }"/>]</b>
 									</a>
 								</td>
-								<td><c:out value="${qboard.qwriter }"></c:out></td>
 								<td><fmt:formatDate value="${qboard.qdate }" pattern="yyyy/MM/dd"/></td>
-								<td><fmt:formatDate value="${qboard.qupdatedate }" pattern="yyyy/MM/dd"/></td>
-								<td><c:out value="${qboard.qview }"></c:out></td>
 							</tr>
 						</c:forEach>
 					</c:otherwise>

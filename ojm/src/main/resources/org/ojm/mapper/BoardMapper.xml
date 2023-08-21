@@ -41,8 +41,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update board set bview = bview+1 where bno = #{bno}
 	</update>
 
-	<update id="updateBlike" parameterType="int">
-		update board set blike = #{blike} where bno = #{bno}
+	<update id="updateBlikeUp" parameterType="int">
+		update board set blike = blike+1 where bno = #{bno}
+	</update>
+	
+	<update id="updateBlikeDown" parameterType="int">
+		update board set blike = blike-1 where bno = #{bno}
 	</update>
 	
 	<update id="updateReplyCnt" parameterType="int">
