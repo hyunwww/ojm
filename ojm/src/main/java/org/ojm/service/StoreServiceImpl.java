@@ -76,9 +76,12 @@ public class StoreServiceImpl implements StoreService{
 	public StoreVO storeInfo(int sno) {
 		
 		StoreVO info = mapper.storeInfo(sno);
-		info.setMenuList(mMapper.getMenu(sno));
-		info.setImgList(iMapper.getImg(sno));
-		info.setRevList(rMapper.storeReviewList(sno));
+		try {
+			info.setMenuList(mMapper.getMenu(sno));
+			info.setImgList(iMapper.getImg(sno));
+			info.setRevList(rMapper.storeReviewList(sno));
+		} catch (NullPointerException e) {
+		}
 		return info;
 	}
 	@Override

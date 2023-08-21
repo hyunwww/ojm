@@ -34,14 +34,12 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Override
 	public List<BoardVO> getList(Criteria cri) {
-		log.info("getList...");
 		return mapper.getListWithPaging(cri);
 	}
 
 	@Override
 	@Transactional
 	public void register(BoardVO vo) {
-		log.info("register...");
 		mapper.insert(vo);
 		if (vo.getImgList() != null && vo.getImgList().size() > 0) {
 			int bno = mapper.getMaxBno();
@@ -54,14 +52,12 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public BoardVO get(int bno) {
-		log.info("get...");
 		mapper.updateBview(bno);
 		return mapper.read(bno);
 	}
 
 	@Override
 	public boolean remove(int bno) {
-		log.info("remove...");
 		imgMapper.deleteAll(bno);
 		brMapper.deleteAll(bno);
 		return mapper.delete(bno) == 1;
@@ -69,19 +65,16 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public boolean modify(BoardVO vo) {
-		log.info("modify..." + vo);
 		return mapper.update(vo) == 1;
 	}
 
 	@Override
 	public int getTotal() {
-		log.info("getTotal...");
 		return mapper.getTotalCount();
 	}
 
 	@Override
 	public List<BoardImgVO> getImgList(int bno) {
-		log.info("getImgList..." + bno);
 		return imgMapper.findByBno(bno);
 	}
 
@@ -92,12 +85,15 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int bLikeUp(int bno, int uno) {
+		mapper.updateBlikeUp(bno);
 		return blMapper.bLikeUp(bno, uno);
 	}
 
 	@Override
 	public int bLikeDown(int bno, int uno) {
+		mapper.updateBlikeDown(bno);
 		return blMapper.bLikeDown(bno, uno);
 	}
+
 
 }

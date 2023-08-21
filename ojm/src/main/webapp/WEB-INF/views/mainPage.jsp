@@ -62,7 +62,7 @@
           	<ul>
 			  <li><a href="/board/list">1</a></li>
 			  <li><a href="/qboard/qlist">2</a></li>
-			  <li><a href="#">3</a></li>
+			  <li><a href="/job/jlist">3</a></li>
 			</ul>
           </li>
           <li><a href="/store/storeList">Search</a></li>
@@ -129,8 +129,8 @@
 
     </div>
   </section><!-- End Hero -->
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+	
+	
 
   <!-- Vendor JS Files -->
   <script src="/resources/vendor/aos/aos.js"></script>

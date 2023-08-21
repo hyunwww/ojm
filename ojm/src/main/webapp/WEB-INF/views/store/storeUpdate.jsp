@@ -59,13 +59,27 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .dayOff{
+		border: 1px solid black;
+		border-collapse: collapse;
+		background-color: rgba(171, 171, 171, 0.5);
+	}
+	.dayOff td{
+		border: 1px solid black;
+		padding: 5px;
+		 
+	}
+	.dayClicked{
+		background-color: cadetblue;
+		color: white;
+	}
 </style>
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="../resources/js/menuAjax.js"></script>
 <script type="text/javascript">
 	var sno = '${store.sno}';
 	$(function() {
-		getMenuList();
+		menuService.getMenuList();
 		
 		$("input[name='deposit']").on("change", function() {
 			$("#depoInput").val($(this).val());
@@ -82,7 +96,21 @@
 				$("input[name='deposit']").attr("disabled", false);
 			}
 		});
-		
+		$(".upBtn").click(function() {
+			var value = $("#reserveValue").text();
+			
+			$("#reserveValue").html(++value);
+		});
+		$(".downBtn").click(function() {
+			var value = $("#reserveValue").text();
+			if (value > 0) {
+				$("#reserveValue").html(--value);
+			}
+		});
+		//휴무
+		$(".dayOff td").click(function() {
+			$(this).toggleClass("dayClicked");
+		});
 		
 		//regForm 제어
 		$("form input").on("click", function() {
@@ -174,6 +202,30 @@
 							<option value="일식">jap</option>
 							<option value="아시아">asia</option>
 						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>예약</td>
+					<td>
+						<button type="button" class="downBtn">-</button>
+						<span id="reserveValue">${store.smaxreserv }</span>
+						<button type="button" class="upBtn">+</button>
+					</td>
+				</tr>
+				<tr>
+					<td>휴무</td>
+					<td>
+						<table class="dayOff">
+							<tr>
+								<td data-day="1">월</td>
+								<td data-day="2">화</td>
+								<td data-day="3">수</td>
+								<td data-day="4">목</td>
+								<td data-day="5">금</td>
+								<td data-day="6">토</td>
+								<td data-day="0">일</td>
+							</tr>
+						</table>
 					</td>
 				</tr>
 				<tr>
@@ -303,6 +355,36 @@
 				}
 			}
 			
+			var dayOff = '${store.dayOff}';
+			console.log(dayOff.split(""));
+			for (var day of dayOff.split("")) {
+				switch (day) {
+				case "1":
+					$(".dayOff td[data-day='1']").addClass("dayClicked");
+					break;
+				case "2":
+					$(".dayOff td[data-day='2']").addClass("dayClicked");
+					break;
+				case "3":
+					$(".dayOff td[data-day='3']").addClass("dayClicked");
+					break;
+				case "4":
+					$(".dayOff td[data-day='4']").addClass("dayClicked");
+					break;
+				case "5":
+					$(".dayOff td[data-day='5']").addClass("dayClicked");
+					break;
+				case "6":
+					$(".dayOff td[data-day='6']").addClass("dayClicked");
+					break;
+				case "0":
+					$(".dayOff td[data-day='0']").addClass("dayClicked");
+					break;
+				default:
+					break;
+				}
+			}
+			
 		})();
 	
 	
@@ -375,23 +457,7 @@
 			});
 		});
         
-        function getMenuList() {
-			
-        	$.ajax({
-			      type: "get",
-			      url: "/menu/"+sno,
-			      dataType: 'json',
-			      success: function (result, status, xhr) {
-			    	  for (var menu of result) {
-			    		  menuService.add(menu);
-			    		  // 큰 문제는 아니지만 수정페이지에서 새로고침 시 일정 확률로 순서가 뒤바뀜
-					}
-			    	  
-			      }
-			});
-        	
-        	
-		}
+        
         
         
         
