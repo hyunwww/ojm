@@ -41,6 +41,7 @@ public class JobController {
 	public String jregister(Model model, Criteria cri, JobVO jvo, int uno) {
 		log.info("jregister...");
 		model.addAttribute("stores", sservice.searchStoreByUno(uno));
+		log.info(sservice.searchStoreByUno(uno));
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", jservice.getJtotal());
 		return "job/jregister";
@@ -55,11 +56,11 @@ public class JobController {
 	}
 	
 	@GetMapping("/jget")
-	public String jget(@RequestParam("jno") int jno, int uno, Model model, Criteria cri) {
+	public String jget(@RequestParam("jno") int jno, Model model, Criteria cri) {
 		log.info("jget...");
-		model.addAttribute("store", sservice.searchStoreByUno(uno));
-		log.info(sservice.searchStoreByUno(uno));
 		model.addAttribute("jvo", jservice.jGet(jno));
+		int sno = jservice.jGet(jno).getSno();
+		model.addAttribute("store", sservice.storeInfo(sno));
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", jservice.getJtotal());
 		return "job/jget";

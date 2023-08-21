@@ -58,7 +58,8 @@
 						<c:forEach var="job" items="${jlist }">
 							<tr>
 								<td><c:out value="${job.jno }"></c:out></td>
-								<td><c:out value="${job.jaddress }"></c:out></td>
+								<td>
+								<c:out value="${job.sno }"></c:out></td>
 								<td>
 									<a class="jmove" href='<c:out value="${job.jno }"/>'>
 										<c:out value="${job.jtitle }"></c:out>
@@ -98,7 +99,7 @@
 		<hr>
 		
 		<!-- 로그인 확인  -->
-		<sec:authorize access="isAuthenticated()">
+		<sec:authorize access="hasRole('ROLE_business')">
 			<button id="jRegBtn">게시글 등록</button>
 		</sec:authorize>
 		<button onclick="location.href='/'">메인</button>
@@ -149,8 +150,8 @@
 			e.preventDefault();
 			
 			jActionForm.attr('action', 'jget');
-			jActionForm.append("<input type='hidden' name='uno' value='" + ${uvo.uno} +"'>");
 			jActionForm.append("<input type='hidden' name='jno' value='" + $(this).attr('href') + "'>");
+
 			jActionForm.submit();
 		});
 		

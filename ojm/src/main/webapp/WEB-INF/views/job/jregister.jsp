@@ -41,13 +41,12 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 					<td><input name="jwriter" id="jwriter" value="${uvo.username }" readonly="readonly" style="background-color: #ccc"></td>
 				</tr>
 				<tr>
-					<td>매장 / 주소</td>
+					<td>매장</td>
 					<td>
-						<select name="jsname" id="jsname">
+						<select name="sno" id="sno">
 							<option value="none" selected disabled hidden>매장 선택</option>
 							<c:forEach var="stores" items="${stores}">
-								<option value="${stores.sname }">${stores.sname}(${stores.saddress })</option>
-								<input type="hidden" name="jaddress" id="jaddress" value="${stores.saddress }">
+								<option value="${stores.sno }">${stores.sname}</option>
 							</c:forEach>
 						</select>
 					</td>
@@ -93,7 +92,6 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 			<input type="hidden" name="amount" value="${cri.amount }">
 			<input type="hidden" name="total" value="${total }">
 			<input type="hidden" name="uno" value="${uvo.uno }">
-			<input type="hidden" name="sno" value="${svo.sno }">
 		</form>
 	</body>
 	
@@ -158,7 +156,7 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 				if (document.getElementById("jtitle").value=="") {
 					alert("제목을 입력하세요.");
 					return;
-				}else if (document.getElementById("jaddress").value=="none") {
+				}else if (document.getElementById("sno").value=="none") {
 					alert("매장을 선택하세요.")
 					return;
 				}else if (document.getElementById("salary").value=="") {
