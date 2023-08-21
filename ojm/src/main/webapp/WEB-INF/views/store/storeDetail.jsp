@@ -352,7 +352,6 @@
 	});
 
 </script>
-
 <script type="text/javascript">  /* 현재 위치 및 거리 계산*/
 	var distance;	//현재 위치로부터의 거리
 	var currentPosition;

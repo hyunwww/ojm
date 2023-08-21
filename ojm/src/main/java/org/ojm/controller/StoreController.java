@@ -390,7 +390,6 @@ public class StoreController {
 		
 		log.info("delete store, pw : " + pw);
 		// 유저 pw 체크 후 검증성공 시 삭제, 실패 시 실패 메세지와 함께 오류status 전송 후 script 처리
-		log.info("currentPw : " + uvo.getUvo().getUserpw());
 		if (encoder.matches(pw, uvo.getUvo().getUserpw())) {
 			log.info("일치");
 			return new ResponseEntity<String>("삭제되었습니다." ,HttpStatus.OK);

@@ -23,7 +23,7 @@ public class CustomUserDetailService implements UserDetailsService{
 
 		UserVO vo = mapper.getUserByID(username);
 		CustomUser uvo = null;
-		log.warn("member mapper : " + vo);
+		log.warn("user mapper : " + vo);
 		if (vo != null) {
 			uvo = new CustomUser(vo);
 			log.warn(uvo);

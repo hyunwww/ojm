@@ -127,13 +127,6 @@ $(function() {
 			location.href = '/user/login';
 		});
 		
-		
-		//뒤로가기 버튼 이벤트
-		$("#backBtn").on("click", function() {
-			history.go(-1);
-		});
-		
-		
 		//신고 버튼 이벤트 
 		$("#reportBtn").on("click", function() {
 			$(".reportOverlay").show();
@@ -417,6 +410,16 @@ $(function() {
                   <li><a href="#">smallTag 2</a></li>
                   <li><a href="#">smallTag 3</a></li>
                 </ul>
+                <div id="btnContainer" style="text-align: right; padding: 10px;">
+					<button id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal">신고</button>
+					<sec:authorize access="isAuthenticated()">
+						<button id="open-modal" data-bs-toggle="modal" data-bs-target="#revModal">리뷰 작성</button>
+					</sec:authorize>
+					<sec:authorize access="isAnonymous()">
+						<button id="revBtn">리뷰 작성</button>
+					</sec:authorize>
+					<button id="bookBtn">예약</button>
+				</div>
               </div>
 
             </article><!-- End blog entry -->
@@ -571,7 +574,54 @@ $(function() {
     </section><!-- End Blog Single Section -->
 
   </main><!-- End #main -->
-  
+  <!-- 모달 test  -->
+  <!-- reviewModal -->
+<div class="modal fade" id="revModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">리뷰 작성</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       	<p>ㅇㅇ</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">작성하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- reportModal -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">신고</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      		<form action="#" method="post">
+				<p>제목</p>
+				<p><input type="text" name="rptitle"></p>
+				<p>사유</p>
+				<p>
+					<select name="state">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+					</select>
+				</p>
+				<p>내용</p>
+				<textarea rows="12" cols="30" name="rpcontent" style="resize: none;"></textarea>
+			</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">작성하기</button>
+      </div>
+    </div>
+  </div>
+</div>
   	<!-- 지도 팝업  -->
 	<div class="map-overlay">
 		<div class="mapModal"></div>
