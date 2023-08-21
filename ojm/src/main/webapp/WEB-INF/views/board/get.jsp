@@ -69,6 +69,7 @@
 						<td colspan="2">
 							<input class="like" type="hidden" value="${like }">
 							<button name="blikeBtn">추천</button>
+							${vo.blike}
 						</td>
 					</tr>
 				</c:when>
@@ -77,6 +78,7 @@
 						<td colspan="2">
 							<input class="like" type="hidden" value="${like }">
 							<button name="blikeBtn">추천 취소</button>
+							${vo.blike}
 						</td>
 					</tr>
 				</c:when>
