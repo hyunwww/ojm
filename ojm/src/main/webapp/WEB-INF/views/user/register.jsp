@@ -21,5 +21,8 @@
 	$("#reg_buisness").on("click",function(){
 		location.href="regBuisness";
 	});
+	$("#homeBtn").on("click",function(){
+		location.href="/";
+	});
 </script>
 </html>
