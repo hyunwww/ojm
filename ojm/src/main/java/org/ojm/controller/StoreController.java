@@ -136,6 +136,8 @@ public class StoreController {
 		
 		return "/store/storeSearch";
 	}
+	
+	//필터링
 	@GetMapping(value = "/search/filter", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<StoreVO>> searchStore(@RequestParam("scate[]")List<String> scate,
@@ -166,7 +168,7 @@ public class StoreController {
 		log.info("detail...." + sno);
 		log.info("user : " + principal);
 		
-		//uno을 통해 좋아요 정보 받아와서 처리해야함.
+		//uno을 통해 좋아요 정보 받아와서 처리
 		// uno >> userinfo >> ulikestore 데이터 가공 후 현재 sno와 일치하는지 확인
 		boolean isLike = false;
 		
@@ -191,8 +193,8 @@ public class StoreController {
 		StoreVO svo = service.storeInfo(sno);
 		String result = "";
 		
+		// 데이터 >> 요일
 		if (svo.getDayOff() != null && !svo.getDayOff().equals("")) {
-			log.info("데이터 있음");
 			for (String day : svo.getDayOff().split("")) {
 				switch (day) {
 				case "1":

@@ -161,6 +161,40 @@
 					if (menuInput != '') {
 						$("#regForm").append(menuInput);
 					}
+					//휴무일 처리
+					var dayInput = '';
+					for (var i = 0; i < $(".dayOff td").length; i++) {
+						if ($(".dayOff td")[i].classList.contains("dayClicked")) {
+							var day = $(".dayOff td")[i].innerHTML;
+							switch (day) {
+							case '월':
+								dayInput += 1;
+								break;
+							case '화':
+								dayInput += 2;
+								break;
+							case '수':
+								dayInput += 3;
+								break;
+							case '목':
+								dayInput += 4;
+								break;
+							case '금':
+								dayInput += 5;
+								break;
+							case '토':
+								dayInput += 6;
+								break;
+							case '일':
+								dayInput += 0;
+								break;
+							default:
+								break;
+							}
+							
+						}
+					}
+					$("#regForm").append('<input type="hidden" name="dayOff" value="'+dayInput+'"/>');
 					$("#regForm").submit();
 				});
 				
@@ -181,7 +215,7 @@
 		<form action="#" id="regForm" method="post">
 			<table id="storeTable">
 				<tr>
-					<td>가게명</td>
+					<td>가게명<span style="color: red;">*</span></td>
 					<td><input type="text" name="sname" value="${store.sname }" readonly="readonly"></td>
 				</tr>
 				<tr>
@@ -189,7 +223,7 @@
 					<td><input type="text" name="addr" readonly="readonly" value="${store.saddress }"></td>
 				</tr>
 				<tr>
-					<td>전화번호</td>
+					<td>전화번호<span style="color: red;">*</span></td>
 					<td><input type="text" name="sphone" value="${store.sphone }"></td>
 				</tr>
 				<tr>
@@ -233,12 +267,12 @@
 					<td><input type="number" name="openHour" value="${openHour }"> ~ <input type="number" name="closeHour" value="${closeHour }"></td>
 				</tr>
 				<tr>
-					<td>사업자등록번호</td>
+					<td>사업자등록번호<span style="color: red;">*</span></td>
 					<td><input type="text" name="scrn" value="${store.scrn }"></td>
 				</tr>
 				<tr>
 					<td>예약금</td>
-					<td><input type="number" name="sdepo" id="depoInput" readonly="readonly" value="${store.sdepo }">&nbsp;예약금 없음<input type="checkbox" name="sdepo" value="0" id="noDeposit"></td>
+					<td><input type="text" name="sdepo" id="depoInput" readonly="readonly" value="${store.sdepo }">&nbsp;예약금 없음<input type="checkbox" name="sdepo" value="0" id="noDeposit"></td>
 				</tr>
 				<tr>
 					<td></td>
@@ -260,8 +294,7 @@
 				</tr>
 			</table>
 			<input type="hidden" value="${store.sno }" name="sno">
-			<input type="hidden" value="${uvo.uno }" name="uno">
-			<input type="hidden" value="${uvo.auth }" name="auth">
+			<input type="hidden" value="${store.uno }" name="uno">
 		</form>
 		<table>
 			<tr>

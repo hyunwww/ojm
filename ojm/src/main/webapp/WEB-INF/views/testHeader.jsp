@@ -25,6 +25,8 @@
   <link href="/resources/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
   <link href="/resources/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="/resources/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/resources/css/owl.theme.default.min.css">
+  <link rel="stylesheet" href="/resources/css/owl.carousel.min.css">
 
   <!-- Template Main CSS File -->
   <link href="/resources/css/style.css" rel="stylesheet">
@@ -37,6 +39,8 @@
   <script src="/resources/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="/resources/vendor/waypoints/noframework.waypoints.js"></script>
   <script src="/resources/vendor/php-email-form/validate.js"></script>
+  <script src="/resources/js/owl.carousel.min.js"></script>
+
 
   <!-- Template Main JS File -->
   <script src="/resources/js/main.js"></script>
@@ -73,6 +77,60 @@
 	height: 250px;
 	margin: auto;
 }
+.owl-next, .owl-prev{
+		background-color: rgba(245, 126, 100, 0.6);
+		color: white;
+		border-radius : 10px; 
+		width: auto;
+		display: inline-block;
+		padding: 10px;
+		cursor: pointer;
+		position: relative;
+		transform: translateY(-50%);
+		top: -8rem;
+	}
+.owl-lastItem{
+	background-color: rgba(245, 126, 100, 0.2);
+}
+.mapModal {
+	  position: absolute;
+	  width: 1000px;
+	  height: 700px;
+	  top: 50%;
+	  left: 50%;
+	  transform: translate(-50%, -50%);
+	  overflow: hidden;
+	}
+	.map-overlay{
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  background-color: rgba(0, 0, 0, 0.8);
+	  display: none;
+	  z-index: 997;
+	}
+	.reportOverlay{
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  background-color: rgba(0, 0, 0, 0.8);
+	  display: none;
+	  z-index: 1;
+	}
+	.reportModal{
+		width: fit-content;
+		height: auto;
+		margin: auto;
+		background-color: white;
+		padding: 15px;
+		border-radius: 5px; 
+		position: relative;
+		top: 10%; 
+	}
 </style>
 </head>
 <script type="text/javascript">

@@ -333,7 +333,6 @@
 			$(".map-overlay").show();
 			popMap.relayout();
 			popMap.setBounds(bounds);
-			//popMap.panTo(coords);
 			
 		});
 		
@@ -426,9 +425,6 @@
 	$(function() {
 		//슬라이더
 		recommendByDistance();
-		
-		
-		 
 	});
 	
 	
@@ -449,7 +445,7 @@
 		    		if (sno == store.sno) {
 						continue;
 					}
-		    		//내 위치로부터 거리 *distance 는 현재 매장에 대한 정보
+		    		//내 위치로부터 거리 *distance 는 현재 매장에 대한 정보 , 단위 : km
 		    		var dist = getDistance(kd, wd, store.kd, store.wd);
 		    		var empty = true;
 		    		if (dist <= 5) {
@@ -466,7 +462,7 @@
 		    		
 				}
 		    	
-		    	
+		    		//슬라이더 생성
 		    	  $('.owl-carousel').owlCarousel({
 		    		    loop: false,
 		    		    mousedrag : false,

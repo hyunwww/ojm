@@ -169,7 +169,7 @@
 				// 공백 input 제어
 				if (regForm.sname.value == '' || regForm.addr.value == '' || regForm.openHour.value == '' || regForm.closeHour.value == ''
 						|| regForm.scrn.value == '' || regForm.sphone.value == '') {
-					alert("입력해야됨.");
+					alert("필수입력항목을 작성해야합니다.");
 					return;
 				}
 				
@@ -352,11 +352,11 @@
 		<form action="#" id="regForm" method="post">
 			<table id="storeTable">
 				<tr>
-					<td>가게명</td>
+					<td>가게명<span style="color: red;">*</span></td>
 					<td><input type="text" name="sname"></td>
 				</tr>
 				<tr>
-					<td>주소</td>
+					<td>주소<span style="color: red;">*</span></td>
 					<td><input type="text" name="addr" readonly="readonly">&nbsp;&nbsp;<button type="button" id="searchBtn">주소 검색</button></td>
 				</tr>
 				<tr>
@@ -364,7 +364,7 @@
 					<td><input type="text" name="addrDet" placeholder="상세 주소"></td>
 				</tr>
 				<tr>
-					<td>전화번호</td>
+					<td>전화번호<span style="color: red;">*</span></td>
 					<td><input type="text" name="sphone"></td>
 				</tr>
 				<tr>
@@ -406,10 +406,10 @@
 				</tr>
 				<tr>
 					<td>영업시간</td>
-					<td><input type="text" name="openHour"> ~ <input type="number" name="closeHour"></td>
+					<td><input type="number" name="openHour"> ~ <input type="number" name="closeHour"></td>
 				</tr>
 				<tr>
-					<td>사업자등록번호</td>
+					<td>사업자등록번호<span style="color: red;">*</span></td>
 					<td><input type="text" name="scrn"></td>
 				</tr>
 				<tr>
