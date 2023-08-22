@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <html lang="en">
 
 
@@ -63,18 +62,13 @@
           	<ul>
 			  <li><a href="/board/list">1</a></li>
 			  <li><a href="/qboard/qlist">2</a></li>
-			  <li><a href="#">3</a></li>
+			  <li><a href="/jboard/jlist">3</a></li>
 			</ul>
           </li>
           <li><a href="/store/storeList">Search</a></li>
           <li><a href="/store/register">Register</a></li>
           <li><a href="/user/myPage/main">myPage</a></li>
-          <sec:authorize access="isAnonymous()">
-	          <li><a href="/user/login">Login</a></li>
-          </sec:authorize>
-          <sec:authorize access="isAuthenticated()">
-	          <li><a href="/logout">Logout</a></li>
-          </sec:authorize>
+          <li><a href="/user/login">Login</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->

@@ -98,13 +98,12 @@
 		</div>
 		<hr>
 		
-		<!-- 로그인 확인  -->
 		<sec:authorize access="hasRole('ROLE_business')">
 			<button id="jRegBtn">게시글 등록</button>
 		</sec:authorize>
 		<button onclick="location.href='/'">메인</button>
 		
-		<form action="/job/jlist" method="get" id="jActionForm">
+		<form action="/jboard/jlist" method="get" id="jActionForm">
 			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
 			<input type="hidden" name="total" value="${total }">
@@ -116,7 +115,7 @@
 	<script type="text/javascript">
 		var jActionForm = $("#jActionForm");
 		$("#jRegBtn").click(function(){
-			jActionForm.attr('action', '/job/jregister');
+			jActionForm.attr('action', '/jboard/jregister');
 			jActionForm.submit();
 		});
 		
