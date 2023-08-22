@@ -33,6 +33,7 @@ public interface StoreService {
 	//storeimg 관련
 	public int removeImg(int sino);
 	
+	// 푸쉬용
 	//book 예약 관련 	
 	public void addBook(BookVO vo);
 }

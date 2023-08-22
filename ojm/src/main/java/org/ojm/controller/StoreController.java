@@ -496,6 +496,7 @@ public class StoreController {
 		service.reportSubmit(report);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
+	// 푸쉬용
 	@PostMapping("/bookregister")
 	public String addBook(BookVO vo, RedirectAttributes rttr, Model model) {
 		log.info(vo);

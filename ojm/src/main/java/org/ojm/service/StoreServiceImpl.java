@@ -44,7 +44,7 @@ public class StoreServiceImpl implements StoreService{
 			return mapper.allStore();
 		}
 	
-	// 커밋용 코드
+	
 	@Override
 	@Transactional 
 	public int storeRegister(StoreVO store) {
@@ -191,6 +191,7 @@ public class StoreServiceImpl implements StoreService{
 		return mapper.reportSubmit(rvo);
 	}
 	
+	// 푸쉬용
 	// 스토어 예약 신청 
 		@Override
 		public void addBook(BookVO vo) {

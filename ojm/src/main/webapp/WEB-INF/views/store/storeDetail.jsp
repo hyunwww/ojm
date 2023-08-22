@@ -595,7 +595,7 @@ p {
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script type="text/javascript">
 		
-		
+		// 푸쉬용
 		var openHour = 109;
 		var endHour = 118;
 		var currentDate = new Date();
