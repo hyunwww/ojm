@@ -41,21 +41,46 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 					<td>
 						<select name="qcate" id="qcate">
 							<option value="none" selected disabled hidden>말머리 선택</option>
-							<!-- 관리자 계정이 아니면 공지사항 보이지 않도록 수정해야 함 -->
-							<option value="공지사항">공지사항</option>
-							<option value="Q&A">Q&A</option>
+							<sec:authorize access="hasRole('ROLE_admin')">
+								<option value="공지사항">공지사항</option>
+							</sec:authorize>
+							<sec:authorize access="hasRole('ROLE_user')">
+								<option value="Q&A">Q&A</option>
+							</sec:authorize>
+							<sec:authorize access="hasRole('ROLE_business')">
+								<option value="Q&A">Q&A</option>
+							</sec:authorize>
 							<option value="비밀글" hidden>비밀글</option>
 						</select>		
 					</td>
 				</tr>
-				<tr>
-					<!-- 관리자 계정이면 비밀글 보이지 않도록 수정해야 함 -->
-					<td>비밀글</td>
-					<td>
-						<input type="checkbox" name="qhide" id="qhideChecked" value="1">
-						<input type="hidden" name="qhide" id="qhideNone" value="0">
-					</td>
-				</tr>
+				<sec:authorize access="hasRole('ROLE_admin')">
+					<tr style="display:none">
+						<td>비밀글</td>
+						<td>
+							<input type="checkbox" name="qhideBox" id="qhideBox">
+							<input type="hidden" name="qhide" id="qhide" value="0">
+						</td>
+					</tr>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_user')">
+					<tr>
+						<td>비밀글</td>
+						<td>
+							<input type="checkbox" name="qhideBox" id="qhideBox">
+							<input type="hidden" name="qhide" id="qhide" value="0">
+						</td>
+					</tr>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_business')">
+					<tr>
+						<td>비밀글</td>
+						<td>
+							<input type="checkbox" name="qhideBox" id="qhideBox">
+							<input type="hidden" name="qhide" id="qhide" value="0">
+						</td>
+					</tr>
+				</sec:authorize>
 				<tr>
 					<td>작성자</td>
 					<td><input name="qwriter" id="qwriter" value="${uvo.username }" readonly="readonly" style="background-color: #ccc"></td>
@@ -87,6 +112,7 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 			e.preventDefault();		// 동작 중단
 			
 			var operation = $(this).data("oper");
+			var qhideBox = document.getElementById('qhideBox');
 			
 			if (operation === 'qregister') {
 				if (document.getElementById("qtitle").value=="") {
@@ -98,10 +124,9 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 				}else if (document.getElementById("qcontent").value=="") {
 					alert("내용을 입력하세요.");
 					return;
-				}else if(document.getElementById("qhideChecked").checked) {
-				    document.getElementById("qhideNone").disabled = true;
+				}else if (qhideBox.checked) {
+					qhide.value = 1;
 				}
-
 				
 				formObj.attr("action", '/qboard/qregister');
 				

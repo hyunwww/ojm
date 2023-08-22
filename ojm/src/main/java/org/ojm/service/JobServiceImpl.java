@@ -38,5 +38,15 @@ public class JobServiceImpl implements JobService{
 		jmapper.updateJview(jvo);
 		return jmapper.jRead(jvo);
 	}
+
+	@Override
+	public boolean jModify(JobVO jvo) {
+		return jmapper.jUpdate(jvo) == 1;
+	}
+
+	@Override
+	public boolean jRemove(int jno) {
+		return jmapper.jDelete(jno) == 1;
+	}
 	
 }

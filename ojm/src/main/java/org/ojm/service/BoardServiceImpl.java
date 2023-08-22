@@ -60,6 +60,7 @@ public class BoardServiceImpl implements BoardService{
 	public boolean remove(int bno) {
 		imgMapper.deleteAll(bno);
 		brMapper.deleteAll(bno);
+		blMapper.bLikeDelete(bno);
 		return mapper.delete(bno) == 1;
 	}
 
@@ -94,6 +95,5 @@ public class BoardServiceImpl implements BoardService{
 		mapper.updateBlikeDown(bno);
 		return blMapper.bLikeDown(bno, uno);
 	}
-
 
 }

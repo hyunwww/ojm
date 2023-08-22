@@ -80,7 +80,7 @@
 		
 		<!-- 작성자 본인일 때에만 게시글 수정이 가능하도록 기능 추가해야 함 -->
 		<c:if test="${jvo.jwriter eq uvo.username }">
-			<button data-oper="modify">수정</button>
+			<button data-oper="jmodify">수정</button>
 		</c:if>
 		<button data-oper="jlist">목록</button>
 		
@@ -99,11 +99,9 @@
 		$(function(){
 			var operForm = $("#jOperForm");  
 			
-			// 수정 버튼 클릭 시 bno 값을 같이 전달 → 기존 내부 input 태그 그대로 전달
 			$("button[data-oper='jmodify']").on('click', function(){
 				operForm.submit();
 			});
-			// 목록 버튼 클릭 시 bno 값 없이 이동 → 기존 내부 input 태그 삭제 후 이동
 			$("button[data-oper='jlist']").on('click', function(){
 				operForm.find("#jno").remove();
 				operForm.attr('action', '/job/jlist');

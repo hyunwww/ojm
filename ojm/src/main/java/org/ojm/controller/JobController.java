@@ -41,7 +41,6 @@ public class JobController {
 	public String jregister(Model model, Criteria cri, JobVO jvo, int uno) {
 		log.info("jregister...");
 		model.addAttribute("stores", sservice.searchStoreByUno(uno));
-		log.info(sservice.searchStoreByUno(uno));
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", jservice.getJtotal());
 		return "job/jregister";
@@ -50,7 +49,6 @@ public class JobController {
 	@PostMapping("/jregister")
 	public String jregister(Model model, JobVO jvo, RedirectAttributes rttr) {
 		log.info("jregister2...");
-		log.info(jvo);
 		jservice.jRegister(jvo);
 		rttr.addFlashAttribute("result", "ok");
 		return "redirect:/job/jlist";
@@ -65,5 +63,33 @@ public class JobController {
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", jservice.getJtotal());
 		return "job/jget";
+	}
+	
+	@GetMapping("/jmodify")
+	public String jmodify(@RequestParam("jno") int jno, int uno, Model model, Criteria cri) {
+		log.info("jmodify...");
+		model.addAttribute("stores", sservice.searchStoreByUno(uno));
+		model.addAttribute("jvo", jservice.jGet(jno));
+		model.addAttribute("cri", cri);
+		model.addAttribute("total", jservice.getJtotal());
+		return "job/jmodify";
+	}
+	
+	@PostMapping("/jmodify")
+	public String jmodify(JobVO jvo, RedirectAttributes rttr) {
+		log.info("jmodify2...");
+		if (jservice.jModify(jvo)) {
+			rttr.addFlashAttribute("result", "jmodify");
+		}
+		return "redirect:/job/jlist";
+	}
+	
+	@PostMapping("/jremove")
+	public String jremove(@RequestParam("jno") int jno, RedirectAttributes rttr) {
+		log.info("jremove...");
+		if (jservice.jRemove(jno)) {
+			rttr.addFlashAttribute("result", "jremove");
+		}
+		return "redirect:/job/jlist";
 	}
 }

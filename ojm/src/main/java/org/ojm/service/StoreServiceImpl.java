@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.ojm.domain.BookVO;
 import org.ojm.domain.MenuVO;
 import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreImgVO;
@@ -189,5 +190,13 @@ public class StoreServiceImpl implements StoreService{
 	public int reportSubmit(ReportVO rvo) {
 		return mapper.reportSubmit(rvo);
 	}
+	
+	// 푸쉬용
+	// 스토어 예약 신청 
+		@Override
+		public void addBook(BookVO vo) {
+			log.info("register serv...");
+			mapper.addbook(vo);
+		}
 	
 }

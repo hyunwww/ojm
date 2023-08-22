@@ -26,7 +26,7 @@ public interface StoreService {
 	public int reportSubmit(ReportVO rvo);
 	public int storeLike(int sno, int amount);
 	
-	
+	// 커밋용 코드
 	//user관련 (임시 테스트용)
 	public UserVO getUserById(String id);
 	

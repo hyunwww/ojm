@@ -992,7 +992,7 @@ p {
 					<button id="close-modal2">닫기</button>
 				</div>
 			</div>
-			<script type="text/javascript"> 
+<script type="text/javascript"> /* 예약 모달  */
 	const modal2 = document.getElementById("modal2");
 	const openModalBtn2 = document.getElementById("open-modal2");
 	const closeModalBtn2 = document.getElementById("close-modal2");
@@ -1119,7 +1119,7 @@ p {
 	</div>
 
 
-
+	<!-- 커밋용 코드 -->
 	<script type="text/javascript"> /* review 모달 스크립트  */
 		function myFunction(drawstar) {
 			//const drawstar = document.querySelector('.star input');

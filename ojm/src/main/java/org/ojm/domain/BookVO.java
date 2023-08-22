@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookVO {
-
+	// 푸쉬용
 	private long bkno, sno, uno;
-	private Date bdate;
-	private String btime, bman, bname, bphone, bdepo, breq;
+	private String bdate, btime, bman, bname, bphone, bdepo, breq;
 }

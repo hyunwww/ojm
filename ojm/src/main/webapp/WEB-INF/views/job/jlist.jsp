@@ -135,11 +135,11 @@
 				alert("게시글 등록이 완료되었습니다.");
 				return;
 			}
-			if (result === 'jModify') {
+			if (result === 'jmodify') {
 				alert("게시글 수정이 완료되었습니다.");
 				return;
 			}
-			if (result === 'jRemove') {
+			if (result === 'jremove') {
 				alert("게시글 삭제가 완료되었습니다.")
 				return;
 			}

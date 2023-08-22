@@ -3,6 +3,7 @@ package org.ojm.service;
 import java.util.List;
 import java.util.Map;
 
+import org.ojm.domain.BookVO;
 import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
@@ -32,4 +33,7 @@ public interface StoreService {
 	//storeimg 관련
 	public int removeImg(int sino);
 	
+	// 푸쉬용
+	//book 예약 관련 	
+	public void addBook(BookVO vo);
 }

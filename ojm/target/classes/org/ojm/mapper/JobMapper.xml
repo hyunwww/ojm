@@ -6,10 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="org.ojm.mapper.JobMapper">
 	<select id="getJlistWithPaging" resultType="org.ojm.domain.JobVO">
 		<![CDATA[
-			select jno, sno, jtitle, jwriter, jdate, jview, jupdatedate
+			select jno, sno, jaddress, jtitle, jwriter, jdate, jview, jupdatedate
 			from
 				(select /*+INDEX_DESC(job pk_job) */
-				rownum rn, jno, sno, jtitle, jwriter, jdate, jview, jupdatedate from job
+				rownum rn, jno, sno, jaddress, jtitle, jwriter, jdate, jview, jupdatedate from job
 				where]]>
 				<![CDATA[
 				rownum <= #{pageNum} * #{amount})
@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="jInsert" parameterType="org.ojm.domain.JobVO">
-		insert into job(jno, uno, sno, jtitle, jwriter, jdate, salary, jday, starttime, endtime, jcontent) values(seq_jno.nextval, #{uno}, #{sno}, #{jtitle}, #{jwriter}, sysdate, #{salary}, #{jday}, #{starttime}, #{endtime}, #{jcontent})
+		insert into job(jno, uno, sno, jaddress, jtitle, jwriter, jdate, salary, jday, starttime, endtime, jcontent) values(seq_jno.nextval, #{uno}, #{sno}, #{jaddress}, #{jtitle}, #{jwriter}, sysdate, #{salary}, #{jday}, #{starttime}, #{endtime}, #{jcontent})
 	</insert>
 	
 	<select id="jRead" resultType="org.ojm.domain.JobVO" parameterType="int">
@@ -33,4 +33,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update job set jview = jview+1 where jno = #{jno}
 	</update>
 	
+	<update id="jUpdate" parameterType="org.ojm.domain.JobVO">
+		update job set jaddress = #{jaddress}, jtitle = #{jtitle}, salary = #{salary}, jday = #{jday}, starttime = #{starttime}, endtime = #{endtime}, jcontent = #{jcontent}, jupdatedate = sysdate where jno = #{jno}
+	</update>
+	
+	<delete id="jDelete" parameterType="int">
+		delete from job where jno = #{jno}
+	</delete>
 </mapper>

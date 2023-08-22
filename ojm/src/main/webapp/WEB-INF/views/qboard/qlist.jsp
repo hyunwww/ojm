@@ -1,8 +1,21 @@
+<%@page import="org.ojm.security.domain.CustomUser"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
+<%@page import="org.springframework.security.core.Authentication"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%
+   Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      Object principal = auth.getPrincipal();
+      
+      try{
+         pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
+      }catch(Exception e){
+         pageContext.setAttribute("uvo", null);
+      }
+%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -50,7 +63,7 @@
 										<td><c:out value="${qboard.qcate }"></c:out></td>
 									</c:when>
 									<c:otherwise>
-										<td></td>
+										<td>비밀글</td>
 									</c:otherwise>
 								</c:choose>
 								<c:choose>
@@ -62,9 +75,29 @@
 											</a>
 										</td>
 									</c:when>
+									<c:when test="${uvo.username eq qboard.qwriter }">
+										<td>
+											<a class="qmove" href='<c:out value="${qboard.qno }"/>'>
+												<c:out value="${qboard.qtitle }"></c:out>
+												<b>[<c:out value="${qboard.qreplycnt }"/>]</b>
+											</a>
+										</td>
+									</c:when>
 									<c:otherwise>
-										<!-- 관리자 계정 또는 작성자 본인일 시에는 확인가능하도록 수정 필요 -->
-										<td>비밀글입니다.</td>
+										<sec:authorize access="hasRole('ROLE_admin')">
+											<td>
+												<a class="qmove" href='<c:out value="${qboard.qno }"/>'>
+													<c:out value="${qboard.qtitle }"></c:out>
+													<b>[<c:out value="${qboard.qreplycnt }"/>]</b>
+												</a>
+											</td>
+										</sec:authorize>
+										<sec:authorize access="hasRole('ROLE_user')">
+											<td>비밀글입니다.</td>
+										</sec:authorize>
+										<sec:authorize access="hasRole('ROLE_business')">
+											<td>비밀글입니다.</td>
+										</sec:authorize>
 									</c:otherwise>
 								</c:choose>
 								<td><c:out value="${qboard.qwriter }"></c:out></td>
