@@ -606,7 +606,7 @@ p {
 	 	var selectedFirstTime = 24*1;
 		//var year = currentDate.getFullYear().toString;
 		//var result = year.substring(2, 8);
-	function buildCalendar() { // 달력 만드는 함수
+	function buildCalendar() { // 달력 만드는 함수a
 		var row = null; // 높이
 		var cnt = 0; // 요일 카운트 일 1 월 2 화 3 수 4 목 5 금 6 토 7 cnt를 7로 나눌시 
 		var cntt = 0;
