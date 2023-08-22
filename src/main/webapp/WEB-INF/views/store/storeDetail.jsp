@@ -1119,7 +1119,7 @@ p {
 	</div>
 
 
-
+	<!-- 커밋용 코드 -->
 	<script type="text/javascript"> /* review 모달 스크립트  */
 		function myFunction(drawstar) {
 			//const drawstar = document.querySelector('.star input');
