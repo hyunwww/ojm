@@ -46,11 +46,13 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 						<select name="sno" id="sno">
 							<option value="none" selected disabled hidden>매장 선택</option>
 							<c:forEach var="stores" items="${stores}">
-								<option value="${stores.sno }">${stores.sname}</option>
+								<option value="${stores.sno }" data-address="${stores.saddress }">${stores.sname}</option>
 							</c:forEach>
 						</select>
+						<input type="hidden" name="jaddress" id="jaddress">
 					</td>
 				</tr>
+
 				<tr>
 					<td>시급</td>
 					<td><input name="salary" id="salary">원</td>
@@ -98,6 +100,18 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	
 	<script type="text/javascript">
+	
+		$(function () {
+			
+			$("#sno").on("change", function () {
+				var saddress = $(this).find("option:selected").data("address");
+				console.log(saddress);
+				
+				$("#jaddress").attr('value', saddress);
+				console.log($("#jaddress").val());
+			});
+		});
+	
 		$(document).ready(function(){
 			$(".weekday").click(function(){
 				if(this.checked){
@@ -144,6 +158,7 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 	</script>
 	
 	<script type="text/javascript">
+
 		$(function(){
 		var formObj = $("form");
 		

@@ -59,7 +59,7 @@
 							<tr>
 								<td><c:out value="${job.jno }"></c:out></td>
 								<td>
-								<c:out value="${job.sno }"></c:out></td>
+								<c:out value="${job.jaddress }"></c:out></td>
 								<td>
 									<a class="jmove" href='<c:out value="${job.jno }"/>'>
 										<c:out value="${job.jtitle }"></c:out>

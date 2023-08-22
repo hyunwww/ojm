@@ -50,6 +50,7 @@ public class JobController {
 	@PostMapping("/jregister")
 	public String jregister(Model model, JobVO jvo, RedirectAttributes rttr) {
 		log.info("jregister2...");
+		log.info(jvo);
 		jservice.jRegister(jvo);
 		rttr.addFlashAttribute("result", "ok");
 		return "redirect:/job/jlist";
