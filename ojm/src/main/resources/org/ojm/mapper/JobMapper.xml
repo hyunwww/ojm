@@ -33,4 +33,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update job set jview = jview+1 where jno = #{jno}
 	</update>
 	
+	<update id="jUpdate" parameterType="org.ojm.domain.JobVO">
+		update job set jaddress = #{jaddress}, jtitle = #{jtitle}, salary = #{salary}, jday = #{jday}, starttime = #{starttime}, endtime = #{endtime}, jcontent = #{jcontent}, jupdatedate = sysdate where jno = #{jno}
+	</update>
+	
+	<delete id="jDelete" parameterType="int">
+		delete from job where jno = #{jno}
+	</delete>
 </mapper>

@@ -3,13 +3,18 @@
 <%@page import="org.springframework.security.core.Authentication"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%
-Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-Object principal = auth.getPrincipal();
-
-pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
-   // jsp 원래 있던 코드 그대로 쓰려고 (uvo 변수) 자바 코드 사용함
+   Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      Object principal = auth.getPrincipal();
+      
+      try{
+         pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
+      }catch(Exception e){
+         pageContext.setAttribute("uvo", null);
+      }
 %>
 <!DOCTYPE html>
 <html>
@@ -36,20 +41,46 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 					<td>
 						<select name="qcate" id="qcate">
 							<option value="none" selected disabled hidden>말머리 선택</option>
-							<!-- 관리자 계정이 아니면 공지사항 보이지 않도록 수정해야 함 -->
-							<option value="공지사항">공지사항</option>
-							<option value="Q&A">Q&A</option>
+							<sec:authorize access="hasRole('ROLE_admin')">
+								<option value="공지사항">공지사항</option>
+							</sec:authorize>
+							<sec:authorize access="hasRole('ROLE_user')">
+								<option value="Q&A">Q&A</option>
+							</sec:authorize>
+							<sec:authorize access="hasRole('ROLE_business')">
+								<option value="Q&A">Q&A</option>
+							</sec:authorize>
 							<option value="비밀글" hidden>비밀글</option>
 						</select>
 					</td>
 				</tr>
-				<tr>
-					<td>비밀글</td>
-					<td>
-						<input type="checkbox" name="qhide" id="qhideChecked" value="1">
-						<input type="hidden" name="qhide" id="qhideNone" value="0">
-					</td>
-				</tr>
+				<sec:authorize access="hasRole('ROLE_admin')">
+					<tr style="display:none">
+						<td>비밀글</td>
+						<td>
+							<input type="checkbox" name="qhideBox" id="qhideBox">
+							<input type="hidden" name="qhide" id="qhide" value="0">
+						</td>
+					</tr>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_user')">
+					<tr>
+						<td>비밀글</td>
+						<td>
+							<input type="checkbox" name="qhideBox" id="qhideBox">
+							<input type="hidden" name="qhide" id="qhide" value="0">
+						</td>
+					</tr>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_business')">
+					<tr>
+						<td>비밀글</td>
+						<td>
+							<input type="checkbox" name="qhideBox" id="qhideBox">
+							<input type="hidden" name="qhide" id="qhide" value="0">
+						</td>
+					</tr>
+				</sec:authorize>
 				<tr>
 					<td>작성자</td>
 					<td><input id="qwriter" name="qwriter" value="${qvo.qwriter }" readonly="readonly" style="background-color: #ccc"></td>
@@ -77,7 +108,10 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 	<!-- 화면 이동 스크립트 -->
 	<script type="text/javascript">
 		$(function(){
+			
 			var formObj = $("form");
+			var qhideBox = document.getElementById('qhideBox');
+			
 			$("button").on('click', function(e){
 				e.preventDefault();		// 기본 이벤트 방지
 				var operation = $(this).data("oper")	// operation = 내가 누른 버튼의 data-oper
@@ -91,6 +125,8 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 					}else if (document.getElementById("qcontent").value=="") {
 						alert("내용을 입력하세요.");
 						return;
+					}else if (qhideBox.checked) {
+						qhide.value = 1;
 					}
 					formObj.attr('action', 'qmodify');
 					formObj.attr('method', 'post');

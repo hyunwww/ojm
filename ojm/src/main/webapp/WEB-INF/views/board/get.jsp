@@ -114,7 +114,6 @@
 		</table>
 		<hr>
 		
-		<!-- 작성자 본인일 때에만 게시글 수정이 가능하도록 기능 추가해야 함 -->
 		<c:if test="${vo.bwriter eq uvo.username }">
 			<button data-oper="modify">수정</button>
 		</c:if>

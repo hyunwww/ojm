@@ -48,6 +48,7 @@ public class QbaordController {
 	@PostMapping("qregister")
 	public String qregister(QboardVO qvo, RedirectAttributes rttr) {
 		log.info("qregister...");
+		log.info(qvo);
 		qservice.qRegister(qvo);
 		rttr.addFlashAttribute("result", "ok");
 		return "redirect:/qboard/qlist";

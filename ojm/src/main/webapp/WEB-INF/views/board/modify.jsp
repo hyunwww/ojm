@@ -1,6 +1,9 @@
 <%@page import="org.ojm.security.domain.CustomUser"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
 <%@page import="org.springframework.security.core.Authentication"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
@@ -37,8 +40,9 @@
 					<td>
 						<select name="bcate" id="bcate">
 							<option value="none" selected disabled hidden>말머리 선택</option>
-							<!-- 관리자 계정이 아니면 공지사항 보이지 않도록 수정해야 함 -->
-							<option value="공지사항">공지사항</option>
+							<sec:authorize access="hasRole('ROLE_admin')">
+								<option value="공지사항">공지사항</option>
+							</sec:authorize>
 							<option value="추천">추천</option>
 							<option value="정보">정보</option>
 							<option value="자유">자유</option>

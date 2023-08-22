@@ -15,4 +15,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="bLikeDown">
 	  	delete from boardlike where bno= #{param1} and uno = #{param2}
 	</delete>
+	
+	<delete id="bLikeDelete">
+		delete from boardlike where bno = #{bno}
+	</delete>
 </mapper>

@@ -10,4 +10,6 @@ public interface JobService {
 	public int getJtotal();
 	public void jRegister(JobVO jvo);
 	public JobVO jGet(int jvo);
+	public boolean jModify(JobVO jvo);
+	public boolean jRemove(int jno);
 }
