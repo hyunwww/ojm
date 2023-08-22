@@ -499,6 +499,7 @@ public class StoreController {
 	@PostMapping("/bookregister")
 	public String addBook(BookVO vo, RedirectAttributes rttr, Model model) {
 		log.info(vo);
+		log.info(vo);
 		log.info(vo.getBdate());
 		service.addBook(vo);
 		log.info("addBook.......");
