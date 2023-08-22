@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.ojm.mapper.UserMapper">
+	<resultMap type="org.ojm.domain.UserVO" id="userMap">
+		<result column="uno" property="uno"/>
+		<result column="userid" property="userid"/>
+		<result column="userpw" property="userpw"/>
+		<result column="username" property="username"/>
+		<result column="userbirth" property="userbirth"/>
+		<result column="userphone" property="userphone"/>
+		<result column="useremail" property="useremail"/>
+		<collection property="authList" resultMap="authMap" />
+		<collection property="info" resultMap="infoMap" />
+	</resultMap>
+	<resultMap type="org.ojm.domain.AuthVO" id="authMap">
+		<result column="userid" property="userid"/>
+		<result column="auth" property="auth"/>
+	</resultMap>
+	<resultMap type="org.ojm.domain.InfoVO" id="infoMap">
+		<result column="uino" property="uino"/>
+		<result column="uno" property="uno"/>
+		<result column="nickname" property="nickname"/>
+		<result column="uaddress" property="uaddress"/>
+		<result column="uads" property="uads"/>
+		<result column="ualer" property="ualer"/>
+		<result column="ualeretc" property="ualeretc"/>
+		<result column="ufavor" property="ufavor"/>
+		<result column="ulikestore" property="ulikestore"/>
+		<result column="ulikejob" property="ulikejob"/>
+		<result column="ugender" property="ugender"/>
+	</resultMap>
+	<select id="login" parameterType="map" resultMap="userMap">
+		select 
+		    u.userid,u.userpw,u.username,u.userbirth,
+		    u.userphone,u.useremail,a.auth,i.* 
+		from 
+		        usertable u 
+		    left join 
+		        userinfo i 
+		    on u.uno = i.uno
+		    left join 
+		        userauth a 
+		    on u.userid = a.userid
+		where userid=#{id} and userpw=#{pw}
+	</select>
+	<select id="loginBusiness" resultType="org.ojm.domain.UserVO">
+		select * from usertable where userid=#{id} and userpw=#{pw}
+	</select>
+	<select id="getUser" parameterType="map" resultMap="userMap">
+		select 
+		    u.userid,u.userpw,u.username,u.userbirth,
+		    u.userphone,u.useremail,a.auth,i.* 
+		from 
+		        usertable u 
+		    left join 
+		        userinfo i 
+		    on u.uno = i.uno
+		    left join 
+		        userauth a 
+		    on u.userid = a.userid
+		where u.userid=#{id} and u.userpw=#{pw}
+	</select>
+	
+	<insert id="regUser" parameterType="org.ojm.domain.UserVO">
+		insert into usertable 
+			values(
+				seq_uno.nextval,
+				#{userid},
+				#{userpw},
+				#{username},
+				#{userphone},
+				#{useremail},
+				#{userbirth}
+				)
+	</insert>
+	<insert id="regUserInfo" parameterType="org.ojm.domain.InfoVO">
+		insert into userinfo 
+			values(
+				seq_uino.nextval,
+				seq_uno.currval,
+				#{nickname},
+				#{uaddress},
+				#{uads},
+				#{ualer},
+				#{ualeretc},
+				#{ufavor},
+				#{ulikestore},
+				#{ulikejob},
+				#{ugender}
+				)
+	</insert>
+	<insert id="regUserAuth" parameterType="org.ojm.domain.AuthVO">
+		insert into userauth values(#{userid},#{auth})
+	</insert>
+	<update id="modifyUser" parameterType="org.ojm.domain.UserVO">
+		update usertable set
+			userpw=#{userpw},
+			username=#{username},
+			userphone=#{userphone},
+			useremail=#{useremail}
+		where uno=#{uno}
+	</update>
+	<update id="modifyUserInfo" parameterType="org.ojm.domain.InfoVO">
+		update userinfo set
+				nickname=#{nickname},
+				uaddress=#{uaddress},
+				uads=#{uads},
+				ualer=#{ualer},
+				ualeretc=#{ualeretc},
+				ufavor=#{ufavor}
+		where uno=#{uno}
+	</update>
+	<select id="findID" parameterType="map" resultType="String">
+		select userid from usertable where username=#{username} and useremail=#{useremail}
+	</select>
+	
+	<!-- 메일인증 -->
+	<insert id="newMailKey">
+		insert into mail (email,mail_key) values(#{email},#{mail_key})
+	</insert>
+	
+	<update id="updateMailKey">
+	   update mail set mail_key=#{mail_key} where email=#{email}
+	</update>
+	
+	<update id="updateMailAuth" >
+	   update mail set mail_auth=1 where email=#{email} and mail_key=#{mail_key}
+	</update>
+	
+	<select id="getUserByID" resultMap="userMap">
+		select 
+		    u.uno,u.userid,u.userpw,u.username,u.userbirth,
+		    u.userphone,u.useremail,a.auth,i.* 
+		from 
+		        usertable u 
+		    left join 
+		        userinfo i 
+		    on u.uno = i.uno
+		    left join 
+		        userauth a 
+		    on u.userid = a.userid
+		where u.userid=#{id}
+	</select>
+	<select id="idCheck" resultType="int">
+		select count(*) from usertable where userid=#{userid}
+	</select>
+	
+	<update id="pwChange">
+		update usertable set userpw=#{userpw} where userid=#{userid}
+	</update>
+	
+	<select id="getUno" resultType="int">
+		select uno from usertable where userid=#{userid}
+	</select>
+	
+	
+	
+	<!-- myPage -->
+	<select id="getListWithPaging" resultType="org.ojm.domain.BoardVO">
+		<![CDATA[
+			select bno, bcate, btitle, bwriter, bdate, bupdatedate, bview, blike, breplycnt
+			from
+				(select /*+INDEX_DESC(board pk_board) */
+				rownum rn, bno, bcate, btitle, bwriter, bdate, bupdatedate, bview, blike, breplycnt from board
+				where]]>
+				<![CDATA[
+				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
+				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+		]]>
+	</select>
+	<select id="getReviews" resultType="org.ojm.domain.ReviewVO">
+		<![CDATA[
+			select rvno, sno, uno, rvcontent, rvlike, rvdate
+			from
+				(select /*+INDEX_DESC(review pk_review) */
+				rownum rn, rvno, sno, uno, rvcontent, rvlike, rvdate from review
+				where]]>
+				<![CDATA[
+				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
+				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+		]]>
+	</select>
+	<select id="getRvCnt" resultType="int">
+		select count(*) from review where uno=#{uno}
+	</select>
+	<select id="getQlist" resultType="org.ojm.domain.QboardVO">
+		<![CDATA[
+			select qno, qtitle, qwriter, qcate, qhide, qdate, qupdatedate, qreplycnt, qview
+			from
+				(select /*+INDEX_DESC(qboard pk_qboard) */
+				rownum rn, qno, qtitle, qwriter, qcate, qhide, qdate, qupdatedate, qreplycnt, qview from qboard
+				where]]>
+				<![CDATA[
+				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
+				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+		]]>
+	</select>
+	<select id="getStoreList" resultType="org.ojm.domain.StoreVO">
+		select * from store where uno=#{uno}
+	</select>
+</mapper>

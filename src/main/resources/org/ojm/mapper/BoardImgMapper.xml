@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.ojm.mapper.BoardImgMapper">
+	<select id="findByBno" resultType="org.ojm.domain.BoardImgVO">
+		select * from boardimg where bno = #{bno}
+	</select>
+	
+	<insert id="insert" parameterType="org.ojm.mapper.BoardImgMapper">
+		insert into boardimg(bino, bno, uuid, uploadpath, filename) values(seq_bino.nextval,#{bno}, #{uuid}, #{uploadpath}, #{filename}) 
+	</insert>
+	
+	<delete id="delete">
+		delete from boardimg where uuid = #{uuid}
+	</delete>
+	
+	<delete id="deleteAll">
+		delete boardimg where bno = #{bno}
+	</delete>
+</mapper>
