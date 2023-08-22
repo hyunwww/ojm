@@ -310,6 +310,52 @@ $(function() {
 		}
 	}
 </script>
+<script type="text/javascript">
+	function recommendByDistance() {
+		var scate = ['${store.scate}'];
+		var saddr = '${store.saddress}';
+		//지역과 카테고리 기준으로 불러오기
+		$.ajax({
+		      type: "get",
+		      url: "/store/search/filter",
+		      data: {scate : scate,
+		    	  	location : saddr.split(" ")[0]},
+		      success: function (result, status, xhr) {
+		    		console.log(result);
+		    	  
+		    	  for (var store of result) {
+		    		if (sno == store.sno) { //현재 매장 제외
+						continue;
+					}
+		    		//내 위치로부터 거리 *distance 는 현재 매장에 대한 정보 , 단위 : km
+		    		var dist = getDistance(kd, wd, store.kd, store.wd);
+		    		var empty = true;
+		    		if (dist <= 5) {
+		    			empty = false;
+				    	var str = '';
+				    	
+				    	str += '<div class="post-item clearfix">';
+				    	str += '<img src="/resources/img/ja.jpg" alt="image">';
+				    	str += '<h4><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h4>';
+				    	str += '<time datetime="2020-01-01">detail</time>';
+				    	str += '</div>';
+				    	
+				    	$(".recent-posts").eq(0).append(str);
+					}
+		    		
+		    		
+		    		
+				}
+		    	
+		    	
+		    		
+		      },
+		      error: function(xhr, state, error) {
+				
+			}
+		});
+	}
+</script>
 <main id="main">
 	
     <!-- ======= Breadcrumbs ======= -->
@@ -317,7 +363,7 @@ $(function() {
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>매장 정보</h2>
+          <h4 style="color: white;">매장 정보</h4>
         </div>
 
       </div>
@@ -353,6 +399,13 @@ $(function() {
               <div class="entry-content">
               	<div class="imgArea" style="width: 50%; height: 200px; overflow: hidden;"><!-- owl carousel 및 lightbox적용하여 이미지 영역 구축  -->
               		<div class="owl-carousel owl-theme owl-loaded" style="text-align: -webkit-center">
+              			<c:forEach var="img" items="${store.imgList }">
+              				<div class="item cons">
+						          <a data-fslightbox href="/images/${img.uuid }_${img.fileName}">
+						         	<img alt="image" src="/images/${img.uuid }_${img.fileName}" style="object-fit : scale-down; height: 100%">
+								  </a>
+					        </div>
+              			</c:forEach>
 				         <div class="item cons">
 					          <a data-fslightbox href="/resources/img/ja.jpg">
 					         	<img alt="image" src="/resources/img/ja.jpg">
@@ -401,7 +454,7 @@ $(function() {
               <div class="entry-footer"><!-- tag 사용  -->
                 <i class="bi bi-folder"></i>
                 <ul class="cats">
-                  <li><a href="#">bigTag</a></li>
+                  <li><a href="#">${store.scate }</a></li>
                 </ul>
 
                 <i class="bi bi-tags"></i>
@@ -419,6 +472,7 @@ $(function() {
 						<button id="revBtn">리뷰 작성</button>
 					</sec:authorize>
 					<button id="bookBtn">예약</button>
+					<button data-bs-toggle="modal" data-bs-target="#replyModal">test</button>
 				</div>
               </div>
 
@@ -476,32 +530,32 @@ $(function() {
 			  
 			  
 
-
-              <div class="reply-form" style="display: none;"><!-- 숨겼다가 모달로 사용  -->
-                <h4>Leave a Reply</h4>
-                <p>Your email address will not be published. Required fields are marked * </p>
-                <form action="">
-                  <div class="row">
-                    <div class="col-md-6 form-group">
-                      <input name="name" type="text" class="form-control" placeholder="Your Name*">
-                    </div>
-                    <div class="col-md-6 form-group">
-                      <input name="email" type="text" class="form-control" placeholder="Your Email*">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col form-group">
-                      <input name="website" type="text" class="form-control" placeholder="Your Website">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col form-group">
-                      <textarea name="comment" class="form-control" placeholder="Your Comment*"></textarea>
-                    </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Post Comment</button>
-
-                </form>
+				
+              <div class="reply-form modal modal-sheet modal-lg" id="replyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><!-- 숨겼다가 모달로 사용  -->
+                <div class="modal-dialog modal-dialog-centered">
+                	<div class="modal-content p-3">
+                		<div>
+	                		<h4 style="float: left;">리뷰 작성</h4>
+	                		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="float: right;"></button>
+                		</div><br>
+		                <form action="#" method="post">
+		                  <div class="row">
+		                    <div class="col form-group">
+		                      <input name="writer" type="text" class="form-control" placeholder="작성자">
+		                    </div>
+		                  </div>
+		                  <div class="row">
+		                    <div class="col form-group">
+		                      <textarea name="comment" class="form-control" placeholder="내용을 입력해주세요" style="resize: none;"></textarea>
+		                    </div>
+		                  </div>
+		                  <div style="text-align: right;">
+			                  <button type="submit" class="btn btn-primary">작성하기</button>
+		                  </div>
+		                </form>
+                	</div>
+                </div>
+                
 
               </div>
 
@@ -516,41 +570,24 @@ $(function() {
               <h3 class="sidebar-title">비슷한 매장 추천</h3>
               <div class="sidebar-item recent-posts">
                 <div class="post-item clearfix">
-                  <img src="assets/img/blog/blog-recent-1.jpg" alt="">
-                  <h4><a href="blog-single.html">Nihil blanditiis at in nihil autem</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
+                  <img src="/resources/img/ja.jpg" alt="">
+                  <h4><a href="blog-single.html">title</a></h4>
+                  <time datetime="2020-01-01">desc</time>
                 </div>
 
                 <div class="post-item clearfix">
-                  <img src="assets/img/blog/blog-recent-2.jpg" alt="">
+                  <img src="/resources/img/sam.jpg" alt="">
                   <h4><a href="blog-single.html">Quidem autem et impedit</a></h4>
                   <time datetime="2020-01-01">Jan 1, 2020</time>
                 </div>
-
-                <div class="post-item clearfix">
-                  <img src="assets/img/blog/blog-recent-3.jpg" alt="">
-                  <h4><a href="blog-single.html">Id quia et et ut maxime similique occaecati ut</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
-                </div>
-
-                <div class="post-item clearfix">
-                  <img src="assets/img/blog/blog-recent-4.jpg" alt="">
-                  <h4><a href="blog-single.html">Laborum corporis quo dara net para</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
-                </div>
-
-                <div class="post-item clearfix">
-                  <img src="assets/img/blog/blog-recent-5.jpg" alt="">
-                  <h4><a href="blog-single.html">Et dolores corrupti quae illo quod dolor</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
-                </div>
+                
 
               </div><!-- End sidebar recent posts-->
 
-              <h3 class="sidebar-title">Tags</h3>
+              <h3 class="sidebar-title">관련 검색어</h3>
               <div class="sidebar-item tags">
                 <ul>
-                  <li><a href="#">App</a></li>
+                  <li><a href="/store/search?searchInput=1">1</a></li>
                   <li><a href="#">IT</a></li>
                   <li><a href="#">Business</a></li>
                   <li><a href="#">Mac</a></li>
@@ -565,7 +602,22 @@ $(function() {
               </div><!-- End sidebar tags-->
 
             </div><!-- End sidebar -->
+			
+			<div class="sidebar">
+				<h3 class="sidebar-title">222</h3>
+				<div class="sidebar-item recent-posts">
+					<div class="post-item clearfix">
+						<h5>111</h5>
+					</div>
+					<div class="post-item clearfix">
+						<h5>2</h5>
+					</div>
+					<div class="post-item clearfix">
+						<h5>3</h5>
+					</div>
 
+				</div>
+			</div>
           </div><!-- End blog sidebar -->
 
         </div>
@@ -626,5 +678,8 @@ $(function() {
 	<div class="map-overlay">
 		<div class="mapModal"></div>
 	</div>
+<script type="text/javascript">
+	recommendByDistance();
+</script>
 <script src="/resources/js/fslightbox.js"></script>
 <%@ include file="../testFooter.jsp" %>    

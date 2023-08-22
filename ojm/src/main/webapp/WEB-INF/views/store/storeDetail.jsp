@@ -230,6 +230,9 @@
 			alert("로그인이 필요한 서비스입니다.");
 			location.href = '/user/login';
 		});
+		$("#open-modal").on("click", function() {
+			$("#modal").show();
+		});
 		
 		
 		//뒤로가기 버튼 이벤트

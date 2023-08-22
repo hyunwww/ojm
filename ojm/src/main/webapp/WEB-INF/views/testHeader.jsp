@@ -90,7 +90,8 @@
 		top: -8rem;
 	}
 .owl-lastItem{
-	background-color: rgba(245, 126, 100, 0.2);
+	background-color: rgba(245, 126, 100, 0);
+	color: rgba(0, 0, 0, 0);
 }
 .mapModal {
 	  position: absolute;
@@ -130,6 +131,10 @@
 		border-radius: 5px; 
 		position: relative;
 		top: 10%; 
+	}
+	.cons{
+		width: 100%;
+		height: 200px;
 	}
 </style>
 </head>
