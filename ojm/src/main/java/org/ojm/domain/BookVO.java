@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class BookVO {
 
 	private long bkno, sno, uno;
-	private Date bdate;
+	private String bdate;
 	private String btime, bman, bname, bphone, bdepo, breq;
 }

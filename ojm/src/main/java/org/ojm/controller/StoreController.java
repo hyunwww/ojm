@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.ojm.domain.AuthVO;
+import org.ojm.domain.BookVO;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreImgVO;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.extern.log4j.Log4j;
 
@@ -493,5 +495,15 @@ public class StoreController {
 		// 아래에 신고 내용 처리 하는 코드 작성
 		service.reportSubmit(report);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+	@PostMapping("/bookregister")
+	public String addBook(BookVO vo, RedirectAttributes rttr, Model model) {
+		log.info(vo);
+		log.info(vo);
+		log.info(vo.getBdate());
+		//service.addBook(vo);
+		log.info("addBook.......");
+		rttr.addFlashAttribute("result", "ok");
+		return "redirect:/store/detail?sno="+vo.getSno();
 	}
 }
