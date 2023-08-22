@@ -10,7 +10,9 @@
 <title>Insert title here</title>
 <style type="text/css">
 #real {
+	
 }
+
 #breq {
 	resize: none;
 }
@@ -163,7 +165,7 @@ p {
 
 #modal2 {
 	position: fixed;
-	z-index: 1;
+	z-index: 7;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -287,6 +289,9 @@ p {
 		$("#revBtn").on("click", function() {
 			alert("로그인이 필요한 서비스입니다.");
 			location.href = '/user/login';
+		});
+		 $("#open-modal").click(function() {
+			$("#modal").show();
 		});
 		
 		
@@ -970,11 +975,11 @@ p {
 
 						<input type="hidden" id="sno" name="sno" value="${store.sno }"><br />
 						<input type="hidden" id="uno" name="uno" value="${store.uno }"><br />
-						<input type="hidden" id="bdate" name="bdate"><br /> 
-						<input type="hidden" id="bday"><br /> 
-						<input type="hidden" id="btime" name="btime"><br /> 
-						<input type="hidden" id="bkno" name="bkno" value="1001"><br />
-						<input type="hidden" id="bdepo" name="bdepo" value="5000"><br />
+						<input type="hidden" id="bdate" name="bdate"><br /> <input
+							type="hidden" id="bday"><br /> <input type="hidden"
+							id="btime" name="btime"><br /> <input type="hidden"
+							id="bkno" name="bkno" value="1001"><br /> <input
+							type="hidden" id="bdepo" name="bdepo" value="5000"><br />
 						<!--<input type="text" id="openHour" name="openHour" value="9"><br /> 
 							<input type="text" id="endHour" name="endHour" value="18"><br /> -->
 
