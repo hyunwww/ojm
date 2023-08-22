@@ -41,17 +41,18 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 					<td><input name="jwriter" id="jwriter" value="${uvo.username }" readonly="readonly" style="background-color: #ccc"></td>
 				</tr>
 				<tr>
-					<td>매장 / 주소</td>
+					<td>매장</td>
 					<td>
-						<select name="jsname" id="jsname">
+						<select name="sno" id="sno">
 							<option value="none" selected disabled hidden>매장 선택</option>
 							<c:forEach var="stores" items="${stores}">
-								<option value="${stores.sname }">${stores.sname}(${stores.saddress })</option>
-								<input type="hidden" name="jaddress" id="jaddress" value="${stores.saddress }">
+								<option value="${stores.sno }" data-address="${stores.saddress }">${stores.sname}</option>
 							</c:forEach>
 						</select>
+						<input type="hidden" name="jaddress" id="jaddress">
 					</td>
 				</tr>
+
 				<tr>
 					<td>시급</td>
 					<td><input name="salary" id="salary">원</td>
@@ -93,13 +94,24 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 			<input type="hidden" name="amount" value="${cri.amount }">
 			<input type="hidden" name="total" value="${total }">
 			<input type="hidden" name="uno" value="${uvo.uno }">
-			<input type="hidden" name="sno" value="${svo.sno }">
 		</form>
 	</body>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	
 	<script type="text/javascript">
+	
+		$(function () {
+			
+			$("#sno").on("change", function () {
+				var saddress = $(this).find("option:selected").data("address");
+				console.log(saddress);
+				
+				$("#jaddress").attr('value', saddress);
+				console.log($("#jaddress").val());
+			});
+		});
+	
 		$(document).ready(function(){
 			$(".weekday").click(function(){
 				if(this.checked){
@@ -146,6 +158,7 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 	</script>
 	
 	<script type="text/javascript">
+
 		$(function(){
 		var formObj = $("form");
 		
@@ -158,7 +171,7 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 				if (document.getElementById("jtitle").value=="") {
 					alert("제목을 입력하세요.");
 					return;
-				}else if (document.getElementById("jaddress").value=="none") {
+				}else if (document.getElementById("sno").value=="none") {
 					alert("매장을 선택하세요.")
 					return;
 				}else if (document.getElementById("salary").value=="") {

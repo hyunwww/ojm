@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.ojm.mapper.ReviewMapper">
+<!--  
+	<select id="getListWithPaging" resultType="org.ojm.domain.ReviewVO">
+		<![CDATA[
+			select rvno,sno,uno,rvstar,rvcontent,rvlike, rvdate 
+			from
+				(select 
+				rownum rn,rvno,sno,uno,rvstar,rvcontent,rvlike,rvdate from review
+				where rownum <= #{pageNum} * #{amount}) 
+			where rn > (#{pageNum} -1) * #{amount}
+		]]>
+	</select>
+	-->
+	
+	<!-- 해당 매장의 리뷰 불러오기  -->
+	<select id="storeReviewList" parameterType="int" resultType="org.ojm.domain.ReviewVO">
+		select * from review where sno = #{sno}		
+	</select>
+	
+	<insert id="addrv" parameterType="org.ojm.domain.ReviewVO">
+		insert into review
+		values(
+			seq_rvno.nextval,
+			#{sno},
+			#{uno},
+			#{rvstar},
+			#{rvcontent},
+			#{rvlike},
+			sysdate
+		)
+	</insert>
+	<!--  
+	<select id="getTotalCount" resultType="int">
+		select count(*) from review
+	</select>-->
+	<!--  
+	<select id="getrrvno" parameterType="long" resultType="org.ojm.domain.ReviewVO">
+		select max(rvno) from review
+	</select>-->
+</mapper>
