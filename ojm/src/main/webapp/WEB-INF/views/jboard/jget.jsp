@@ -5,6 +5,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%
    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
       Object principal = auth.getPrincipal();
@@ -82,9 +83,12 @@
 		<c:if test="${jvo.jwriter eq uvo.username }">
 			<button data-oper="jmodify">수정</button>
 		</c:if>
+		<sec:authorize access="hasRole('ROLE_user')">
+			<button id="applicationBtn">지원</button>
+		</sec:authorize>
 		<button data-oper="jlist">목록</button>
 		
-		<form action="/job/jmodify" method="get" id="jOperForm">
+		<form action="/jboard/jmodify" method="get" id="jOperForm">
 			<input type="hidden" name="jno" id="jno" value="${jvo.jno }">			
 			<input type="hidden" name="pageNum" value="${cri.pageNum }">
 			<input type="hidden" name="amount" value="${cri.amount }">
@@ -92,6 +96,18 @@
 			<input type="hidden" name="uno" value="${uvo.uno }">
 		</form>
 	</body>
+	
+	<!-- 지원하기 모달 -->
+	<div id="applicationDiv">
+		<h2>지원</h2>
+		<hr>
+		<table>
+			<tr>
+				<td>이름</td>
+				<td><input type="text" name="username" id="username"></td>
+			</tr>
+		</table>
+	</div>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<!-- 화면 이동 스크립트 -->
@@ -104,7 +120,7 @@
 			});
 			$("button[data-oper='jlist']").on('click', function(){
 				operForm.find("#jno").remove();
-				operForm.attr('action', '/job/jlist');
+				operForm.attr('action', '/jboard/jlist');
 				operForm.submit();
 			});
 		})

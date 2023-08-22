@@ -30,7 +30,7 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 		<h1>구인 게시글 등록</h1>
 		<hr>
 		
-		<form action="/job/jregister" method="post" role="form">
+		<form action="/jboard/jregister" method="post" role="form">
 			<table>
 				<tr>
 					<td>제목</td>
@@ -197,12 +197,12 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 					return;
 				}
 				
-				formObj.attr("action", '/job/jregister');
+				formObj.attr("action", '/jboard/jregister');
 				
 				formObj.submit();
 				
 			}else if (operation === 'jlist') {
-				formObj.attr("action", '/job/jlist');
+				formObj.attr("action", '/jboard/jlist');
 				formObj.attr("method", 'get');
 				
 				var pageNumTag = $("input[name='pageNum']").clone();

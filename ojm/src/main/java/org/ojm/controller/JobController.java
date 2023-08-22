@@ -19,7 +19,7 @@ import lombok.extern.log4j.Log4j;
 
 @Controller
 @Log4j
-@RequestMapping("/job/*")
+@RequestMapping("/jboard/*")
 public class JobController {
 	
 	@Setter(onMethod_ = @Autowired)
@@ -34,7 +34,7 @@ public class JobController {
 		model.addAttribute("jlist", jservice.getJlist(cri));
 		model.addAttribute("total", jservice.getJtotal());
 		model.addAttribute("pageMaker", new PageDTO(cri, jservice.getJtotal()));
-		return "job/jlist";
+		return "jboard/jlist";
 	}
 	
 	@GetMapping("/jregister")
@@ -43,7 +43,7 @@ public class JobController {
 		model.addAttribute("stores", sservice.searchStoreByUno(uno));
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", jservice.getJtotal());
-		return "job/jregister";
+		return "jboard/jregister";
 	}
 	
 	@PostMapping("/jregister")
@@ -51,7 +51,7 @@ public class JobController {
 		log.info("jregister2...");
 		jservice.jRegister(jvo);
 		rttr.addFlashAttribute("result", "ok");
-		return "redirect:/job/jlist";
+		return "redirect:/jboard/jlist";
 	}
 	
 	@GetMapping("/jget")
@@ -62,7 +62,7 @@ public class JobController {
 		model.addAttribute("store", sservice.storeInfo(sno));
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", jservice.getJtotal());
-		return "job/jget";
+		return "jboard/jget";
 	}
 	
 	@GetMapping("/jmodify")
@@ -72,7 +72,7 @@ public class JobController {
 		model.addAttribute("jvo", jservice.jGet(jno));
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", jservice.getJtotal());
-		return "job/jmodify";
+		return "jboard/jmodify";
 	}
 	
 	@PostMapping("/jmodify")
@@ -81,7 +81,7 @@ public class JobController {
 		if (jservice.jModify(jvo)) {
 			rttr.addFlashAttribute("result", "jmodify");
 		}
-		return "redirect:/job/jlist";
+		return "redirect:/jboard/jlist";
 	}
 	
 	@PostMapping("/jremove")
@@ -90,6 +90,6 @@ public class JobController {
 		if (jservice.jRemove(jno)) {
 			rttr.addFlashAttribute("result", "jremove");
 		}
-		return "redirect:/job/jlist";
+		return "redirect:/jboard/jlist";
 	}
 }
