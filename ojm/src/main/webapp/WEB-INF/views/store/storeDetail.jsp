@@ -206,7 +206,7 @@ p {
 <link rel="stylesheet" href="/resources/css/owl.theme.default.min.css">
 <link rel="stylesheet" href="/resources/css/owl.carousel.min.css">
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script> -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript" src="/resources/js/imgPopup.js"></script>
 <script type="text/javascript" src="/resources/js/owl.carousel.min.js"></script>
 <!-- 지도 관련 스크립트 -->
@@ -220,10 +220,10 @@ p {
 	var popMap;	//지도 객체
 	var kd = '${store.kd}';
 	var wd = '${store.wd}';
-	//var bounds = new kakao.maps.LatLngBounds(); //지도 범위
+	var bounds = new kakao.maps.LatLngBounds(); //지도 범위
 	$(function() {
 		
-		/* // 마커 이미지의 주소(현재 위치)
+		// 마커 이미지의 주소(현재 위치)
 		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
 		    markerImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
 		    markerImageOptions = { 
@@ -278,7 +278,7 @@ p {
 				$("#mapContainer").hide();
 			}
 		});
-		 */
+		 
 		
 		
 		
@@ -378,10 +378,6 @@ p {
 		});
 		
 		
-		//예약하기 버튼 이벤트
-		//$("#bookBtn").on("click", function() {
-		//	alert("예약 버튼 이벤트!");
-		//});
 		
 		//이미지 클릭 이벤트
 		$("#storeDetail img").on("click", function() {
@@ -592,7 +588,6 @@ p {
 	
 </script>
 </head>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script type="text/javascript">
 		
 		// 푸쉬용
