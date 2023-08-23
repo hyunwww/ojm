@@ -1,5 +1,8 @@
 <!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <html lang="en">
 
 
@@ -41,6 +44,18 @@
 <script type="text/javascript">
 	var user = '${uvo}';
 	
+	var errorCode = '${errorCode}';	//에러알림 테스트 중
+	switch (errorCode) {
+	case "noInfo":
+		alert("해당 매장은 존재하지 않는 매장입니다.");
+		break;
+	case "access":
+		alert("잘못된 접근");
+		break;
+
+	default:
+		break;
+	}
 	
 	
 </script>
@@ -68,7 +83,12 @@
           <li><a href="/store/storeList">Search</a></li>
           <li><a href="/store/register">Register</a></li>
           <li><a href="/user/myPage/main">myPage</a></li>
-          <li><a href="/user/login">Login</a></li>
+          <sec:authorize access="isAnonymous()">
+	          <li><a href="/user/login">Login</a></li>
+          </sec:authorize>
+          <sec:authorize access="isAuthenticated()">
+	          <li><a href="/logout">Logout</a></li>
+          </sec:authorize>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->

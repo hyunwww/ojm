@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -98,6 +99,10 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .descText{
+        	color: gray;
+        	font-size: 12px;
+        }
 </style>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
@@ -129,18 +134,9 @@
 			}
 		});
 		
-		//예약 가능 ox
-		$("input[name='checkReserv']").on("change", function() {
-			console.log($(this)[0].checked);
-			if ($(this)[0].checked) {
-				$("input[name=smaxreserv]").show();
-				$("input[name=smaxreserv]").attr("disabled", false);
-			}else{
-				$("input[name=smaxreserv]").hide();
-				$("input[name=smaxreserv]").attr("disabled", true);
-				
-			}
-		});
+		
+		
+		//예약 인원 조정 버튼
 		$(".upBtn").click(function() {
 			var value = $("#reserveValue").text();
 			
@@ -219,6 +215,7 @@
 						}
 					}
 					$("#regForm").append('<input type="hidden" name="dayOff" value="'+dayInput+'"/>');
+					$("#regForm").append('<input type="hidden" name="smaxreserv" value="'+$("#reserveValue").text()+'"/>');
 					$("#regForm").append(menuInput);
 					$("#regForm").submit();
 				});
@@ -365,7 +362,7 @@
 				</tr>
 				<tr>
 					<td>전화번호<span style="color: red;">*</span></td>
-					<td><input type="text" name="sphone"></td>
+					<td><input type="text" name="sphone"><span class="descText">&nbsp;하이픈 없이 입력</span></td>
 				</tr>
 				<tr>
 					<td>카테고리</td>
@@ -380,12 +377,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td>예약<input type="checkbox" value="1" name="checkReserv"></td>
+					<td>예약</td>
 					<td>
 						<button type="button" class="downBtn">-</button>
-						<input type="number" name="smaxreserv" placeholder="예약 최대 가능 인원" value="0">
 						<span id="reserveValue">0</span>
 						<button type="button" class="upBtn">+</button>
+						<span class="descText">예약 불가능인 경우 0명으로 설정해주세요.</span>
 					</td>
 				</tr>
 				<tr>
@@ -405,8 +402,30 @@
 					</td>
 				</tr>
 				<tr>
-					<td>영업시간</td>
-					<td><input type="number" name="openHour"> ~ <input type="number" name="closeHour"></td>
+					<td>영업시간<span style="color: red;">*</span></td>
+					<td>
+						<select name="openHour">
+							<c:forEach var="num" begin="0" end="23">
+								<option value="${num }:00">${num }:00</option>
+								<option value="${num }:00">${num }:10</option>
+								<option value="${num }:00">${num }:20</option>
+								<option value="${num }:00">${num }:30</option>
+								<option value="${num }:00">${num }:40</option>
+								<option value="${num }:00">${num }:50</option>
+							</c:forEach>
+						</select>
+						~
+						<select name="closeHour">
+							<c:forEach var="num" begin="0" end="23">
+								<option value="${num }:00">${num }:00</option>
+								<option value="${num }:00">${num }:10</option>
+								<option value="${num }:00">${num }:20</option>
+								<option value="${num }:00">${num }:30</option>
+								<option value="${num }:00">${num }:40</option>
+								<option value="${num }:00">${num }:50</option>
+							</c:forEach>
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<td>사업자등록번호<span style="color: red;">*</span></td>
@@ -467,7 +486,7 @@
       <!-- Modal content -->
       <div class="modal-content">
       	<p onclick="modalClose()" style="text-align: right; margin: 0px;">x</p>
-      	<form action="#" method="post">
+      	<form action="#" method="post" id="menuForm">
 	      	<table id="menuTable">
 	      		<tr>
 	      			<td>메뉴명</td>
@@ -477,6 +496,7 @@
 	      			<td>분류</td>
 	      			<td>
 	      				<select name="mcate">
+								<option value="0">0</option>
 								<option value="1">1</option>
 								<option value="2">2</option>
 								<option value="3">3</option>
@@ -502,7 +522,7 @@
 	      		</tr>
 	      	</table>
 	      	<div style="text-align: right;">
-		      	<input type="button" value="추가하기" id="addMenuBtn">
+		      	<button type="button" id="addMenuBtn">추가하기</button>
 	      	</div>
       	</form>
       </div>
@@ -527,17 +547,32 @@
         // 모달 x 버튼
  		function modalClose() {
             modal.style.display = "none";
+            menuForm.reset();
+            
 		}
         // 모달창 밖 클릭 시 닫힘
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
+	            menuForm.reset();
             }
         }
 		
         
         //메뉴 추가하기 버튼
 		$("#addMenuBtn").on("click", function() {
+			
+			
+			if (menuForm.mname.value == '') {
+				alert("메뉴명을 입력해야합니다.");
+				return;
+			}
+			if (menuForm.mcate.value == 0) {
+				alert(2);
+				return;
+			}
+			
+			
 			
 			var selectedAlrg = "";
 			for (var sel of menuForm.maler) {
@@ -558,6 +593,7 @@
 			
 			modal.style.display = "none";
 			alert("추가되었습니다.");
+			menuForm.reset();
 		});
         
         

@@ -48,7 +48,7 @@ public class StoreController {
 	@Autowired
 	private StoreService service;
 	@Autowired
-	BCryptPasswordEncoder encoder;
+	private BCryptPasswordEncoder encoder;
 	
 	@GetMapping("/goTest")
 	public String goTest() {
@@ -143,14 +143,30 @@ public class StoreController {
 	@GetMapping(value = "/search/filter", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<StoreVO>> searchStore(@RequestParam("scate[]")List<String> scate,
-														@RequestParam("location")String location) {
+														@RequestParam("location")String location,
+														@RequestParam("delivery[]")String delivery,
+														@RequestParam("reservation[]")String reservation) {
 		List<StoreVO> result = null;
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		List<String> loc = new ArrayList<String>();
+		List<String> deli = new ArrayList<String>();
+		List<String> reserv = new ArrayList<String>();
 		if (location == null || location.equals("")) {
 		}else {
 			loc.add("%" + location + "%");
 		}
+		if (delivery == null || delivery.equals("")) {
+		}else {
+			deli.add(delivery);
+		}
+		if (reservation  == null || reservation.equals("")) {
+		}else {
+			reserv.add(reservation);
+		}
+	
+		
+		map.put("reservation", reserv);
+		map.put("delivery", deli);
 		map.put("cateList", scate);
 		map.put("location", loc);
 		log.info("searchWithFilter >>> " + map);
@@ -193,42 +209,11 @@ public class StoreController {
 		
 		
 		StoreVO svo = service.storeInfo(sno);
-		String result = "";
-		
-		// 데이터 >> 요일
-		if (svo.getDayOff() != null && !svo.getDayOff().equals("")) {
-			for (String day : svo.getDayOff().split("")) {
-				switch (day) {
-				case "1":
-					result += "월요일,";
-					break;
-				case "2":
-					result += "화요일,";
-					break;
-				case "3":
-					result += "수요일,";
-					break;
-				case "4":
-					result += "목요일,";
-					break;
-				case "5":
-					result += "금요일,";
-					break;
-				case "6":
-					result += "토요일,";
-					break;
-				case "0":
-					result += "일요일,";
-					break;
-				default:
-					break;
-				}
-			}
-			model.addAttribute("dayOff", result.substring(0, result.length()-1));
-		}else {
-			result = "없음";
-			model.addAttribute("dayOff", result);
+		if (svo == null) {
+			model.addAttribute("errorCode", "noInfo");
+			return "mainPage";
 		}
+		
 		log.info("현재 매장 좋아요 여부 : " + isLike); 
 		model.addAttribute("isLike", isLike);
 		model.addAttribute("store" , svo);
@@ -303,7 +288,7 @@ public class StoreController {
 			if (current && uvo.getInfo().getUlikestore() != null) {//좋아요 이미 누른 경우 제거
 				uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore().replace(String.valueOf(sno)+",", ""));
 				
-				//db
+				//db 매장정보 수정
 				//service.storeLike(sno, -1);
 			}else {//좋아요 아닌 경우 추가
 				if (uvo.getInfo().getUlikestore() == null || uvo.getInfo().getUlikestore().isEmpty()) {
@@ -312,7 +297,7 @@ public class StoreController {
 					uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore() +sno+",");
 				}
 				
-				//db
+				//db 매장정보 수정
 				//service.storeLike(sno, 1);
 			}
 			log.info(uvo.getInfo().getUlikestore());
@@ -364,12 +349,12 @@ public class StoreController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delete")
 	public String goDelete(@RequestParam("sno") int sno, Model model,
-							@RequestParam("uno")int uno,
 							@AuthenticationPrincipal CustomUser user) {
 		
 		if (user != null) {
-			if (user.getUvo().getUno() != uno) {	//유저 검증
-				return "redirect:/";
+			if (user.getUvo().getUno() != service.storeInfo(sno).getUno()) {	//유저 검증
+				model.addAttribute("errorCode", "access");
+				return "mainPage";
 			}else {
 				model.addAttribute("store", service.storeInfo(sno));
 				return "/store/storeDelete";
@@ -405,13 +390,14 @@ public class StoreController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/update")
 	public String goUpdate(@RequestParam("sno")int sno, Model model,
-							@AuthenticationPrincipal CustomUser user,
-							@RequestParam("uno")int uno) {
+							@AuthenticationPrincipal CustomUser user) {
 		
 		log.info("goUpdate!");
 		if (user != null) {
-			if (user.getUvo().getUno() != uno) {	//유저 검증
-				return "redirect:/";
+			int storeUno = service.storeInfo(sno).getUno();
+			if (user.getUvo().getUno() != storeUno) {	//유저 검증
+				model.addAttribute("errorCode", "access");
+				return "mainPage";
 			}else {
 				
 				StoreVO storeInfo = service.storeInfo(sno);

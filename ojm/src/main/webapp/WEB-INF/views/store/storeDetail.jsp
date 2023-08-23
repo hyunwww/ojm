@@ -589,7 +589,10 @@ p {
 </script>
 </head>
 <script type="text/javascript">
-		
+		var reservationResult = '${result}';
+		if (reservationResult == 'ok') {
+			alert("예약이 완료되었습니다.");
+		}
 		// 푸쉬용
 		var openHour = 109;
 		var endHour = 118;
@@ -871,7 +874,7 @@ p {
 				이름 : ${store.sname }<span id="distance"></span>
 			</p>
 			<p>주소 : ${store.saddress }</p>
-			<p>휴무일 : ${dayOff }</p>
+			<p>휴무일 : ${store.dayOff }</p>
 			<p>영업시간 : ${store.openHour }</p>
 			<p>예약금 : ${store.sdepo }</p>
 			<p>
@@ -915,7 +918,7 @@ p {
 			<button id="backBtn">뒤로</button>
 			<button id="reportBtn" style="background-color: maroon;">신고</button>
 			<button id="delBtn" style="background-color: maroon;"
-				onclick="location.href='/store/delete?sno=${store.sno}&uno=${store.uno }'">삭제test</button>
+				onclick="location.href='/store/delete?sno=${store.sno}'">삭제test</button>
 			<sec:authorize access="isAuthenticated()">
 				<button id="open-modal">리뷰 작성</button>
 			</sec:authorize>
@@ -965,8 +968,8 @@ p {
 						<br />
 						<h6 align="center" id="realcalendar"></h6>
 						<script type="text/javascript">
-				buildCalendar();
-			</script>
+							buildCalendar();
+						</script>
 
 						<input type="hidden" id="sno" name="sno" value="${store.sno }"><br />
 						<input type="hidden" id="uno" name="uno" value="${store.uno }"><br />
@@ -981,8 +984,8 @@ p {
 						<!--  예약 인원, 요일 제한 미구현 보류 미구현 기본값 1-->
 						<%-- <input type="text" id="bman" name="bman" value="${param.dayoff }"> --%>
 
-						<input type="submit" value="예약 신청" id="cbtn"> <input
-							type="button" value="취소" id="cbtn"><br />
+						<input type="submit" value="예약 신청" id="cbtn"> 
+						<input type="button" value="취소" id="cbtn"><br/>
 					</form>
 					<button id="close-modal2">닫기</button>
 				</div>

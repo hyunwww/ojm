@@ -77,7 +77,45 @@ public class StoreServiceImpl implements StoreService{
 	public StoreVO storeInfo(int sno) {
 		
 		StoreVO info = mapper.storeInfo(sno);
-		try {
+		
+		String result = "";
+		
+		// 데이터 >> 요일
+		if (info.getDayOff() != null && !info.getDayOff().equals("")) {
+			for (String day : info.getDayOff().split("")) {
+				switch (day) {
+				case "1":
+					result += "월요일,";
+					break;
+				case "2":
+					result += "화요일,";
+					break;
+				case "3":
+					result += "수요일,";
+					break;
+				case "4":
+					result += "목요일,";
+					break;
+				case "5":
+					result += "금요일,";
+					break;
+				case "6":
+					result += "토요일,";
+					break;
+				case "0":
+					result += "일요일,";
+					break;
+				default:
+					break;
+				}
+			}
+			info.setDayOff(result);
+		}else {
+			info.setDayOff("없음");
+		}
+		
+		
+		try { // list의 null은 무시
 			info.setMenuList(mMapper.getMenu(sno));
 			info.setImgList(iMapper.getImg(sno));
 			info.setRevList(rMapper.storeReviewList(sno));
@@ -193,10 +231,10 @@ public class StoreServiceImpl implements StoreService{
 	
 	// 푸쉬용
 	// 스토어 예약 신청 
-		@Override
-		public void addBook(BookVO vo) {
-			log.info("register serv...");
-			mapper.addbook(vo);
-		}
+	@Override
+	public void addBook(BookVO vo) {
+		log.info("register serv...");
+		mapper.addbook(vo);
+	}
 	
 }
