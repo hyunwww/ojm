@@ -29,6 +29,36 @@
 			th, td{
 				border: 1px solid black;
 			}
+			#modal {
+			  position: fixed;
+			  z-index: 1;
+			  left: 0;
+			  top: 0;
+			  width: 100%;
+			  height: 100%;
+			  overflow: auto;
+			  background-color: rgba(0, 0, 0, 0.4);
+			  display: none;
+			}
+			.modal-content {
+			  background-color: #fefefe;
+			  margin: 15% auto;
+			  padding: 20px;
+			  border: 1px solid #888;
+			  width: 80%;
+			}
+			.close {
+			  color: #aaa;
+			  float: right;
+			  font-size: 28px;
+			  font-weight: bold;
+			}
+			.close:hover,
+			.close:focus {
+			  color: black;
+			  text-decoration: none;
+			  cursor: pointer;
+			}
 		</style>
 	</head>
 	<body>
@@ -98,15 +128,58 @@
 	</body>
 	
 	<!-- 지원하기 모달 -->
-	<div id="applicationDiv">
-		<h2>지원</h2>
-		<hr>
-		<table>
-			<tr>
-				<td>이름</td>
-				<td><input type="text" name="username" id="username"></td>
-			</tr>
-		</table>
+	<div id="modal">
+		<div class="modal-content">
+			<h2>지원</h2>
+			<hr>
+			<form class="submit">
+				<table>
+					<tr>
+						<td>이름</td>
+						<td><input type="text" name="username" id="username" value="${uvo.username }" readonly="readonly" style="background-color: #ccc"></td>
+					</tr>
+					<tr>
+						<td>생년월일</td>
+						<td><input type="text" name="userbirth" id="userbirth" value="${uvo.userbirth }" readonly="readonly" style="background-color: #ccc"></td>
+					</tr>
+					<tr>
+						<td>성별</td>
+						<c:choose>
+							<c:when test="${uvo.info.ugender eq 'male' }">
+								<td>남</td>
+							</c:when>
+							<c:otherwise>
+								<td>여</td>
+							</c:otherwise>
+						</c:choose>
+						
+					</tr>
+					<tr>
+						<td>전화번호</td>
+						<td><input type="text" name="userphone" id="userphone" value="${uvo.userphone }" readonly="readonly" style="background-color: #ccc"></td>
+					</tr>
+					<tr>
+						<td>이메일</td>
+						<td><input type="text" name="useremail" id="useremail" value="${uvo.useremail }" readonly="readonly" style="background-color: #ccc"></td>
+					</tr>
+					<tr>
+						<td>경력사항</td>
+						<td><input type="text" name="career" id="career"></td>
+					</tr>
+					<tr>
+						<td>하고싶은 말</td>
+						<td><input type="text" name="pobu" id="pobu"></td>
+					</tr>
+				</table>
+				<button type="submit" id="submitBtn">제출</button>
+				<button id="close-modal">닫기</button>
+				<input type="hidden" name="ugender" id="ugender" value="${uvo.info.ugender }">
+				<input type="hidden" name="jno" value="${jvo.jno}">
+				<input type="hidden" name="uno" value="${uvo.uno}">
+				<input type="hidden" name="sno" value="${jvo.sno}">
+			</form>
+			
+		</div>
 	</div>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -124,5 +197,35 @@
 				operForm.submit();
 			});
 		})
+	</script>
+	
+	<!-- 모달 스크립트 -->
+	<script type="text/javascript">
+		var modal = document.getElementById("modal");
+		var openModalBtn = document.getElementById("applicationBtn");
+		var closeModalBtn = document.getElementById("close-modal");
+		var submitBtn = document.getElementById("submitBtn");
+		var formObj = $(".submit");
+		
+		// 모달창 열기
+		openModalBtn.addEventListener("click", () => {
+			modal.style.display = "block";
+			document.body.style.overflow = "hidden"; // 스크롤바 제거
+		});
+		
+		// 모달창 닫기
+		closeModalBtn.addEventListener("click", () => {
+			e.preventDefault();
+			modal.style.display = "none";
+			document.body.style.overflow = "auto"; // 스크롤바 보이기
+		});
+		
+		// 제출
+		$("#submitBtn").on('click', function(e){
+			e.preventDefault();
+			formObj.attr("action", '/jsboard/jsregister');
+			formObj.attr("method", 'post');
+			formObj.submit();
+		});
 	</script>
 </html>

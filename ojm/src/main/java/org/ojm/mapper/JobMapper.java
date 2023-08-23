@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.ojm.domain.Criteria;
 import org.ojm.domain.JobVO;
-import org.ojm.domain.QboardVO;
 
 public interface JobMapper {
 	public List<JobVO> getJlistWithPaging(Criteria cri);

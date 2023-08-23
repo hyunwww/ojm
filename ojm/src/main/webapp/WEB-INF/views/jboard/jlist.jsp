@@ -141,6 +141,9 @@
 			if (result === 'jremove') {
 				alert("게시글 삭제가 완료되었습니다.")
 				return;
+			}if (result === 'submit') {
+				alert("지원서 제출이 완료되었습니다.")
+				return;
 			}
 		}
 		

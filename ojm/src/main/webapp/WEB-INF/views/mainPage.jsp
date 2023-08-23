@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <html lang="en">
 
 
@@ -59,7 +60,7 @@
         <ul>
           <li><a class="active" href="/">Home</a></li>
           <li class="dropdown"><a href="#"><span>Community</span><i class="bi bi-chevron-down"></i></a>
-          	<ul>
+          	<ul>  
 			  <li><a href="/board/list">1</a></li>
 			  <li><a href="/qboard/qlist">2</a></li>
 			  <li><a href="/jboard/jlist">3</a></li>
@@ -67,7 +68,15 @@
           </li>
           <li><a href="/store/storeList">Search</a></li>
           <li><a href="/store/register">Register</a></li>
-          <li><a href="/user/myPage/main">myPage</a></li>
+          <sec:authorize access="hasRole('ROLE_user')">
+          	<li><a href="/user/myPage/main">myPage</a></li>
+          </sec:authorize>
+          <sec:authorize access="hasRole('ROLE_business')">
+          	<li><a href="/user/myPage/main">myPage</a></li>
+          </sec:authorize>
+          <sec:authorize access="hasRole('ROLE_admin')">
+			<li><a href="/admin/main">adminPage</a></li>
+          </sec:authorize>
           <li><a href="/user/login">Login</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
