@@ -177,6 +177,7 @@
 				<input type="hidden" name="jno" value="${jvo.jno}">
 				<input type="hidden" name="uno" value="${uvo.uno}">
 				<input type="hidden" name="sno" value="${jvo.sno}">
+				<input type="hidden" name="sname" value="${store.sname}">
 			</form>
 			
 		</div>

@@ -198,6 +198,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
 		]]>
 	</select>
+	<select id="getJobSendList" resultType="org.ojm.domain.JobSendVO">
+		select * from jobsend where uno=#{uno}
+	</select>
+	
+	
+	<!-- 사업자 -->
 	<select id="getStoreList" resultType="org.ojm.domain.StoreVO">
 		select * from store where uno=#{uno}
 	</select>
