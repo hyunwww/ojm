@@ -7,6 +7,7 @@ import org.ojm.domain.InfoVO;
 import org.ojm.domain.PageDTO;
 import org.ojm.domain.UserVO;
 import org.ojm.service.BoardService;
+import org.ojm.service.JobService;
 import org.ojm.service.QboardService;
 import org.ojm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,8 @@ public class MyPageController {
 	BoardService bs;
 	@Setter(onMethod_ = @Autowired)
 	QboardService qs;
+	@Setter(onMethod_ = @Autowired)
+	JobService js;
 	
 	// 일반유저
 	@GetMapping("/main")
@@ -64,6 +67,7 @@ public class MyPageController {
 	public String myPageJboard(Principal pr,Model model) {
 		log.info("myPageMain...... ");
 		model.addAttribute("jlist", service.getJobSendList(service.getUno(pr.getName())));
+		
 		return "user/myPage/jboard";
 	}
 	@GetMapping("/qboard")
@@ -126,10 +130,12 @@ public class MyPageController {
 		return "user/myPage/b/store";
 	}
 	@GetMapping("/b/jboard")
-	public String b_jboard(Principal pr,Model model) {
+	public String b_jboard(Principal pr,Model model,Criteria cri) {
 		log.info("myPageBjboard......");
 		
-		
+		model.addAttribute("jlist", js.getJlist(cri));
+		model.addAttribute("total", js.getJtotal());
+		model.addAttribute("pageMaker", new PageDTO(cri, js.getJtotal()));
 		return "user/myPage/b/jboard";
 	}
 }
