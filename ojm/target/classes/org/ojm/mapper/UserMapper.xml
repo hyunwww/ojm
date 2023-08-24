@@ -201,6 +201,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getJobSendList" resultType="org.ojm.domain.JobSendVO">
 		select * from jobsend where uno=#{uno}
 	</select>
+	<select id="getBookList" resultType="org.ojm.domain.BookWithStoreVO">
+		select s.sname,b.* from book b join store s on b.sno=s.sno
+	</select>
 	
 	
 	<!-- 사업자 -->

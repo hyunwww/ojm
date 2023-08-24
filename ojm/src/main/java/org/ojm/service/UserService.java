@@ -3,6 +3,7 @@ package org.ojm.service;
 import java.util.List;
 
 import org.ojm.domain.BoardVO;
+import org.ojm.domain.BookVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.JobSendVO;
@@ -39,6 +40,7 @@ public interface UserService {
 	public int getRvCnt(int uno);
 	public List<QboardVO> getQlist(Criteria cri, int uno);
 	public List<JobSendVO> getJobSendList(int uno);
+	public List<BookVO> getBookList(int uno);
 	
 	
 	// business

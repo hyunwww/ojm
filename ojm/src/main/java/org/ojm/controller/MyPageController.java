@@ -60,12 +60,14 @@ public class MyPageController {
 	}
 	@GetMapping("/book")
 	public String myPageBook(Principal pr,Model model) {
-		log.info("myPageMain...... ");
+		log.info("myPageBook...... ");
+		log.info(service.getBookList(service.getUno(pr.getName())));
+		model.addAttribute("blist", service.getBookList(service.getUno(pr.getName())));
 		return "user/myPage/book";
 	}
 	@GetMapping("/jboard")
 	public String myPageJboard(Principal pr,Model model) {
-		log.info("myPageMain...... ");
+		log.info("myPageJboard...... ");
 		model.addAttribute("jlist", service.getJobSendList(service.getUno(pr.getName())));
 		
 		return "user/myPage/jboard";

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.ojm.domain.AuthVO;
 import org.ojm.domain.BoardVO;
+import org.ojm.domain.BookVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.JobSendVO;
@@ -48,6 +49,7 @@ public interface UserMapper {
 	public int getRvCnt(int uno);
 	public List<QboardVO> getQlist(@Param("cri") Criteria cri,@Param("uno") int uno);
 	public List<JobSendVO> getJobSendList(int uno);
+	public List<BookVO> getBookList(int uno);
 	
 	
 	// business

@@ -1,5 +1,8 @@
 package org.ojm.domain;
 
+import java.sql.Date;
+
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,9 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookVO {
-	// 푸쉬용
+public class BookWithStoreVO {
 	
+	private Date bdate;
 	private long bkno, sno, uno;
-	private String bdate, btime, bman, bname, bphone, bdepo, breq;
+	private String btime, bman, bname, bphone, bdepo, breq, sname;
 }

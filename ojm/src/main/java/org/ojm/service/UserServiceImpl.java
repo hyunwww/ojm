@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.ojm.domain.AuthVO;
 import org.ojm.domain.BoardVO;
+import org.ojm.domain.BookVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.JobSendVO;
@@ -17,8 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.log4j.Log4j;
+
 
 @Service
+@Log4j
 public class UserServiceImpl implements UserService{
 	@Autowired
 	UserMapper mapper;
@@ -129,6 +133,12 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<JobSendVO> getJobSendList(int uno) {
 		return mapper.getJobSendList(uno);
+	}
+	@Override
+	public List<BookVO> getBookList(int uno) {
+		log.warn(mapper.getBookList(uno));
+		
+		return mapper.getBookList(uno);
 	}
 	
 	// 사업자

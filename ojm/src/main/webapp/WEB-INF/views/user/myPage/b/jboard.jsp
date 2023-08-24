@@ -89,16 +89,15 @@
 	var jActionForm = $("#jActionForm");
 	var jno;
 	
-	//---------- 조회 화면 이동 이벤트 처리 ----------	
 	function preventClick(e,j){
-		e.preventDefault()
+		e.preventDefault();
 		jno=j;
 	}
+	// 새창으로 조회화면 띄우기
 	$(".jmove").on('click', function (){
 	    var gsWin = window.open("/jboard/jget?jno="+jno, "winName");
 	    jActionForm.target="winName";
 	});
-	
 	
 	// ---------- 페이징 버튼 이벤트 처리 ----------	 
 	$(".paginate_button a").on('click', function(e){
