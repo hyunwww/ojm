@@ -295,9 +295,9 @@ p {
 		});
 		
 		
-		//뒤로가기 버튼 이벤트
+		//목록으로 버튼 이벤트
 		$("#backBtn").on("click", function() {
-			history.go(-1);
+			location.href = '/store/goTest';
 		});
 		
 		
@@ -915,7 +915,7 @@ p {
 		</div>
 
 		<div id="btnContainer" style="text-align: right; padding: 10px;">
-			<button id="backBtn">뒤로</button>
+			<button id="backBtn">목록</button>
 			<button id="reportBtn" style="background-color: maroon;">신고</button>
 			<button id="delBtn" style="background-color: maroon;"
 				onclick="location.href='/store/delete?sno=${store.sno}'">삭제test</button>

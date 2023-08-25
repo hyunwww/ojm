@@ -8,8 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.ojm.domain.AuthVO;
 import org.ojm.domain.BookVO;
+import org.ojm.domain.FilterVO;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreImgVO;
@@ -51,7 +55,17 @@ public class StoreController {
 	private BCryptPasswordEncoder encoder;
 	
 	@GetMapping("/goTest")
-	public String goTest() {
+	public String goTest(HttpSession session, HttpServletRequest request, Model model) {
+		String referer = request.getHeader("referer");
+		if (session.getAttribute("filterData") != null) {
+			if (referer != null && referer.contains("detail")) {
+				log.info("이전페이지 : detail");
+				log.info("session 정보 : " + session.getAttribute("filterData"));
+			}else {
+			}
+		}else {
+		}
+		
 		return "testPage";
 		
 	}
@@ -109,14 +123,11 @@ public class StoreController {
 	}
 	
 	// 매장 전체 리스트 ( test 끝 , 임시 사용 용도 )
-	@GetMapping("/storeList")
-	public String storeList(Model model) {
-		log.info("getting storeListtttt");
-		List<StoreVO> list = service.allStores();
-		
-		
-		model.addAttribute("stores", list);
-		return "/store/storeSearch";
+	@GetMapping(value = "/storeList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<StoreVO>> storeList(@RequestParam("point")int point) {
+		log.info("getting storeListtttt" + point);
+		return new ResponseEntity<List<StoreVO>>(service.allStores((point*5-4), (point*5)), HttpStatus.OK);
 	}
 	// top10 매장
 	@GetMapping(value = "/rank", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -182,6 +193,7 @@ public class StoreController {
 	// 매장 상세정보 ( test 끝 )
 	@GetMapping("/detail")
 	public String detail(Model model, @RequestParam("sno") int sno, Principal principal) {
+		
 		
 		log.info("detail...." + sno);
 		log.info("user : " + principal);
@@ -493,5 +505,19 @@ public class StoreController {
 		log.info("addBook.......");
 		rttr.addFlashAttribute("result", "ok");
 		return "redirect:/store/detail?sno="+vo.getSno();
+	}
+	
+	@PostMapping(value = "/filterData", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<FilterVO> saveSession(@RequestBody FilterVO fvo, HttpSession session){
+		log.info("saveData : " + fvo);
+		if (fvo == null) {
+			return new ResponseEntity<FilterVO>(new FilterVO(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}else {
+			String realDist = fvo.getDistance().split(" ")[fvo.getDistance().split(" ").length - 1].replace("km", "");
+			fvo.setDistance(realDist);
+			session.setAttribute("filterData", fvo);
+			return new ResponseEntity<FilterVO>(fvo, HttpStatus.OK);
+		}
 	}
 }

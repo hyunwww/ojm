@@ -28,8 +28,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<!-- 매장의 전체목록(승인 대기 상태의 매장은 제외) -->
-	<select id="allStore" resultType="org.ojm.domain.StoreVO">
-		select * from store where spermmit = 1
+	<select id="allStore" resultType="org.ojm.domain.StoreVO" parameterType="int">
+		select * from (
+		select rownum rn, sno, uno, sname, saddress, wd , kd, sphone, scate, sdeli, scrn, sdepo, slike, sstar, spermmit, openhour, smaxreserv, dayoff from
+		(select * from store where spermmit = 1 order by sname))
+		where rn between #{start} and #{end}
 	</select>
 	
 	<!-- top10  -->
@@ -189,4 +192,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	</insert>
 	
+	<select id="countStore" resultType="int">
+		select count(*) from store where spermmit = 1
+	</select>
 </mapper>

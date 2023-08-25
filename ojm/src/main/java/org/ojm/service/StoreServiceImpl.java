@@ -39,11 +39,15 @@ public class StoreServiceImpl implements StoreService{
 	@Autowired
 	private UserMapper uMapper;
 	
-	@Override
-		public List<StoreVO> allStores() {
-			return mapper.allStore();
-		}
 	
+	@Override
+	public List<StoreVO> allStores(int start, int end) {
+		if (end > mapper.countStore()) {
+			return mapper.allStore(start, mapper.countStore());
+		}else {
+			return mapper.allStore(start, end);
+		}
+	}
 	
 	@Override
 	@Transactional 
