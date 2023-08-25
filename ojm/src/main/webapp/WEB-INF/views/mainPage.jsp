@@ -1,8 +1,9 @@
-<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
-<html lang="en">
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
 
 <head>
   <meta charset="utf-8">
@@ -43,7 +44,6 @@
 	var user = '${uvo}';
 	
 	
-	
 </script>
 <body>
   <!-- ======= Header ======= -->
@@ -77,7 +77,12 @@
           <sec:authorize access="hasRole('ROLE_admin')">
 			<li><a href="/admin/main">adminPage</a></li>
           </sec:authorize>
-          <li><a href="/user/login">Login</a></li>
+          <sec:authorize access="isAuthenticated()">
+          	<li><a href="/logout">Logout</a></li>
+          </sec:authorize>
+          <sec:authorize access="isAnonymous()">
+          	<li><a href="/user/login">Login</a></li>
+          </sec:authorize>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -87,22 +92,49 @@
 
   <!-- ======= Hero Section ======= -->
   <section id="hero">
-    <div id="heroCarousel" data-bs-interval="500" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div id="heroCarousel" data-bs-interval="2500" class="carousel slide carousel-fade" data-bs-ride="carousel">
 
       <div class="carousel-inner" role="listbox">
-
-        <!-- Slide 1 -->
-        <div class="carousel-item active" style="background-image: url(/resources/img/service-1.jpg);">
-          <div class="carousel-container">
-            <div class="carousel-content">
-              <h2>Welcome to <span>Flattern</span></h2>
-              <p>Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem. Esse doloremque accusamus repellendus deleniti vel. Minus et tempore modi architecto.</p>
-              <div class="text-center"><a href="" class="btn-get-started">Read More</a></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 2 -->
+		
+		<sec:authorize access="isAnonymous()">
+		<!-- 대표 이미지(비로그인) -->
+			<div class="carousel-item active" style="background-image: url(/resources/img/service-2.jpg);">
+	          <div class="carousel-container">
+	            <div class="carousel-content">
+	              <h2>오늘 점심 뭐 먹을까?</h2>
+	              <p>더 상세한 추천을 받고 싶다면?</p>
+	              <div class="text-center"><a href="/user/register" class="btn-get-started">회원되기</a></div>
+	            </div>
+	          </div>
+	        </div>
+        </sec:authorize>
+        
+		<sec:authorize access="isAuthenticated()">
+			<div class="carousel-item active" style="background-image: url(/resources/img/service-2.jpg);">
+	          <div class="carousel-container">
+	            <div class="carousel-content">
+	              <h2>오늘 점심 뭐 먹을까?</h2>
+	              <p></p>
+	              <div class="text-center"><a href="" class="btn-get-started">추천받기</a></div>
+	            </div>
+	          </div>
+	        </div>
+        </sec:authorize>
+		
+		<!-- 가게 이미지 반복 -->
+		<c:forEach var="store" items="${slist }">
+			<div class="carousel-item" style="background-image: url('/images/${store.imgList[0].uuid }_${store.imgList[0].fileName}');">
+	          <div class="carousel-container">
+	            <div class="carousel-content">
+	              <h2>${store.sname }</h2>
+	              <p>${store.saddress }</p>
+	              <div class="text-center"><a href="/store/detail?sno=${store.sno }" class="btn-get-started">가게 보기</a></div>
+	            </div>
+	          </div>
+	        </div>
+		</c:forEach>
+<!--         
+        Slide 2
         <div class="carousel-item" style="background-image: url(/resources/img/service-2.jpg);">
           <div class="carousel-container">
             <div class="carousel-content">
@@ -113,7 +145,7 @@
           </div>
         </div>
 
-        <!-- Slide 3 -->
+        Slide 3
         <div class="carousel-item" style="background-image: url(/resources/img/service-3.jpg);">
           <div class="carousel-container">
             <div class="carousel-content">
@@ -123,7 +155,8 @@
             </div>
           </div>
         </div>
-
+       -->
+      
       </div>
 
       <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
