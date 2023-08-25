@@ -54,5 +54,6 @@ public interface UserMapper {
 	
 	// business
 	public List<StoreVO> getStoreList(int uno);
+	public List<BookVO> getBookListBusiness(int uno);
 	
 }

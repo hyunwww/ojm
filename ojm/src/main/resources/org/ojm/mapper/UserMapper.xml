@@ -210,4 +210,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getStoreList" resultType="org.ojm.domain.StoreVO">
 		select * from store where uno=#{uno}
 	</select>
+	<select id="getBookListBusiness" resultType="org.ojm.domain.BookWithStoreVO">
+		select 
+			s.sname,s.uno,b.bkno,b.sno,b.bdate,b.btime,b.bman,b.bname,b.bphone,b.bdepo,b.breq 
+		from 
+			store s 
+		join 
+			book b on b.sno=s.sno 
+		where s.uno=#{uno}
+	</select>
 </mapper>

@@ -206,7 +206,7 @@
   /**
    * Initiate portfolio lightbox 
    */
-  const portfolioLightbox = GLightbox({
+  const portfolioportfolioLightboxbox = GLightbox({
     selector: '.portfolio-lightbox'
   });
 
@@ -223,7 +223,7 @@
     pagination: {
       el: '.swiper-pagination',
       type: 'bullets',
-      clickable: true
+      clickable: true 
     }
   });
 

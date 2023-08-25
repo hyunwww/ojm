@@ -45,4 +45,5 @@ public interface UserService {
 	
 	// business
 	public List<StoreVO> getStoreList(int uno);
+	public List<BookVO> getBookListBusiness(int uno);
 }

@@ -116,13 +116,6 @@ public class MyPageController {
 		
 		return "user/myPage/b/main";
 	}
-	@GetMapping("/b/book")
-	public String b_book() {
-		log.info("myPageBbook......");
-		
-		
-		return "user/myPage/b/book";
-	}
 	@GetMapping("/b/store")
 	public String b_store(Principal pr,Model model) {
 		log.info("myPageBstore......id : " + pr.getName());
@@ -139,5 +132,11 @@ public class MyPageController {
 		model.addAttribute("total", js.getJtotal());
 		model.addAttribute("pageMaker", new PageDTO(cri, js.getJtotal()));
 		return "user/myPage/b/jboard";
+	}
+	@GetMapping("/b/book")
+	public String b_Book(Principal pr,Model model) {
+		log.info("myPageBBook...... ");
+		model.addAttribute("blist", service.getBookListBusiness(service.getUno(pr.getName())));
+		return "user/myPage/b/book";
 	}
 }

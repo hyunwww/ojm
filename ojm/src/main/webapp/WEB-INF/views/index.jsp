@@ -32,6 +32,7 @@
 
     <!-- Template Stylesheet -->
     <link href="../resources/css/style.css" rel="stylesheet">
+    
 </head>
 
 <body>
@@ -228,7 +229,7 @@
     <script src="../resources/lib/lightbox/js/lightbox.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="../resources/js/main.js"></script>
+    <script src="../resources/js/mainindex.js"></script>
 </body>
 
 </html>

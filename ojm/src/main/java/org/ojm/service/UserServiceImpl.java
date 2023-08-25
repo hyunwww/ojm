@@ -146,4 +146,9 @@ public class UserServiceImpl implements UserService{
 	public List<StoreVO> getStoreList(int uno) {
 		return mapper.getStoreList(uno);
 	}
+	@Override
+	public List<BookVO> getBookListBusiness(int uno) {
+		
+		return mapper.getBookListBusiness(uno);
+	}
 }
