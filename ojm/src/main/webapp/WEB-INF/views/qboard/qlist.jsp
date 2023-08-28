@@ -29,11 +29,27 @@
 			th, td{
 				border: 1px solid black;
 			}
+			
+			.banner {
+				position: fixed;
+				text-align: center;
+				right: 10%;
+			}
 		</style>
 	</head>
 	<body>
 		<h1>Q&A 게시판</h1>
 		<hr>
+		
+		<sec:authorize access="hasRole('ROLE_admin')">
+			<div class="banner"> 
+				<table>
+					<tr><td><a href="/admin/reportList">신고 관리</a></td></tr>
+					<tr><td><a href="/qboard/qlist">Q&A 관리</a></td></tr>
+					<tr><td><a href="/admin/storeRegister">등록 요청 관리</a></td></tr>
+				</table>
+			</div>
+		</sec:authorize>
 		
 		<table>
 			<thead>

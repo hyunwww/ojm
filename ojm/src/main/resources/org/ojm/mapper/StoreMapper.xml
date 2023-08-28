@@ -156,13 +156,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!-- 신고 제출  -->
+	<!-- rpdate sysdate, rpwriter 추가_0823/노헌 -->
 	<insert id="reportSubmit" parameterType="org.ojm.domain.ReportVO">
 		insert into report values(
 			seq_rpno.nextval,
 			#{uno},
-			#{state},
+			#{rpreason},
 			#{rptitle},
-			#{rpcontent}
+			#{rpwriter},
+			#{rpcontent},
+			sysdate
 		)
 	</insert>
 	<!-- 푸쉬용 -->

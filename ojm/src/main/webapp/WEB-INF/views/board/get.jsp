@@ -102,7 +102,7 @@
 				</tr>		
 			</table>
 		</form>
-		<button name="replyregisterbtn" type="submit">댓글 달기</button>
+		<button name="replyregisterbtn" type="submit">댓글 등록</button>
 		<hr>
 		</c:if>
 		

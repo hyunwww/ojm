@@ -320,6 +320,10 @@ p {
 			if (form.rpcontent.value == '') {
 				alert("내용은 필수작성");
 				return;
+				// 신고 사유 선택 추가_0823/노헌
+			}else if (document.getElementById("state").value=="none") {
+				alert("신고 사유를 선택하세요.")
+				return;
 			}
 			
 			var check = confirm("신고내용을 제출하시겠습니까?"); // 확인 메세지
@@ -1094,12 +1098,21 @@ p {
 				<p>
 					<input type="text" name="rptitle">
 				</p>
-				<p>사유</p>
+				<!-- 작성자 추가_0823/노헌 -->
+				<p>작성자</p>
 				<p>
+					<input type="text" name="rpwriter" value="${uvo.username }" readonly="readonly" style="background-color: #ccc">
+				</p>
+				<p>신고 사유</p>
+				<p>
+					<!-- 사유 옵션명 수정_0823/노헌 -->
 					<select name="state">
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
+						<option value="none" selected disabled hidden>신고 사유 선택</option>
+						<option value="허위 정보">허위 정보</option>
+						<option value="불법 광고">불법 광고</option>
+						<option value="욕설/혐오/차별적 표현">욕설/혐오/차별적 표현</option>
+						<option value="개인정보 노출">개인정보 노출</option>
+						<option value="기타">기타</option>					
 					</select>
 				</p>
 				<p>내용</p>
