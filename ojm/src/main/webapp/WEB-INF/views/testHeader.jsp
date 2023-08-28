@@ -141,6 +141,17 @@
 		top: 0;
 		transition : all 0.3s ease-out 0s;
 	}	
+	.bubble{
+		width: fit-content;
+		height: auto;
+		background-color: white;
+		border: 2px solid indianred;
+		border-radius: 15px;
+		padding: 3px;
+		position: relative;
+		top: -42px;
+		right: 2px;
+	}
 </style>
 </head>
 <script type="text/javascript">

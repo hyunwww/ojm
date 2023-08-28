@@ -314,11 +314,6 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 
 			    		var map = new kakao.maps.Map(mapContainer, options); //지도 생성 및 객체 리턴
 			    		
-			    		/* 
-			    		// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
-			    		var zoomControl = new kakao.maps.ZoomControl();
-			    		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-			    		 */
 			    		
 			    		for (var store of storeResult) {
 			    			//이미지 마커 생성 및 지도범위 설정

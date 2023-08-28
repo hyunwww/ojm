@@ -1,110 +1,209 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<!DOCTYPE html><%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<style type="text/css">
-	div{
-		text-align: center;
-	}
-	input[name="smaxreserv"]{
-		display: none;
-	}
-	.dayOff{
-		border: 1px solid black;
-		border-collapse: collapse;
-		background-color: rgba(171, 171, 171, 0.5);
-	}
-	.dayOff td{
-		border: 1px solid black;
-		padding: 5px;
-		 
-	}
-	.dayClicked{
-		background-color: cadetblue;
-		color: white;
-	}
-	
-	
-	.thumbnail{
-		width: 100px;
-		background-size: contain;
-	}
-	#wrapper{
-		border: 1px solid black;
-		width: 800px;
-		margin: auto;
-	}
-	#storeTable{
-		width: -webkit-fill-available;
-		text-align: left;
-	}
-	#menuTable{
-		width: fit-content;
-		text-align: left;
-		
-	}
-	#mapContainer{
-		display: none;
-	}
-	#menuContainer li{
-		text-align: left;
-	}
-	.imgBox{
-		display: inline-block;
-		position: relative;
-	}
-	.imgBox button{
-		position: absolute;
-		top: 0%;
-		right: 0%;
-	}
-	
-	
-	.modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        }
-    
-        /* Modal Content/Box */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 10px;
-            border: 1px solid #888;
-            width: fit-content; /* Could be more or less, depending on screen size */                          
-        }
-        /* The Close Button */
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .descText{
-        	color: gray;
-        	font-size: 12px;
-        }
-</style>
-<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<%@ include file="../testHeader.jsp" %>
+
+<section id="register" class="cta" style="margin-top: 35px;">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-2"></div>
+			<div class="col-lg-8">
+				<h3 style="text-align: center; font-weight: 500;">매장 등록하기</h3>
+				<div class="border-top border-dark py-3"></div>
+				<form action="#" id="regForm" method="post">
+					<div class="mb-3 row">
+					    <label for="snameInput" class="col-sm-2 col-form-label">매장명</label>
+					    <div class="col-sm-10">
+					      <input type="text" class="form-control" id="snameInput" name="sname">
+					    </div>
+					  </div>
+					<div class="mb-3 row">
+					    <div class="col-2">
+						    <label for="staticEmail2" class="visually-hidden"></label>
+						    <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="주소">
+						  </div>
+						<div class="col-8">
+						    <label for="saddrInput" class="visually-hidden"></label>
+						    <input type="text" class="form-control" id="saddrInput" readonly="readonly" name="addr">
+						</div>
+						<div class="col-auto">
+						    <button type="button" class="btn btn-secondary" id="searchBtn">주소 검색</button>
+						</div>
+					</div>
+					<div class="mb-3 row">
+						<div class="col-2">상세 주소</div>
+						<div class="col-10">
+							<input type="text" class="form-control" name="addrDet" placeholder="상세 주소">
+						</div>
+					</div>
+					<div class="mb-3 row">
+					    <label for="sphoneInput" class="col-sm-2 col-form-label">전화번호</label>
+					    <div class="col-auto">
+					      <input type="text" class="form-control" id="sphoneInput" name="sphone">
+					    </div>
+					  </div>
+					<div class="row mb-3">
+						<div class="col-sm-2">
+							<label for="scateInput" class="visually-hidden"></label>
+						    <input type="text" readonly class="form-control-plaintext" id="scateInput" value="카테고리">
+						</div>
+						<div class="col-sm-2">
+							<select class="form-select" aria-label="Default select example" name="scate">
+							  <option selected>선택 안함</option>
+							  <option value="1">kor</option>
+							  <option value="2">chn</option>
+							  <option value="3">west</option>
+							</select>
+						</div>
+						<div class="col-auto"></div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-2">
+							예약 가능 인원
+						</div>
+						<div class="col-auto">
+							<div class="input-group mb-3">
+							  <button class="btn btn-outline-secondary downBtn" type="button">-</button>
+							  <input class="btn-check" type="checkbox" name="smaxreserve" id="smaxInput" autocomplete="off" disabled="disabled">
+							  <label class="btn btn-outline-secondary" for="smaxInput" id="reserveValue">0</label> 
+							  <button class="btn btn-outline-secondary upBtn" type="button">+</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row mb-3">
+						<div class="col-2">
+							휴무
+						</div>
+						<div class="col-auto">
+							<div class="input-group">
+								<input class="btn-check" type="checkbox" name="dayOff" id="monday" autocomplete="off" value="1">
+								<label class="btn btn-outline-secondary" for="monday">Mon</label> 
+								<input class="btn-check" type="checkbox" name="dayOff" id="tuesday" autocomplete="off" value="2">
+								<label class="btn btn-outline-secondary" for="tuesday">tue</label> 
+								<input class="btn-check" type="checkbox" name="dayOff" id="wednesday" autocomplete="off" value="3">
+								<label class="btn btn-outline-secondary" for="wednesday">wed</label>
+								<input class="btn-check" type="checkbox" name="dayOff" id="thursday" autocomplete="off" value="4">
+								<label class="btn btn-outline-secondary" for="thursday">thu</label>
+								<input class="btn-check" type="checkbox" name="dayOff" id="friday" autocomplete="off" value="5">
+								<label class="btn btn-outline-secondary" for="friday">fri</label>
+								<input class="btn-check" type="checkbox" name="dayOff" id="saturday" autocomplete="off" value="6">
+								<label class="btn btn-outline-secondary" for="saturday">sat</label>
+								<input class="btn-check" type="checkbox" name="dayOff" id="sunday" autocomplete="off" value="0">
+								<label class="btn btn-outline-secondary" for="sunday">sun</label>
+								<input class="btn-check"> <!-- 의미 x  -->
+							</div>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-2">영업시간</div>
+						<div class="col-auto">
+							<select class="form-select" aria-label="Default select example" name="openHour">
+								  <c:forEach var="num" begin="0" end="23">
+									<option value="${num }:00">${num }:00</option>
+									<option value="${num }:00">${num }:10</option>
+									<option value="${num }:00">${num }:20</option>
+									<option value="${num }:00">${num }:30</option>
+									<option value="${num }:00">${num }:40</option>
+									<option value="${num }:00">${num }:50</option>
+								  </c:forEach>
+							</select>
+						</div>
+						<div class="col-auto">
+							<span style="font-weight: 500;">~</span>
+						</div>
+						<div class="col-auto">
+							<select class="form-select" aria-label="Default select example" name="closeHour">
+								  <c:forEach var="num" begin="0" end="23">
+									<option value="${num }:00">${num }:00</option>
+									<option value="${num }:00">${num }:10</option>
+									<option value="${num }:00">${num }:20</option>
+									<option value="${num }:00">${num }:30</option>
+									<option value="${num }:00">${num }:40</option>
+									<option value="${num }:00">${num }:50</option>
+								  </c:forEach>
+							</select>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-2">사업자등록번호</div>
+						<div class="col-auto">
+							<input type="text" class="form-control" name="scrn">
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-2">예약금</div>
+						<div class="col-auto">
+							<input type="text" class="form-control" name="sdepo" id="depoInput" readonly="readonly">
+							<input type="range" name="deposit" id="depoYes" value="1" min="0" max="100000" step="1000" style="width: -webkit-fill-available">
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-2">배달</div>
+						<div class="col-auto">
+							<input type="radio" class="form-check-input" name="sdeli" id="deliYes" value="1">
+							<label class="form-check-label" for="deliYes">
+							    y
+							</label>
+							<input type="radio" class="form-check-input" name="sdeli" value="0" id="deliNo" checked="checked">
+							<label class="form-check-label" for="deliNo">
+							    n
+							</label>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-2">이미지</div>
+						<div class="col-auto">
+							<input class="form-control" type="file" multiple name="uploadImgs">
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-auto" id="imgContainer">
+						
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-1">메뉴</div>
+						<div class="btn-group btn-group-sm col-1" role="group">
+						  <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#menuModal">+</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-lg-2">
+				<div id="mapContainer" style="width: 300px; height: 200px; margin-top: 70px;"></div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+			<!-- 메뉴 모달  -->
+			<div class="reply-form modal modal-sheet modal-lg" id="menuModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><!-- 숨겼다가 모달로 사용  -->
+                <div class="modal-dialog modal-dialog-centered">
+                	<div class="modal-content p-3">
+                		<div>
+	                		<h4 style="float: left;">메뉴 등록</h4>
+	                		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="float: right;"></button>
+                		</div><br>
+		                <form action="#" method="post">
+		                  <div class="row">
+		                    <div class="col form-group">
+		                      <input name="writer" type="text" class="form-control" placeholder="작성자">
+		                    </div>
+		                  </div>
+		                  <div class="row">
+		                    <div class="col form-group">
+		                      <textarea name="comment" class="form-control" placeholder="내용을 입력해주세요" style="resize: none;"></textarea>
+		                    </div>
+		                  </div>
+		                  <div style="text-align: right;">
+			                  <button type="submit" class="btn btn-primary">작성하기</button>
+		                  </div>
+		                </form>
+                	</div>
+                </div>
+              </div>
+
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
 <script type="text/javascript" src="../resources/js/menuAjax.js"></script>
@@ -183,35 +282,9 @@
 				
 				sendFile(files, function() {
 					var dayInput = '';
-					for (var i = 0; i < $(".dayOff td").length; i++) {
-						if ($(".dayOff td")[i].classList.contains("dayClicked")) {
-							var day = $(".dayOff td")[i].innerHTML;
-							switch (day) {
-							case '월':
-								dayInput += 1;
-								break;
-							case '화':
-								dayInput += 2;
-								break;
-							case '수':
-								dayInput += 3;
-								break;
-							case '목':
-								dayInput += 4;
-								break;
-							case '금':
-								dayInput += 5;
-								break;
-							case '토':
-								dayInput += 6;
-								break;
-							case '일':
-								dayInput += 0;
-								break;
-							default:
-								break;
-							}
-							
+					for (var i = 0; i < $("input[name='dayOff']").length; i++) {
+						if ($("input[name='dayOff']")[i].checked) {
+							dayInput += $("input[name='dayOff']")[i].value;
 						}
 					}
 					$("#regForm").append('<input type="hidden" name="dayOff" value="'+dayInput+'"/>');
@@ -331,286 +404,6 @@
 	}
 	
 	
-
-</script>
-</head>
-<body>
-	<!-- 로그인 확인  -->
-	<sec:authorize access="isAnonymous()">
-		<script type="text/javascript">
-			alert("로그인이 필요한 서비스입니다.");
-			location.href='/user/login';
-		</script>
-	</sec:authorize>
-	
-	
-	<div id="wrapper">
-		<h2>register</h2>
-		<form action="#" id="regForm" method="post">
-			<table id="storeTable">
-				<tr>
-					<td>가게명<span style="color: red;">*</span></td>
-					<td><input type="text" name="sname"></td>
-				</tr>
-				<tr>
-					<td>주소<span style="color: red;">*</span></td>
-					<td><input type="text" name="addr" readonly="readonly">&nbsp;&nbsp;<button type="button" id="searchBtn">주소 검색</button></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input type="text" name="addrDet" placeholder="상세 주소"></td>
-				</tr>
-				<tr>
-					<td>전화번호<span style="color: red;">*</span></td>
-					<td><input type="text" name="sphone"><span class="descText">&nbsp;하이픈 없이 입력</span></td>
-				</tr>
-				<tr>
-					<td>카테고리</td>
-					<td>
-						<select name="scate">
-							<option value="한식">kor</option>
-							<option value="중식">chn</option>
-							<option value="양식">western</option>
-							<option value="일식">jap</option>
-							<option value="아시아">asia</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>예약</td>
-					<td>
-						<button type="button" class="downBtn">-</button>
-						<span id="reserveValue">0</span>
-						<button type="button" class="upBtn">+</button>
-						<span class="descText">예약 불가능인 경우 0명으로 설정해주세요.</span>
-					</td>
-				</tr>
-				<tr>
-					<td>휴무</td>
-					<td>
-						<table class="dayOff">
-							<tr>
-								<td>월</td>
-								<td>화</td>
-								<td>수</td>
-								<td>목</td>
-								<td>금</td>
-								<td>토</td>
-								<td>일</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>영업시간<span style="color: red;">*</span></td>
-					<td>
-						<select name="openHour">
-							<c:forEach var="num" begin="0" end="23">
-								<option value="${num }:00">${num }:00</option>
-								<option value="${num }:00">${num }:10</option>
-								<option value="${num }:00">${num }:20</option>
-								<option value="${num }:00">${num }:30</option>
-								<option value="${num }:00">${num }:40</option>
-								<option value="${num }:00">${num }:50</option>
-							</c:forEach>
-						</select>
-						~
-						<select name="closeHour">
-							<c:forEach var="num" begin="0" end="23">
-								<option value="${num }:00">${num }:00</option>
-								<option value="${num }:00">${num }:10</option>
-								<option value="${num }:00">${num }:20</option>
-								<option value="${num }:00">${num }:30</option>
-								<option value="${num }:00">${num }:40</option>
-								<option value="${num }:00">${num }:50</option>
-							</c:forEach>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>사업자등록번호<span style="color: red;">*</span></td>
-					<td><input type="text" name="scrn"></td>
-				</tr>
-				<tr>
-					<td>예약금</td>
-					<td><input type="number" name="sdepo" id="depoInput" readonly="readonly">&nbsp;예약금 없음<input type="checkbox" name="sdepo" value="0" id="noDeposit"></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<input type="range" id="deposit" name="deposit" min="0" max="100000" step="1000" value="0">
-  					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						배달가능 <input type="radio" name="sdeli" value="1" checked="checked">y
-						<input type="radio" name="sdeli" value="0">n
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" style="text-align: right;">
-						<input type="button" value="등록" data-cmd="register">
-						<input type="reset" value="다시 작성">
-						<input type="button" value="메인으로" data-cmd="back">
-					</td>
-				</tr>
-			</table>
-		</form>
-		<table>
-			<tr>
-				<td>대표 이미지</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td><input type="file" multiple="multiple" name="uploadImgs"></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>메뉴<input type="button" value="+" id="modalOpenBtn"></td>
-				<td></td>
-			</tr>
-		</table>
-		<div id="imgContainer">
-			
-		</div>
-		<div id="menuContainer">
-			<ul>
-			</ul>
-		</div>
-		<div id="mapContainer" style="width: 250px; height: 250px;"></div>
-	</div>
-	
-	
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-      <!-- Modal content -->
-      <div class="modal-content">
-      	<p onclick="modalClose()" style="text-align: right; margin: 0px;">x</p>
-      	<form action="#" method="post" id="menuForm">
-	      	<table id="menuTable">
-	      		<tr>
-	      			<td>메뉴명</td>
-	      			<td><input type="text" name="mname"></td>
-	      		</tr>
-	      		<tr>
-	      			<td>분류</td>
-	      			<td>
-	      				<select name="mcate">
-								<option value="0">0</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-						</select>
-					</td>
-	      		</tr>
-	      		<tr>
-	      			<td>알레르기 유발물질</td>
-	      			<td>
-	      				<input type="checkbox" name="maler" value="1">1
-	      				<input type="checkbox" name="maler" value="2">2
-	      				<input type="checkbox" name="maler" value="3">3
-	      				<input type="checkbox" name="maler" value="4">4
-	      				<input type="checkbox" name="maler" value="5">5
-	      				<input type="checkbox" name="maler" value="6">6
-	      			</td>
-	      		</tr>
-	      		<tr>
-	      			<td>가격</td>
-	      			<td><input type="number" name="mprice"></td>
-	      		</tr>
-	      	</table>
-	      	<div style="text-align: right;">
-		      	<button type="button" id="addMenuBtn">추가하기</button>
-	      	</div>
-      	</form>
-      </div>
-    </div>
-
-</body>
-<script type="text/javascript"> /* modal 및 메뉴 추가 비동기로 */
-	var menuForm = $("#myModal form")[0];
-	
-		
-        var modal = document.getElementById('myModal');
-        var btn = $("#modalOpenBtn")[0];
- 
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];                                          
- 
-        // modalopen버튼
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
- 
-        // 모달 x 버튼
- 		function modalClose() {
-            modal.style.display = "none";
-            menuForm.reset();
-            
-		}
-        // 모달창 밖 클릭 시 닫힘
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-	            menuForm.reset();
-            }
-        }
-		
-        
-        //메뉴 추가하기 버튼
-		$("#addMenuBtn").on("click", function() {
-			
-			
-			if (menuForm.mname.value == '') {
-				alert("메뉴명을 입력해야합니다.");
-				return;
-			}
-			if (menuForm.mcate.value == 0) {
-				alert(2);
-				return;
-			}
-			
-			
-			
-			var selectedAlrg = "";
-			for (var sel of menuForm.maler) {
-				if (sel.checked) {
-					selectedAlrg += sel.value+",";
-				}
-			}
-			selectedAlrg = selectedAlrg.substring(0, selectedAlrg.length-1);
-			
-			menuService.add({
-				mname : menuForm.mname.value,
-				mcate : menuForm.mcate.value,
-				maler : selectedAlrg,
-				mprice : menuForm.mprice.value 
-			}, function() {
-				alert("good");
-			})
-			
-			modal.style.display = "none";
-			alert("추가되었습니다.");
-			menuForm.reset();
-		});
-        
-        
-        //메뉴 삭제
-        $(function() {
-	        $("#menuContainer ul").on("click", "input[type='button']", function() {
-				
-				console.log($(this).closest("li").text());
-				for (var i = 0; i < menuList.length; i++) {
-					if (menuList[i].mname == $(this).closest("li").text()) { //해당 요소 데이터 삭제 및 목록에서 삭제
-						menuList.splice(i,1);
-						$(this).closest("li").remove();
-					}
-				}
-			});
-		});
-        
 
 </script>
 <script type="text/javascript">	// 파일 업로드 스크립트
@@ -746,4 +539,4 @@
 		
 	});
 </script>
-</html>
+<%@ include file="../testFooter.jsp"%>

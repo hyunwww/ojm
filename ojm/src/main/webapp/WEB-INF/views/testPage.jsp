@@ -41,9 +41,9 @@
     </section><!-- End Breadcrumbs -->
 
 <section id="structure" class="blog">
-	<div class="container-fluid">
+	<div class="container-xl">
 		<div class="row">
-			<div class="col-lg-2 d-flex flex-column flex-shrink-0 p-3">
+			<div class="col-lg-3 d-flex flex-column flex-shrink-0 p-3">
 				<div class="sidebar sideFilter blog">
 					<h3 class="sidebar-title">title</h3>
 					<div class="sidebar-item search-form">
@@ -97,7 +97,7 @@
 					
 				</div>
 			</div>
-			<div class="col-lg-7 p-3 min-vh-100">
+			<div class="col-lg-8 p-3 min-vh-100">
 				<div class="mapBox" style="position: sticky; background-color: white;">
 					<div class="mapContainer"></div>
 					<div style="text-align: right; padding: 10px;">
@@ -332,7 +332,6 @@
 				for (var store of storeResult) {
 					str += store.str + "현재 리뷰 수 : " + store.revList.length;
 				}
-				$("#searchResult").empty();
 				point = 1;
 				getFromStoreResult(point, 5);
 				break;
@@ -346,6 +345,7 @@
 				for (var store of storeResult) {
 					str += store.str + "평균 평점 : " + store.sstar;
 				}
+				$("#searchResult .row").empty();
 				point = 1;
 				getFromStoreResult(point, 5);
 				
@@ -466,14 +466,13 @@
 				}
 		    	  
 		      }
-		});
+		}); 
 		
 	}
 	//amount 만큼 불러오기  
 	function getFromStoreResult(current, amount) {
 		point++;
 		console.log("point : " + current);
-		
 		
 		if (storeResult.length > 0 && storeResult != null) {
 			$(".mapContainer").show();
@@ -695,7 +694,7 @@
 	    
 	 	// 커스텀 오버레이에 표출될 내용
 	    var content = '<div class="bubble">' +
-	        '    <span class="title">'+object.sname+'</span>' +
+	        '    <span class="title" style="margin-left : 25px; font-weight : 600;">'+object.sname+'</span>' +
 	        '</div>';
 	
 	
@@ -704,22 +703,23 @@
 	        map: map,
 	        position: coords,
 	        content: content,
-	        yAnchor: 0.4,
-	        xAnchor: 0.4
+	        yAnchor: 0,
+	        xAnchor: 0,
+	        zIndex: -1
 	    });
-	    
+	    customOverlay.setMap(null);
 	  	//지도 레벨 변동 감지
 		// 지도가 확대 또는 축소되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
 		kakao.maps.event.addListener(map, 'zoom_changed', function() {        
 	    
 		    // 지도의 현재 레벨을 얻어옵니다
 		    var level = map.getLevel();
-		    if (level <= 6) {
+		    if (level <= 7) {
 		    	//오버레이 표시 추후에 추가 필요
-		    	//customOverlay.setMap(map);
+		    	customOverlay.setMap(map);
 			}else{
 				//오버레이 숨기기
-		    	//customOverlay.setMap(null);
+		    	customOverlay.setMap(null);
 			}
 		     
 		});

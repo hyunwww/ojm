@@ -54,6 +54,18 @@ public class StoreController {
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 	
+	@GetMapping("/registerTest")
+	public String regTest() {
+		
+		
+		return "/store/testRegister";
+	}
+	@GetMapping("/registerUpdate")
+	public String updateTest(@RequestParam("sno")int sno, Model model) {
+		
+		
+		return "/store/testUpdate";
+	}
 	@GetMapping("/goTest")
 	public String goTest(HttpSession session, HttpServletRequest request, Model model) {
 		String referer = request.getHeader("referer");
@@ -62,6 +74,7 @@ public class StoreController {
 				log.info("이전페이지 : detail");
 				log.info("session 정보 : " + session.getAttribute("filterData"));
 			}else {
+				session.removeAttribute("filterData");
 			}
 		}else {
 		}
@@ -104,7 +117,6 @@ public class StoreController {
 				for (AuthVO avo : user.getUvo().getAuthList()) {
 					if (avo.getAuth().equals("ROLE_user")) {	//일반 유저
 						storeInfo.setSpermmit(0);
-						break;
 					}else if (avo.getAuth().equals("ROLE_business")) {	//사업자
 						storeInfo.setSpermmit(1);
 						break;
