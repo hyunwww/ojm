@@ -156,6 +156,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select uno from usertable where userid=#{userid}
 	</select>
 	
+	<!-- 매장 좋아요 관련 -->
+	<update id="addLikeStore">
+		update userinfo set ulikestore = '${sno},' || ulikestore where uno=#{uno}
+	</update>
+	
+	<update id="deleteLikeStore">
+		update userinfo set ulikestore = to_clob(REPLACE(to_char(ulikestore),'${sno},','')) where uno=#{uno}
+	</update>
+	<!-- 매장 좋아요 관련 -->
 	
 	
 	<!-- myPage -->

@@ -75,6 +75,12 @@ public class UserController {
 		log.info("register......");
 		return "user/register";
 	}
+	@PostMapping("/loginfail")
+	public String loginfail(Model model) {
+		log.info("loginfail......");
+		
+		return "user/login";
+	}
 
 	@GetMapping("/reg_user")
 	public String userRegisterG() {
@@ -92,10 +98,6 @@ public class UserController {
 
 		if (service.regUser(uvo, ivo) > 0) {
 			model.addAttribute("register", "user");
-			//sendMail(useremail);		// 회원가입 시 인증메일 전송
-										// 유저테이블에 인증정보 컬럼 추가하고 첫메일인증 후에 로그인 가능하게
-										// 메일 인증해야 권한 생기게?
-										// 비동기로 권한이나 인증여부 체크 후 성공 시 login 요청?
 		} else {
 			model.addAttribute("register", "fail");
 		}
@@ -120,8 +122,6 @@ public class UserController {
 					
 					);
 		}
-		// 가입 성공 시 특정 메세지로 일반 유저,사업자 나누고
-		// getRegister 페이지에서 성공/실패에 따라 페이지 나누면 좋을듯.
 
 		return "redirect:login";
 	}

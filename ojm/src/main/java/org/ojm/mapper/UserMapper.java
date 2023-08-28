@@ -40,7 +40,11 @@ public interface UserMapper {
 	public int pwChange(@Param("userid") String userid,
 			@Param("userpw") String userpw);
 	
-	
+	// 매장 좋아요
+	public int deleteLikeStore(@Param("sno") String sno,
+			@Param("uno") String uno);
+	public int addLikeStore(@Param("sno") String sno,
+			@Param("uno") String uno);
 	
 	// myPage
 	// user
