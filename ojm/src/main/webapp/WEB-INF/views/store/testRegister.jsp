@@ -97,11 +97,11 @@
 							<select class="form-select" aria-label="Default select example" name="openHour">
 								  <c:forEach var="num" begin="0" end="23">
 									<option value="${num }:00">${num }:00</option>
-									<option value="${num }:00">${num }:10</option>
-									<option value="${num }:00">${num }:20</option>
-									<option value="${num }:00">${num }:30</option>
-									<option value="${num }:00">${num }:40</option>
-									<option value="${num }:00">${num }:50</option>
+									<option value="${num }:10">${num }:10</option>
+									<option value="${num }:20">${num }:20</option>
+									<option value="${num }:30">${num }:30</option>
+									<option value="${num }:40">${num }:40</option>
+									<option value="${num }:50">${num }:50</option>
 								  </c:forEach>
 							</select>
 						</div>
@@ -112,11 +112,11 @@
 							<select class="form-select" aria-label="Default select example" name="closeHour">
 								  <c:forEach var="num" begin="0" end="23">
 									<option value="${num }:00">${num }:00</option>
-									<option value="${num }:00">${num }:10</option>
-									<option value="${num }:00">${num }:20</option>
-									<option value="${num }:00">${num }:30</option>
-									<option value="${num }:00">${num }:40</option>
-									<option value="${num }:00">${num }:50</option>
+									<option value="${num }:10">${num }:10</option>
+									<option value="${num }:20">${num }:20</option>
+									<option value="${num }:30">${num }:30</option>
+									<option value="${num }:40">${num }:40</option>
+									<option value="${num }:50">${num }:50</option>
 								  </c:forEach>
 							</select>
 						</div>
@@ -277,6 +277,10 @@
 				if (regForm.sname.value == '' || regForm.addr.value == '' || regForm.openHour.value == '' || regForm.closeHour.value == ''
 						|| regForm.scrn.value == '' || regForm.sphone.value == '' || regForm.sdepo.value == '') {
 					alert("필수입력항목을 작성해야합니다.");
+					return;
+				}
+				if (files.length == 0) {
+					alert("1개 이상의 이미지를 등록해야합니다.");
 					return;
 				}
 				
