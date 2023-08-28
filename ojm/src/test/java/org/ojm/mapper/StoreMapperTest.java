@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.ojm.domain.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -37,11 +38,30 @@ public class StoreMapperTest {
 //		
 //	}
 	
+//	@Test
+//	public void rankTest() {
+//		
+//		log.info(mapper.rank());
+//	}
+//	
+	
+	
 	@Test
-	public void rankTest() {
+	public void zeroTest() {
 		
-		log.info(mapper.rank());
+		StoreVO store = new StoreVO();
+		
+		store.setKd("1");
+		store.setWd("0");
+		store.setSaddress("nope");
+		store.setSname("abc");
+		store.setDayOff("0");
+		store.setSdeli(0);
+		store.setScrn("1");
+		store.setSpermmit(0);
+		store.setUno(43);
+		
+		log.info(mapper.storeRegister(store));
+		
 	}
-	
-	
 }

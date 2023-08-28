@@ -69,11 +69,11 @@
 }
 .store:hover{
 	transform: scale(1.01);
-	transition: all 0.2s ease-out;
+	transition: transform 0.2s ease-out;
 }
 .mapContainer {
 	display: none;
-	width: 80%;
+	width: 100%;
 	height: 250px;
 	margin: auto;
 }
@@ -135,6 +135,22 @@
 	.cons{
 		width: 100%;
 		height: 200px;
+	}
+	.sideFilter{
+		position: sticky;
+		top: 0;
+		transition : all 0.3s ease-out 0s;
+	}	
+	.bubble{
+		width: fit-content;
+		height: auto;
+		background-color: white;
+		border: 2px solid indianred;
+		border-radius: 15px;
+		padding: 3px;
+		position: relative;
+		top: -42px;
+		right: 2px;
 	}
 </style>
 </head>

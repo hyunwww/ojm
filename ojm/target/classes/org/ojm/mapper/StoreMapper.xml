@@ -28,8 +28,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<!-- 매장의 전체목록(승인 대기 상태의 매장은 제외) -->
-	<select id="allStore" resultType="org.ojm.domain.StoreVO">
-		select * from store where spermmit = 1
+	<select id="allStore" resultType="org.ojm.domain.StoreVO" parameterType="int">
+		select * from (
+		select rownum rn, sno, uno, sname, saddress, wd , kd, sphone, scate, sdeli, scrn, sdepo, slike, sstar, spermmit, openhour, smaxreserv, dayoff from
+		(select * from store where spermmit = 1 order by sname))
+		where rn between #{start} and #{end}
 	</select>
 	
 	<!-- top10  -->
@@ -86,7 +89,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 매장 정보 수정  -->
 	<update id="updateStore" parameterType="org.ojm.domain.StoreVO">
-		update store set scate = #{scate} , sdepo = #{sdepo} , sphone = #{sphone} , openhour = #{openHour} , scrn = #{scrn} , dayoff = #{dayOff}
+		update store set scate = #{scate} , sdepo = #{sdepo} , sphone = #{sphone} , openhour = #{openHour} , scrn = #{scrn} , dayoff = #{dayOff},
+		smaxreserv = #{smaxreserv}
 		where sno = #{sno}
 	</update>
 	
@@ -133,21 +137,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					<foreach collection="cateList" item="cate" open="(" close=")" separator=",">
 						#{cate} 
 					</foreach> 
-					and 
 				</when>
 				<otherwise>
-					where 1 = 0 or 
+					where 1 = 1 
 				</otherwise>
 			</choose>
 			<choose>
 				<when test="location != null and location.size() > 0">
-					saddress like
+					and saddress like 
 					<foreach collection="location" item="loc">
 						#{loc}
 					</foreach>
 				</when>
 				<otherwise>
-					1 = 0
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="delivery != null and delivery.size() > 0" >
+					and sdeli = 1 
+				</when>
+				<otherwise>
+					and sdeli >= 0
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="reservation != null and reservation.size() > 0">
+					and smaxreserv > 0 
+				</when>
+				<otherwise>
+					and smaxreserv >= 0
 				</otherwise>
 			</choose>
 			
@@ -176,5 +194,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{bdepo}, #{breq})
 
 	</insert>
+	
+	<select id="countStore" resultType="int">
+		select count(*) from store where spermmit = 1
+	</select>
 	
 </mapper>
