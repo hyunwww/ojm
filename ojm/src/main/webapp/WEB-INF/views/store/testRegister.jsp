@@ -11,16 +11,13 @@
 				<div class="border-top border-dark py-3"></div>
 				<form action="#" id="regForm" method="post">
 					<div class="mb-3 row">
-					    <label for="snameInput" class="col-sm-2 col-form-label">매장명</label>
+					    <label for="snameInput" class="col-sm-2 col-form-label">매장명<span style="color: red; font-size: 7px;">*</span></label>
 					    <div class="col-sm-10">
 					      <input type="text" class="form-control" id="snameInput" name="sname">
 					    </div>
 					  </div>
 					<div class="mb-3 row">
-					    <div class="col-2">
-						    <label for="staticEmail2" class="visually-hidden"></label>
-						    <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="주소">
-						  </div>
+						<label for="saddrInput" class="col-sm-2 col-form-label">주소<span style="color: red; font-size: 7px;">*</span></label>
 						<div class="col-8">
 						    <label for="saddrInput" class="visually-hidden"></label>
 						    <input type="text" class="form-control" id="saddrInput" readonly="readonly" name="addr">
@@ -36,7 +33,7 @@
 						</div>
 					</div>
 					<div class="mb-3 row">
-					    <label for="sphoneInput" class="col-sm-2 col-form-label">전화번호</label>
+					    <label for="sphoneInput" class="col-sm-2 col-form-label">전화번호<span style="color: red; font-size: 7px;">*</span></label>
 					    <div class="col-auto">
 					      <input type="text" class="form-control" id="sphoneInput" name="sphone">
 					    </div>
@@ -75,27 +72,27 @@
 							휴무
 						</div>
 						<div class="col-auto">
-							<div class="input-group">
-								<input class="btn-check" type="checkbox" name="dayOff" id="monday" autocomplete="off" value="1">
+							<div class="input-group dayOff">
+								<input class="btn-check" type="checkbox" id="monday" autocomplete="off" value="1">
 								<label class="btn btn-outline-secondary" for="monday">Mon</label> 
-								<input class="btn-check" type="checkbox" name="dayOff" id="tuesday" autocomplete="off" value="2">
+								<input class="btn-check" type="checkbox" id="tuesday" autocomplete="off" value="2">
 								<label class="btn btn-outline-secondary" for="tuesday">tue</label> 
-								<input class="btn-check" type="checkbox" name="dayOff" id="wednesday" autocomplete="off" value="3">
+								<input class="btn-check" type="checkbox" id="wednesday" autocomplete="off" value="3">
 								<label class="btn btn-outline-secondary" for="wednesday">wed</label>
-								<input class="btn-check" type="checkbox" name="dayOff" id="thursday" autocomplete="off" value="4">
+								<input class="btn-check" type="checkbox" id="thursday" autocomplete="off" value="4">
 								<label class="btn btn-outline-secondary" for="thursday">thu</label>
-								<input class="btn-check" type="checkbox" name="dayOff" id="friday" autocomplete="off" value="5">
+								<input class="btn-check" type="checkbox" id="friday" autocomplete="off" value="5">
 								<label class="btn btn-outline-secondary" for="friday">fri</label>
-								<input class="btn-check" type="checkbox" name="dayOff" id="saturday" autocomplete="off" value="6">
+								<input class="btn-check" type="checkbox" id="saturday" autocomplete="off" value="6">
 								<label class="btn btn-outline-secondary" for="saturday">sat</label>
-								<input class="btn-check" type="checkbox" name="dayOff" id="sunday" autocomplete="off" value="0">
+								<input class="btn-check" type="checkbox" id="sunday" autocomplete="off" value="0">
 								<label class="btn btn-outline-secondary" for="sunday">sun</label>
 								<input class="btn-check"> <!-- 의미 x  -->
 							</div>
 						</div>
 					</div>
 					<div class="row mb-3">
-						<div class="col-2">영업시간</div>
+						<div class="col-2">영업시간<span style="color: red; font-size: 7px;">*</span></div>
 						<div class="col-auto">
 							<select class="form-select" aria-label="Default select example" name="openHour">
 								  <c:forEach var="num" begin="0" end="23">
@@ -125,7 +122,7 @@
 						</div>
 					</div>
 					<div class="row mb-3">
-						<div class="col-2">사업자등록번호</div>
+						<div class="col-2">사업자등록번호<span style="color: red; font-size: 7px;">*</span></div>
 						<div class="col-auto">
 							<input type="text" class="form-control" name="scrn">
 						</div>
@@ -151,7 +148,7 @@
 						</div>
 					</div>
 					<div class="row mb-3">
-						<div class="col-2">이미지</div>
+						<div class="col-2">이미지<span style="color: red; font-size: 7px;">*</span></div>
 						<div class="col-auto">
 							<input class="form-control" type="file" multiple name="uploadImgs">
 						</div>
@@ -164,8 +161,13 @@
 					<div class="row mb-3">
 						<div class="col-1">메뉴</div>
 						<div class="btn-group btn-group-sm col-1" role="group">
-						  <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#menuModal">+</button>
+						  <button type="button" class="btn btn-outline-dark" id="menuAddBtn" data-bs-toggle="modal" data-bs-target="#menuModal">+</button>
 						</div>
+					</div>
+					<div id="menuContainer"></div>
+					<div id="btnBox" style="text-align: right;">
+						<button type="button" class="btn btn-dark" data-cmd="back">뒤로가기</button>
+						<button type="button" class="btn btn-dark" data-cmd="reg">등록하기</button>
 					</div>
 				</form>
 			</div>
@@ -178,7 +180,7 @@
 
 
 			<!-- 메뉴 모달  -->
-			<div class="reply-form modal modal-sheet modal-lg" id="menuModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><!-- 숨겼다가 모달로 사용  -->
+			<div class="reply-form modal modal-sheet" id="menuModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><!-- 숨겼다가 모달로 사용  -->
                 <div class="modal-dialog modal-dialog-centered">
                 	<div class="modal-content p-3">
                 		<div>
@@ -186,18 +188,43 @@
 	                		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="float: right;"></button>
                 		</div><br>
 		                <form action="#" method="post">
-		                  <div class="row">
-		                    <div class="col form-group">
-		                      <input name="writer" type="text" class="form-control" placeholder="작성자">
+		                  <div class="row mb-2">
+		                  	<div class="col-2 form-group">메뉴명</div>
+		                    <div class="col-auto form-group">
+		                      <input name="mname" type="text" class="form-control" >
 		                    </div>
 		                  </div>
-		                  <div class="row">
-		                    <div class="col form-group">
-		                      <textarea name="comment" class="form-control" placeholder="내용을 입력해주세요" style="resize: none;"></textarea>
+		                  <div class="row mb-2">
+		                  	<div class="col-2 form-group">분류</div>
+		                    <div class="col-auto form-group">
+		                      <input name="mcate" type="text" class="form-control" >
 		                    </div>
+		                  </div>
+		                  <div class="row mb-2">
+		                  	<div class="col-2 form-group">가격</div>
+		                    <div class="col-auto form-group">
+		                      <input name="mprice" type="text" class="form-control" >
+		                    </div>
+		                  </div>
+		                  <div class="row mb-2">
+		                  	<div class="col">알레르기 유발물질</div>
+		                  </div>
+		                  <div class="row mb-2">
+		                  	<div class="col-auto">
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler1" autocomplete="off" value="1">
+								<label class="btn btn-outline-warning" for="aler1">1</label> 
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler2" autocomplete="off" value="1">
+								<label class="btn btn-outline-warning" for="aler2">2</label> 
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler3" autocomplete="off" value="1">
+								<label class="btn btn-outline-warning" for="aler3">3</label> 
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler4" autocomplete="off" value="1">
+								<label class="btn btn-outline-warning" for="aler4">4</label> 
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler5" autocomplete="off" value="1">
+								<label class="btn btn-outline-warning" for="aler5">5</label> 
+		                  	</div>
 		                  </div>
 		                  <div style="text-align: right;">
-			                  <button type="submit" class="btn btn-primary">작성하기</button>
+			                  <button type="button" id="addMenuBtn" class="btn btn-dark">작성하기</button>
 		                  </div>
 		                </form>
                 	</div>
@@ -221,19 +248,6 @@
 			$("#depoInput").val($(this).val());
 		});
 		
-		//예약금 없음 버튼 이벤트
-		$("#noDeposit").on("click", function() {
-			if ($(this)[0].checked) {
-				$("#depoInput").attr("disabled", true);
-				$("#depoInput").val("");
-				$("input[name='deposit']").attr("disabled", true);
-			}else{
-				$("#depoInput").attr("disabled", false);
-				$("input[name='deposit']").attr("disabled", false);
-			}
-		});
-		
-		
 		
 		//예약 인원 조정 버튼
 		$(".upBtn").click(function() {
@@ -247,23 +261,21 @@
 				$("#reserveValue").html(--value);
 			}
 		});
-		//휴무
-		$(".dayOff td").click(function() {
-			$(this).toggleClass("dayClicked");
+		//메뉴 추가 버튼
+		$("#menuAddBtn").click(function() {
+			$("#menuModal form")[0].reset();
 		});
 		
 		
-		
-		
 		//regForm 제어
-		$("form input").on("click", function() {
+		$("form button").on("click", function() {
 			var regForm = $("#regForm")[0];
-			if ($(this).data("cmd") == 'register') {	//등록 클릭 시
+			if ($(this).data("cmd") == 'reg') {	//등록 클릭 시
 				
 				
 				// 공백 input 제어
 				if (regForm.sname.value == '' || regForm.addr.value == '' || regForm.openHour.value == '' || regForm.closeHour.value == ''
-						|| regForm.scrn.value == '' || regForm.sphone.value == '') {
+						|| regForm.scrn.value == '' || regForm.sphone.value == '' || regForm.sdepo.value == '') {
 					alert("필수입력항목을 작성해야합니다.");
 					return;
 				}
@@ -282,12 +294,12 @@
 				
 				sendFile(files, function() {
 					var dayInput = '';
-					for (var i = 0; i < $("input[name='dayOff']").length; i++) {
-						if ($("input[name='dayOff']")[i].checked) {
-							dayInput += $("input[name='dayOff']")[i].value;
+					for (var i = 0; i < $(".dayOff input").length; i++) {
+						if ($(".dayOff input")[i].checked) {
+							dayInput += $(".dayOff input")[i].value;
 						}
 					}
-					$("#regForm").append('<input type="hidden" name="dayOff" value="'+dayInput+'"/>');
+					$("#regForm").append('<input type="hidden" name="dayOff" value="'+dayInput+'"/>'); 
 					$("#regForm").append('<input type="hidden" name="smaxreserv" value="'+$("#reserveValue").text()+'"/>');
 					$("#regForm").append(menuInput);
 					$("#regForm").submit();
@@ -537,6 +549,65 @@
 		});
 		
 		
+		
+		
 	});
+</script>
+<script type="text/javascript"> /* 메뉴 관련 */
+	var menuForm = $("#menuModal form")[0];
+	var menuModal = new bootstrap.Modal('#menuModal', {
+		  focus: false
+		})
+	//메뉴 추가하기 버튼
+	$("#addMenuBtn").on("click", function() {
+		
+		
+		if (menuForm.mname.value == '') {
+			alert("메뉴명을 입력해야합니다.");
+			return;
+		}
+		if (menuForm.mcate.value == 0) {
+			alert(2);
+			return;
+		}
+		
+		
+		
+		var selectedAlrg = "";
+		for (var sel of menuForm.maler) {
+			if (sel.checked) {
+				selectedAlrg += sel.value+",";
+			}
+		}
+		selectedAlrg = selectedAlrg.substring(0, selectedAlrg.length-1);
+		
+		menuService.add({
+			mname : menuForm.mname.value,
+			mcate : menuForm.mcate.value,
+			maler : selectedAlrg,
+			mprice : menuForm.mprice.value 
+		}, function() {
+			alert("good");
+		})
+		
+		alert("추가되었습니다.");
+		menuForm.reset();
+		menuModal.hide();
+		
+	});
+	
+	//메뉴 삭제
+    $(function() {
+        $("#menuContainer").on("click", "button[type='button']", function() {
+			
+			for (var i = 0; i < menuList.length; i++) {
+				if (menuList[i].mname == $(this).closest(".row").find(".col-2").text()) { //해당 요소 데이터 삭제 및 목록에서 삭제
+					menuList.splice(i,1);
+					$(this).closest(".row").remove();
+				}
+			}
+		});
+	});
+	
 </script>
 <%@ include file="../testFooter.jsp"%>

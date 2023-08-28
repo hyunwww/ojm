@@ -241,6 +241,7 @@ public class StoreController {
 		log.info("현재 매장 좋아요 여부 : " + isLike); 
 		model.addAttribute("isLike", isLike);
 		model.addAttribute("store" , svo);
+		model.addAttribute("uvo", service.getUserById(principal.getName()));
 		return "/store/storeDetail";
 	}
 	
@@ -313,7 +314,7 @@ public class StoreController {
 				uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore().replace(String.valueOf(sno)+",", ""));
 				
 				//db 매장정보 수정
-				//service.storeLike(sno, -1);
+				service.storeLike(sno, -1, String.valueOf(uvo.getUno()));
 			}else {//좋아요 아닌 경우 추가
 				if (uvo.getInfo().getUlikestore() == null || uvo.getInfo().getUlikestore().isEmpty()) {
 					uvo.getInfo().setUlikestore(""+sno+",");
@@ -322,15 +323,12 @@ public class StoreController {
 				}
 				
 				//db 매장정보 수정
-				//service.storeLike(sno, 1);
+				service.storeLike(sno, 1, String.valueOf(uvo.getUno()));
 			}
 			log.info(uvo.getInfo().getUlikestore());
 			
-			//db에 변경사항 저장
 			
 			
-			//유저
-			//uService.modifyUser(uvo);
 			
 			
 			
