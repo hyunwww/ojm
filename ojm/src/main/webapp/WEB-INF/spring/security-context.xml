@@ -17,6 +17,7 @@
     </bean>
 	<bean id="customUserDetailService" class="org.ojm.security.CustomUserDetailService"></bean>
 	<security:http auto-config="true" use-expressions="true">
+		<security:intercept-url pattern="/user/reg*" access="isAnonymous()"/>
 		<security:intercept-url pattern="/user/login" access="isAnonymous()"/>
 		<security:intercept-url pattern="/user/findID/**" access="permitAll"/>
 		<!-- <security:intercept-url pattern="/user/myPage/b_*" access="hasRole('ROLE_business')"/> 정규식? 처럼도 가능.-->

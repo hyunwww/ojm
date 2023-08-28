@@ -7,7 +7,9 @@ import org.ojm.domain.BookVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.JobSendVO;
+import org.ojm.domain.ProfileImgVO;
 import org.ojm.domain.QboardVO;
+import org.ojm.domain.ReportVO;
 import org.ojm.domain.ReviewVO;
 import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
@@ -15,8 +17,10 @@ import org.ojm.domain.UserVO;
 public interface UserService {
 	public UserVO login(String id, String pw);
 	public int getUno(String userid);
+	public UserVO getUser(String id);
 	public int regUser(UserVO uvo);				// 사업자
-	public int regUser(UserVO uvo,InfoVO ivo);	// 일반 회원
+	public int regUser(UserVO uvo,InfoVO ivo,ProfileImgVO img);	// 일반 회원
+	public String getUserImg(int uno);
 	
 	public int modifyUser(UserVO uvo);
 	
@@ -41,9 +45,12 @@ public interface UserService {
 	public List<QboardVO> getQlist(Criteria cri, int uno);
 	public List<JobSendVO> getJobSendList(int uno);
 	public List<BookVO> getBookList(int uno);
+	public List<ReportVO> getReportList(Criteria cri, int uno);
+	public int getReportTotalCount();
 	
 	
 	// business
 	public List<StoreVO> getStoreList(int uno);
 	public List<BookVO> getBookListBusiness(int uno);
+	
 }

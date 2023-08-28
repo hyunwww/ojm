@@ -3,6 +3,7 @@ package org.ojm.controller;
 
 import org.ojm.domain.AuthVO;
 import org.ojm.domain.InfoVO;
+import org.ojm.domain.ProfileImgVO;
 import org.ojm.domain.UserVO;
 import org.ojm.mail.MailHandler;
 import org.ojm.mail.TempKey;
@@ -93,10 +94,10 @@ public class UserController {
 	// 일단 userVO에서 birth를 String으로 변경. service에서 날짜형식으로 변환할 것.
 	// 그리고 view단에서 권한을 name=auth로 넘기지 말고 authList[0].auth 처럼 인덱스를 부여해 배열로 넘겨야함 - service에서 권한부여하게함
 	@PostMapping("/regUser")
-	public String userRegisterP(InfoVO ivo, Model model,UserVO uvo) {
+	public String userRegisterP(InfoVO ivo, Model model,UserVO uvo,ProfileImgVO img) {
 		log.info("userRegister Post......");
-
-		if (service.regUser(uvo, ivo) > 0) {
+		
+		if (service.regUser(uvo,ivo,img) > 0) {
 			model.addAttribute("register", "user");
 		} else {
 			model.addAttribute("register", "fail");

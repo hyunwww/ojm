@@ -5,6 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
+<style type="text/css">
+	img{
+		width: 50px;
+	}
+</style>
 </head>
 <body>
 	<form action="" method="post">
@@ -42,14 +47,23 @@
 				<input type='checkbox' name='ufavor' value='favor2' />양식
 				<input type='checkbox' name='ufavor' value='favor3' />중식
 				<input type='checkbox' name='ufavor' value='' hidden="hidden" checked="checked"/>
-				<br>
-		
+		<br>
+		프로필 이미지 선택 <br>
+		<div id="divImg">
+			<img src="/resources/img/profile/man.png" data-img="man">
+			<img src="/resources/img/profile/woman.png" data-img="woman">
+			<img src="/resources/img/profile/go.png" data-img="go">
+		</div>	
+		<br>
 		
 		
 		<input type="button" value="회원가입" id="regBtn" onclick="check(this.form)">
 		<input type="reset" value="다시입력">
 		<input type="button" value="홈으로" id="homeBtn">
 		
+		
+		<input type="hidden" name="uploadpath" value="resources/img/profile">
+		<input type="hidden" name="filename" value="">
 		
 		<input type="hidden" name="ulikestore" value="">
 		<input type="hidden" name="ulikejob" value="">
@@ -142,6 +156,17 @@
 	      	}
 		});
 	}
+	
+	// 이미지 선택 이벤트
+	$("img").on("click",function(){
+		// 이미지 경로,이름 추가
+		var imgName=$(this).data("img")+".png";
+		console.log(imgName);
+		$("input[name=filename]").val(imgName);
+		
+		// 이미지 div 변경
+		$("#divImg").html($(this));	// 숨겨놓았다가 선택시 특정 부분으로 넣어주는 게 더 좋을듯.
+	});
 	
 	// 유효성 검사용
 	function checkEmail(email) {

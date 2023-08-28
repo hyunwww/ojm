@@ -9,6 +9,7 @@ import org.ojm.domain.UserVO;
 import org.ojm.service.BoardService;
 import org.ojm.service.JobService;
 import org.ojm.service.QboardService;
+import org.ojm.service.ReportService;
 import org.ojm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,14 +40,20 @@ public class MyPageController {
 	QboardService qs;
 	@Setter(onMethod_ = @Autowired)
 	JobService js;
+	@Setter(onMethod_ = @Autowired)
+	ReportService rs;
 	
 	// 일반유저
 	@GetMapping("/main")
 	public String myPageMain(Principal pr,Model model) {
 		log.info("myPageMain...... id : " + pr.getName());
 		
-		model.addAttribute("uno", service.getUno(pr.getName()));
+		UserVO user = service.getUser(pr.getName());
+		log.info(user);
 		
+		model.addAttribute("uno", user.getUno());
+		model.addAttribute("uvo", user);
+		model.addAttribute("imgRoot", service.getUserImg(user.getUno()));
 		return "user/myPage/main";
 	}
 	@GetMapping("/board")
@@ -89,6 +96,16 @@ public class MyPageController {
 		model.addAttribute("total", service.getRvCnt(uno));
 		model.addAttribute("pageMaker", new PageDTO(cri, service.getRvCnt(uno)));
 		return "user/myPage/review";
+	}
+	@GetMapping("/report")
+	public String myPageReport(Model model,Criteria cri,@ModelAttribute("uno") int uno) {
+		log.info("myPageReport...");
+		
+		model.addAttribute("reportList", service.getReportList(cri,uno));
+		model.addAttribute("total", service.getReportTotalCount());
+		model.addAttribute("pageMaker", new PageDTO(cri, service.getReportTotalCount()));
+		
+		return "user/myPage/report";
 	}
 	@RequestMapping(value = "/modify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
 			method = RequestMethod.POST)
