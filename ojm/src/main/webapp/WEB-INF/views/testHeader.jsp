@@ -152,6 +152,22 @@
 		top: -42px;
 		right: 2px;
 	}
+	.imgBox{
+		display: inline-block;
+		position: relative;
+		border: 8px solid lightgray;
+		border-radius: 5px;
+	}
+	.imgBox button{
+		position: absolute;
+		top: 0%;
+		right: 0%;
+	}
+	.imgBox img{
+		width: 150px;
+		height: 150px;
+		object-fit : fill;
+	}
 </style>
 </head>
 <script type="text/javascript">

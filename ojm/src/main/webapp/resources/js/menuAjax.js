@@ -19,12 +19,15 @@ var menuService = (function() {
       contentType: "application/json; charset=utf-8",
       success: function (result, status, xhr) {
       	menuList.push(result);
-        var str = "<li>";
-        str += result.mname;
-        str +=  '<input type="button" value="-">';
-        str += "</li>";
+      	
+        var str = '<div class="row mb-3">';
+        str += '<div class="col-2">'+result.mname+'</div>';
+        str += '<div class="col-auto">';
+        str += '<button type="button" class="btn btn-secondary btn-sm">-</button>';
+        str += '</div>';
+        str += '</div>';
         
-        $("#menuContainer ul").append(str);
+        $("#menuContainer").append(str);
         
         console.log(menuList);
       },

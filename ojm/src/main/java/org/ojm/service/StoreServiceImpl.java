@@ -113,7 +113,7 @@ public class StoreServiceImpl implements StoreService{
 					break;
 				}
 			}
-			info.setDayOff(result);
+			info.setDayOff(result.substring(0, result.length()-1));
 		}else {
 			info.setDayOff("없음");
 		}
@@ -212,8 +212,32 @@ public class StoreServiceImpl implements StoreService{
 	
 	//좋아요 적용
 	@Override
-	public int storeLike(int sno, int amount) {
-		return mapper.storeLike(sno, amount);
+	@Transactional
+	public int storeLike(int sno, int amount, String uno) {
+		int result = 0;
+		switch (amount) {
+		case 1:
+				result = uMapper.addLikeStore(String.valueOf(sno), uno);
+				if (result > 0) {
+					result = mapper.storeLike(sno, amount);
+				}else {
+					result = 0;
+				}
+			break;
+		case -1:
+			result = uMapper.deleteLikeStore(String.valueOf(sno), uno);
+			if (result > 0) {
+				result = mapper.storeLike(sno, amount);
+			}else {
+				result = 0;
+			}
+			break;
+
+		default:
+			break;
+		}
+		
+		return result;
 	}
 	
 	// top10
