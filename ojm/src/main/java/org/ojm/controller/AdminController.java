@@ -34,9 +34,6 @@ public class AdminController {
 	@Setter(onMethod_ = @Autowired)
 	private StoreService sService;
 	
-	@Setter(onMethod_ = @Autowired)
-	private StoreService sService;	
-	
 	@GetMapping("/main")
 	public String adminMain() {
 		return "admin/main";
@@ -74,7 +71,6 @@ public class AdminController {
 		log.info("srGet...");
 		model.addAttribute("svo", sService.storeInfo(sno));
 		int uno = sService.storeInfo(sno).getUno();
-		model.addAttribute(cri)
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", sService.getSrTotal());
 		return "admin/storeGet";
