@@ -9,11 +9,12 @@
 			<div class="col-lg-8">
 				<h3 style="text-align: center; font-weight: 500;">매장 등록하기</h3>
 				<div class="border-top border-dark py-3"></div>
-				<form action="#" id="regForm" method="post">
+				<form action="#" id="regForm" method="post" novalidate>
 					<div class="mb-3 row">
 					    <label for="snameInput" class="col-sm-2 col-form-label">매장명<span style="color: red; font-size: 7px;">*</span></label>
 					    <div class="col-sm-10">
-					      <input type="text" class="form-control" id="snameInput" name="sname">
+					      <input type="text" class="form-control" id="snameInput" name="sname" required>
+					      <div class="invalid-feedback">매장명을 입력해주세요.</div>
 					    </div>
 					  </div>
 					<div class="mb-3 row">
@@ -21,6 +22,7 @@
 						<div class="col-8">
 						    <label for="saddrInput" class="visually-hidden"></label>
 						    <input type="text" class="form-control" id="saddrInput" readonly="readonly" name="addr">
+						    <div class="invalid-feedback">주소를 입력해주세요.</div>
 						</div>
 						<div class="col-auto">
 						    <button type="button" class="btn btn-secondary" id="searchBtn">주소 검색</button>
@@ -35,7 +37,11 @@
 					<div class="mb-3 row">
 					    <label for="sphoneInput" class="col-sm-2 col-form-label">전화번호<span style="color: red; font-size: 7px;">*</span></label>
 					    <div class="col-auto">
-					      <input type="text" class="form-control" id="sphoneInput" name="sphone">
+					      <input type="text" class="form-control" id="sphoneInput" name="sphone" required>
+					      <div class="invalid-feedback">전화번호를 입력해주세요.</div>
+					    </div>
+					    <div class="col-auto">
+					    	<span style="font-size: 12px; color: gray;">부가 설명</span>
 					    </div>
 					  </div>
 					<div class="row mb-3">
@@ -44,7 +50,7 @@
 						    <input type="text" readonly class="form-control-plaintext" id="scateInput" value="카테고리">
 						</div>
 						<div class="col-sm-2">
-							<select class="form-select" aria-label="Default select example" name="scate">
+							<select class="form-select" aria-label="Default select example" name="scate" style="width: auto;">
 							  <option selected>선택 안함</option>
 							  <option value="1">kor</option>
 							  <option value="2">chn</option>
@@ -53,19 +59,7 @@
 						</div>
 						<div class="col-auto"></div>
 					</div>
-					<div class="row mb-3">
-						<div class="col-2">
-							예약 가능 인원
-						</div>
-						<div class="col-auto">
-							<div class="input-group mb-3">
-							  <button class="btn btn-outline-secondary downBtn" type="button">-</button>
-							  <input class="btn-check" type="checkbox" name="smaxreserve" id="smaxInput" autocomplete="off" disabled="disabled">
-							  <label class="btn btn-outline-secondary" for="smaxInput" id="reserveValue">0</label> 
-							  <button class="btn btn-outline-secondary upBtn" type="button">+</button>
-							</div>
-						</div>
-					</div>
+					
 					
 					<div class="row mb-3">
 						<div class="col-2">
@@ -97,11 +91,11 @@
 							<select class="form-select" aria-label="Default select example" name="openHour">
 								  <c:forEach var="num" begin="0" end="23">
 									<option value="${num }:00">${num }:00</option>
-									<option value="${num }:00">${num }:10</option>
-									<option value="${num }:00">${num }:20</option>
-									<option value="${num }:00">${num }:30</option>
-									<option value="${num }:00">${num }:40</option>
-									<option value="${num }:00">${num }:50</option>
+									<option value="${num }:10">${num }:10</option>
+									<option value="${num }:20">${num }:20</option>
+									<option value="${num }:30">${num }:30</option>
+									<option value="${num }:40">${num }:40</option>
+									<option value="${num }:50">${num }:50</option>
 								  </c:forEach>
 							</select>
 						</div>
@@ -112,11 +106,11 @@
 							<select class="form-select" aria-label="Default select example" name="closeHour">
 								  <c:forEach var="num" begin="0" end="23">
 									<option value="${num }:00">${num }:00</option>
-									<option value="${num }:00">${num }:10</option>
-									<option value="${num }:00">${num }:20</option>
-									<option value="${num }:00">${num }:30</option>
-									<option value="${num }:00">${num }:40</option>
-									<option value="${num }:00">${num }:50</option>
+									<option value="${num }:10">${num }:10</option>
+									<option value="${num }:20">${num }:20</option>
+									<option value="${num }:30">${num }:30</option>
+									<option value="${num }:40">${num }:40</option>
+									<option value="${num }:50">${num }:50</option>
 								  </c:forEach>
 							</select>
 						</div>
@@ -124,14 +118,32 @@
 					<div class="row mb-3">
 						<div class="col-2">사업자등록번호<span style="color: red; font-size: 7px;">*</span></div>
 						<div class="col-auto">
-							<input type="text" class="form-control" name="scrn">
+							<input type="text" class="form-control" name="scrn" required>
+							<div class="invalid-feedback">사업자등록번호를 입력해주세요.</div>
 						</div>
 					</div>
 					<div class="row mb-3">
+						<div class="col-2">
+							예약 가능 인원
+						</div>
+						<div class="col-auto">
+							<div class="input-group mb-3">
+							  <button class="btn btn-outline-secondary downBtn" type="button">-</button>
+							  <input class="btn-check" type="checkbox" name="smaxreserve" id="smaxInput" autocomplete="off" disabled="disabled">
+							  <label class="btn btn-outline-secondary" for="smaxInput" id="reserveValue">0</label> 
+							  <button class="btn btn-outline-secondary upBtn" type="button">+</button>
+							</div>
+						</div>
+						<div class="col-auto">
+					    	<span style="font-size: 12px; color: gray;">설명</span>
+					    </div>
+					</div>
+					<div class="row mb-3 depositRow" style="display: none;">
 						<div class="col-2">예약금</div>
 						<div class="col-auto">
-							<input type="text" class="form-control" name="sdepo" id="depoInput" readonly="readonly">
+							<input type="text" class="form-control" name="sdepo" id="depoInput" readonly="readonly" required>
 							<input type="range" name="deposit" id="depoYes" value="1" min="0" max="100000" step="1000" style="width: -webkit-fill-available">
+							<div class="invalid-feedback">예약금을 입력해주세요.</div>
 						</div>
 					</div>
 					<div class="row mb-3">
@@ -150,7 +162,8 @@
 					<div class="row mb-3">
 						<div class="col-2">이미지<span style="color: red; font-size: 7px;">*</span></div>
 						<div class="col-auto">
-							<input class="form-control" type="file" multiple name="uploadImgs">
+							<input class="form-control" type="file" multiple name="uploadImgs" required>
+							<div class="invalid-feedback">1개 이상의 이미지를 등록해주세요.</div>
 						</div>
 					</div>
 					<div class="row mb-3">
@@ -238,25 +251,31 @@
 	$(function() {
 		
 		
-		
 		//주소검색 버튼 이벤트
 		$("#searchBtn").on("click" , function() {
 			execPostcode();
 		});
-		
+		//예약금
 		$("input[name='deposit']").on("change", function() {
 			$("#depoInput").val($(this).val());
 		});
-		
-		
 		//예약 인원 조정 버튼
 		$(".upBtn").click(function() {
 			var value = $("#reserveValue").text();
-			
+			if (value == 0) {
+				$(".depositRow").show();
+			}
 			$("#reserveValue").html(++value);
 		});
 		$(".downBtn").click(function() {
 			var value = $("#reserveValue").text();
+			if (value == 1) {
+				$(".depositRow").hide();
+				$("input[name='sdepo']").attr("disbaled", true);
+				$("input[name='sdepo']").val("");
+				$(".depositRow input[type='range']").val(0);
+				
+			}
 			if (value > 0) {
 				$("#reserveValue").html(--value);
 			}
@@ -272,11 +291,33 @@
 			var regForm = $("#regForm")[0];
 			if ($(this).data("cmd") == 'reg') {	//등록 클릭 시
 				
-				
 				// 공백 input 제어
 				if (regForm.sname.value == '' || regForm.addr.value == '' || regForm.openHour.value == '' || regForm.closeHour.value == ''
-						|| regForm.scrn.value == '' || regForm.sphone.value == '' || regForm.sdepo.value == '') {
+						|| regForm.scrn.value == '' || regForm.sphone.value == '') {
 					alert("필수입력항목을 작성해야합니다.");
+					
+					if (regForm.addr.value != '') {
+						$("input[name='addr']").removeClass("is-invalid");
+					}else{
+						$("input[name='addr']").addClass("is-invalid");
+					}
+					
+					
+					
+					regForm.classList.add('was-validated');
+					return;
+				}
+				$("input[name='addr']").removeClass("is-invalid");
+				
+				if ($("#reserveValue").text() > 0 && regForm.sdepo.value == '') {
+					alert("예약금을 입력해주세요.");
+					$("input[name='sdepo']").addClass("is-invalid");
+					return;
+				}else{
+					$("input[name='sdepo']").removeClass("is-invalid");
+				}				
+				if (files.length == 0) {
+					alert("1개 이상의 이미지를 등록해야합니다.");
 					return;
 				}
 				
@@ -409,6 +450,7 @@
 					alert("주소 선택 안함.");
                 } else if(state === 'COMPLETE_CLOSE'){
                 	// 커서를 상세주소 필드로 이동한다.
+                	$("input[name='addr']").removeClass("is-invalid");
                     $("input[name='addrDet']").focus();
                 }
             }
