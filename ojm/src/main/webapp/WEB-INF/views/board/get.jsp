@@ -36,10 +36,6 @@
 		
 		<table>
 			<tr>
-				<td>글 번호</td>
-				<td><input name="bno" value="${vo.bno }" readonly="readonly" style="background-color: #ccc"></td>
-			</tr>
-			<tr>
 				<td>제목</td>
 				<td><input name="btitle" value="${vo.btitle }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
@@ -280,10 +276,10 @@
 						if (result == null || result.length == 0) {
 							replyTable.html('<h3>댓글이 없습니다.</h3>');
 						}else {
-							str += '<tr><td>댓글 번호</td><td>작성자</td><td>내용</td><td>작성일</td><td>삭제</td></tr>';
+							str += '<tr><td>작성자</td><td>내용</td><td>작성일</td><td>삭제</td></tr>';
 							for (var i = 0; i < result.length; i++) {
 								str += '<tr>';
-								str += '<td data-brno="' + result[i].brno + '">' + result[i].brno + '</td>';
+								str += '<td style="display: none;" data-brno="' + result[i].brno + '">' + result[i].brno + '</td>';
 								str += '<td>' + result[i].brwriter + '</td>';
 								str += '<td>' + result[i].brcontent + '</td>';
 								str += '<td>' + displayTime(result[i].brdate) + '</td>';

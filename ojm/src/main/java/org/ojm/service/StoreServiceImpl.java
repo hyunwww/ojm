@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.ojm.domain.Criteria;
 import org.ojm.domain.BookVO;
 import org.ojm.domain.MenuVO;
 import org.ojm.domain.ReportVO;
@@ -265,4 +266,14 @@ public class StoreServiceImpl implements StoreService{
 		mapper.addbook(vo);
 	}
 	
+	@Override
+	public List<StoreVO> getSrList(Criteria cri) {
+		return mapper.getSrListWithPaging(cri);
+	}
+	
+	
+	@Override
+	public int getSrTotal() {
+		return mapper.getSrTotalCount();
+	}
 }

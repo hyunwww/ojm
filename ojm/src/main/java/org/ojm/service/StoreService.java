@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ojm.domain.BookVO;
+import org.ojm.domain.Criteria;
 import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreImgVO;
 import org.ojm.domain.StoreVO;
@@ -36,4 +37,8 @@ public interface StoreService {
 	// 푸쉬용
 	//book 예약 관련 	
 	public void addBook(BookVO vo);
+	
+	// 관리자 페이지 - 등록 요청 관리 탭 관련
+	public List<StoreVO> getSrList(Criteria cri);
+	public int getSrTotal();
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.ojm.domain.BookVO;
+import org.ojm.domain.Criteria;
 import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreVO;
 
@@ -24,5 +25,9 @@ public interface StoreMapper {
 	public int storeLike(@Param("sno") int sno, @Param("amount") int amount);
 	public int addbook(BookVO vo);	
 	public int countStore();
+	
+	// 관리자페이지 - 등록 요청 관리 탭 관련
+	public List<StoreVO> getSrListWithPaging(Criteria cri);
+	public int getSrTotalCount();
 	
 }

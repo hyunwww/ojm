@@ -38,7 +38,6 @@
 		<table>
 			<thead>
 				<tr>
-					<th>번호</th>
 					<th>말머리</th>
 					<th>제목</th>
 					<th>작성자</th>
@@ -58,7 +57,6 @@
 					<c:otherwise>
 						<c:forEach var="board" items="${list }">
 							<tr>
-								<td><c:out value="${board.bno }"></c:out></td>
 								<td><c:out value="${board.bcate }"></c:out></td>
 								<td>
 									<a class="move" href='<c:out value="${board.bno }"/>'>

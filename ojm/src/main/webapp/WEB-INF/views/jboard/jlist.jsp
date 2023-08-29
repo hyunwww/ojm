@@ -38,7 +38,6 @@
 		<table>
 			<thead>
 				<tr>
-					<th>번호</th>
 					<th>지역</th>
 					<th>제목</th>
 					<th>작성자</th>
@@ -57,7 +56,6 @@
 					<c:otherwise>
 						<c:forEach var="job" items="${jlist }">
 							<tr>
-								<td><c:out value="${job.jno }"></c:out></td>
 								<td>
 								<c:out value="${job.jaddress }"></c:out></td>
 								<td>

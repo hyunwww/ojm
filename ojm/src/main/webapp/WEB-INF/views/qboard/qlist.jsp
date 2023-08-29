@@ -46,7 +46,7 @@
 				<table>
 					<tr><td><a href="/admin/reportList">신고 관리</a></td></tr>
 					<tr><td><a href="/qboard/qlist">Q&A 관리</a></td></tr>
-					<tr><td><a href="/admin/storeRegister">등록 요청 관리</a></td></tr>
+					<tr><td><a href="/admin/srList">등록 요청 관리</a></td></tr>
 				</table>
 			</div>
 		</sec:authorize>
@@ -54,7 +54,6 @@
 		<table>
 			<thead>
 				<tr>  
-					<th>번호</th>
 					<th>말머리</th>
 					<th>제목</th>
 					<th>작성자</th>
@@ -73,7 +72,6 @@
 					<c:otherwise>
 						<c:forEach var="qboard" items="${qlist }">
 							<tr>
-								<td><c:out value="${qboard.qno }"></c:out></td>
 								<c:choose>
 									<c:when test="${qboard.qhide eq '0' }">
 										<td><c:out value="${qboard.qcate }"></c:out></td>

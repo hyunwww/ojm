@@ -67,10 +67,6 @@
 		
 		<table>
 			<tr>
-				<td>글 번호</td>
-				<td><input name="jno" value="${jvo.jno }" readonly="readonly" style="background-color: #ccc"></td>
-			</tr>
-			<tr>
 				<td>제목</td>
 				<td><input name="jtitle" value="${jvo.jtitle }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>

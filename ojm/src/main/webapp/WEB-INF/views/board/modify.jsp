@@ -28,10 +28,6 @@
 		<form>
 			<table>
 				<tr>
-					<td>글 번호</td>
-					<td><input id="bno" name="bno" value="${vo.bno }" readonly="readonly" style="background-color: #ccc"></td>
-				</tr>
-				<tr>
 					<td>제목</td>
 					<td><input id="btitle" name="btitle" value="${vo.btitle }"></td>
 				</tr>

@@ -6,6 +6,7 @@ import org.ojm.domain.Criteria;
 import org.ojm.domain.PageDTO;
 import org.ojm.domain.ReportVO;
 import org.ojm.service.ReportService;
+import org.ojm.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +31,12 @@ public class AdminController {
 	@Setter(onMethod_ = @Autowired)
 	private ReportService rpService;
 	
+	@Setter(onMethod_ = @Autowired)
+	private StoreService sService;
+	
+	@Setter(onMethod_ = @Autowired)
+	private StoreService sService;	
+	
 	@GetMapping("/main")
 	public String adminMain() {
 		return "admin/main";
@@ -45,7 +52,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("/rpGet")
-	public String get(@RequestParam("rpno") int rpno, @RequestParam(value="uno",required = false) Integer uno, Model model, Criteria cri) {
+	public String rpGet(@RequestParam("rpno") int rpno, @RequestParam(value="uno",required = false) Integer uno, Model model, Criteria cri) {
 		log.info("rpGet...");
 		model.addAttribute("rpvo", rpService.rpGet(rpno));
 		model.addAttribute("cri", cri);
@@ -53,14 +60,24 @@ public class AdminController {
 		return "admin/reportGet";
 	}
 	
-	@GetMapping("/storeDelete")
-	public String adminStoreDelete() {
-		return "admin/storeDelete";
+	@GetMapping("/srList")
+	public String adminStoreRegister(Model model, Criteria cri) {
+		log.info("srList...");
+		model.addAttribute("srList", sService.getSrList(cri));
+		model.addAttribute("tota", sService.getSrTotal());
+		model.addAttribute("pageMaker", new PageDTO(cri, sService.getSrTotal()));
+		return "admin/storeRegister";
 	}
 	
-	@GetMapping("/storeRegister")
-	public String adminStoreRegister() {
-		return "admin/storeRegister";
+	@GetMapping("/srGet")
+	public String srGet(@RequestParam("sno") int sno, Model model, Criteria cri) {
+		log.info("srGet...");
+		model.addAttribute("svo", sService.storeInfo(sno));
+		int uno = sService.storeInfo(sno).getUno();
+		model.addAttribute(cri)
+		model.addAttribute("cri", cri);
+		model.addAttribute("total", sService.getSrTotal());
+		return "admin/storeGet";
 	}
 	
 	@GetMapping(value = "/{rpno}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})

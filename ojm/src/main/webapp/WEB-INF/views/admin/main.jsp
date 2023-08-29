@@ -28,7 +28,7 @@
 			<table>
 				<tr><td><a href="/admin/reportList">신고 관리</a></td></tr>
 				<tr><td><a href="/qboard/qlist">Q&A 관리</a></td></tr>
-				<tr><td><a href="/admin/storeRegister">등록 요청 관리</a></td></tr>
+				<tr><td><a href="/admin/srList">등록 요청 관리</a></td></tr>
 			</table>
 		</div>
 	</body>

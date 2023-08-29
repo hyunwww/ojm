@@ -44,14 +44,13 @@
 			<table>
 				<tr><td><a href="/admin/reportList">신고 관리</a></td></tr>
 				<tr><td><a href="/qboard/qlist">Q&A 관리</a></td></tr>
-				<tr><td><a href="/admin/storeRegister">등록 요청 관리</a></td></tr>
+				<tr><td><a href="/admin/srList">등록 요청 관리</a></td></tr>
 			</table>
 		</div>
 		
 		<table>
 			<thead>
 				<tr>
-					<th>번호</th>
 					<th>신고 사유</th>
 					<th>제목</th>
 					<th>작성자</th>
@@ -69,7 +68,6 @@
 					<c:otherwise>
 						<c:forEach var="rpvo" items="${reportList }">
 							<tr>
-								<td><c:out value="${rpvo.rpno }"></c:out></td>
 								<td><c:out value="${rpvo.rpreason }"></c:out></td>
 								<td>
 									<a class="move" href='<c:out value="${rpvo.rpno }"/>'>

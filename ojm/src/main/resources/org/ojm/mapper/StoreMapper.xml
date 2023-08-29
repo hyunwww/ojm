@@ -23,7 +23,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{spermmit}, 
 			#{openHour},
 			#{smaxreserv},
-			#{dayOff}
+			#{dayOff},
+			sysdate
 		)
 	</insert>
 	
@@ -197,6 +198,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="countStore" resultType="int">
 		select count(*) from store where spermmit = 1
+	</select>
+	
+	<!-- 관리자페이지 등록 요청 관리 탭 관련 -->
+	<select id="getSrListWithPaging" resultType="org.ojm.domain.StoreVO">
+		<![CDATA[
+			select sno, uno, sname, spermmit, sdate
+			from
+				(select
+				rownum rn, sno, uno, sname, spermmit, sdate from store
+				where]]>
+				<![CDATA[
+				rownum <= #{pageNum} * #{amount})
+				where rn > (#{pageNum} - 1) * #{amount}
+		]]>
+	</select>
+
+	<select id="getSrTotalCount" resultType="int">
+		select count(*) from store where spermmit = 0
 	</select>
 	
 </mapper>

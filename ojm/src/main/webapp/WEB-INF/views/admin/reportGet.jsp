@@ -36,10 +36,6 @@
 		
 		<table>
 			<tr>
-				<td>글 번호</td>
-				<td><input name="rpno" value="${rpvo.rpno }" readonly="readonly" style="background-color: #ccc"></td>
-			</tr>
-			<tr>
 				<td>제목</td>
 				<td><input name="rptitle" value="${rpvo.rptitle }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
