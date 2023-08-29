@@ -596,9 +596,12 @@ p {
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script type="text/javascript">
 		
-		
-	var openHour = 109;
-	var endHour = 118;
+	var getTime = "${store.openHour}";
+	var times = getTime.split('~');
+	
+	var openHour = parseInt(times[0])+100;
+	var endHour = parseInt(times[1])+100;
+	
 	var currentDate = new Date();
 	var realDate = new Date();
 	var nownowd = realDate.getDate(); 	
@@ -606,6 +609,7 @@ p {
 	 //사용자가 시간표에서 선택한 시간
 	 var selectedFirstTime = 24*1;
 	 var doff = String(${store.dayOff});
+	var nowHour = currentDate.getHours(); // 현 시간
 	 var off = doff, substring0 = "0", substring1 = "1", substring2 = "2", 
 	 substring3 = "3", substring4 = "4", substring5 = "5", substring6 = "6";
 	 
@@ -624,7 +628,6 @@ p {
 		var nowYear = currentDate.getFullYear(); // 현 연도
 		var nowMonth = currentDate.getMonth(); // 현 월
 		var nowDate = currentDate.getDate(); // 현 일
-		var nowHours = currentDate.getHours(); // 현 시간
 		var calendarTable = document.getElementById("bookcalendar");
 		var calendarCurrentDate = document.getElementById("maincalendar");
 		var realcalendar = document.getElementById("realcalendar");
@@ -713,8 +716,7 @@ p {
 		//	}
 	
 			cell.onclick = function(){
-				// 셀 클릭시 월, 일 값 전역변수에 저장 
-				
+				// 셀 클릭시 월, 일 값 전역변수에 저장 	
 				cellTime = this.getAttribute('id');
 				cellTime = cellTime*1;
 				selectedMonth = currentDate.getMonth() + 1;
@@ -786,7 +788,7 @@ p {
 					document.getElementById(clickedDateId).style.backgroundColor = "#00FF00";
 					rememberId = clickedDateId;
 				}
-				if(nowDate <= clickedDateNum || nowMonth == realDate.getMonth()){
+				if(nowDate <= clickedDateNum && nowMonth == realDate.getMonth() || nowMonth != realDate.getMonth()){
 				// dayoff에 해당 요일 해당할시 이벤트
 				if(off.includes(substring0) == true){	// 일요일
 					if(clickedDateNumPlus % 7 == 0){
@@ -853,8 +855,7 @@ p {
 						}
 				} 
 				}
-				document.getElementById("show1").value =  "${store.smaxreserv}"; // 현달력 값
-				document.getElementById("show2").value = clickedDateNum;	
+				
 				
 				if(nowDate-1 < clickedDateId || realDate.getMonth() + 1 == nowMonth || nowDate < clickedDateNum && nowMonth != realDate.getMonth()){			
 					buildTimeTable();
@@ -875,6 +876,10 @@ p {
 		var timeTable = document.getElementById("timeTable");
 		var alltime = 24*1;
 		var	overHours = alltime - openHour;
+		var compareTime = nowHour+100;
+					// 테스트용 코드
+					document.getElementById("show1").value = openHour; // 현달력 값
+					document.getElementById("show2").value = compareTime;
 		var cntime = 0;
 		var rcellTime = 0;
 		var cntcnt = 0;
@@ -885,22 +890,24 @@ p {
 		}
 		
 		row = timeTable.insertRow();
-		
+		// 당일 시작후 당일날 끝날때 Time View
 		if(openHour < endHour){
 			for (i = 0; i < endHour - openHour; i++){
 				cntime += 1;
 				cellTime = openHour*1 + i;
-				cellTimeText = cellTime-100 + ":00";
-				inputCellText = cellTimeText;
-				
-				cell = row.insertCell();
-				cell.setAttribute('id', cellTime);
-				cell.innerHTML = inputCellText;
-				cell.bgColor="#CEE3F6";
-				
-				if(cntime % 5 == 0){
-					row = timeTable.insertRow();
-				}
+				//if(cellTime < compareTime){			// 현재 시간기준 지난 시간대 예약 불가	
+					cellTimeText = cellTime-100 + ":00";
+					inputCellText = cellTimeText;
+					
+					cell = row.insertCell();
+					cell.setAttribute('id', cellTime);
+					cell.innerHTML = inputCellText;
+					cell.bgColor="#CEE3F6";
+					
+					if(cntime % 5 == 0){
+						row = timeTable.insertRow();
+					}
+				//}
 				cell.onclick = function(){
 					cntcnt+=1;
 					cellTime = this.getAttribute('id');
@@ -917,13 +924,19 @@ p {
 				}
 			}
 		}
-		
+		// 전날 시작해서 다음날로 끝날때 Time View
 		if(openHour > endHour){
 			for(i = 0; i < overHours + endHour; i++){
 				cntime += 1;
-				cellTime = openHourm*1 + i;
+				cellTime = openHour*1 + i;
+				if(cellTime < 124){					
 				cellTimeText = cellTime-100 + ":00";
 				inputCellText = cellTimeText;
+				}else{
+					cellTimeText = cellTime-124 + ":00";
+					inputCellText = cellTimeText;
+				}
+				
 				
 				cell = row.insertCell();
 				cell.setAttribute('id', cellTime);
@@ -1124,15 +1137,15 @@ p {
 						</tr>
 					</table>
 					<table id="timeTable"></table>
-
-					<input type='text' id="show1"> <input type="text"
+					<!-- 테스트용 뷰 -->
+					<input type='hidden' id="show1"> <input type="hidden"
 						id="show2"><input type='hidden' id='hidesmax' value="${store.smaxreserv }">
 
 					<p>예약 정보 입력</p>
 					<!-- 예약 폼 -->
 					<form action="/store/bookregister" method="post" role="form" id="bookForm">
 						<select name="bman" id="bman" class="bman">
-							<option value="none" selected disabled hidden>인원 선택</option>
+							<option id="bman1" value="none" selected disabled hidden>인원 선택</option>
 						</select><br /> 예약자:<input type="text" id="bname" name="bname"><br />
 						전화번호:<input type="text" id="bphone" name="bphone"><br />
 						요청사항:
@@ -1143,19 +1156,20 @@ p {
 							buildCalendar();
 						</script>
 
-						<input type="text" id="sno" name="sno" value="${store.sno }"><br />
-						<input type="text" id="uno" name="uno" value="${store.uno }"><br />
-						<input type="text" id="bdate" name="bdate"><br /> 
-						<input type="text" id="bday" name="bday"><br /> 
-						<input type="text" id="btime" name="btime"><br /> 
-						<input type="text" id="bdepo" name="bdepo" value="${store.sdepo }"><br />
+						<input type="hidden" id="sno" name="sno" value="${store.sno }"><br />
+						<input type="hidden" id="uno" name="uno" value="${store.uno }"><br />
+						<input type="hidden" id="bdate" name="bdate"><br /> 
+						<input type="hidden" id="bday" name="bday"><br /> 
+						<input type="hidden" id="btime" name="btime"><br /> 
+						<input type="hidden" id="bdepo" name="bdepo" value="${store.sdepo }"><br />
 						<input type="submit" value="예약 신청" data-oper="bookreg" id="cbtn">
 						<input type="button" value="취소" id="cbtn" data-oper="cancle"><br />
 					</form>
 					<button id="close-modal2">닫기</button>
 				</div>
 			</div>
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+			<!-- book -->
+		<!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 			<script type="text/javascript">
 			function bmanget(){
 				var smax = document.getElementById('hidesmax').value;
@@ -1166,9 +1180,6 @@ p {
 					var option = $("<option value="+i+">"+i+"</option>");
 					$(".bman").append(option);						
 				}
-			}
-			function bmanclear(){
-				
 			}
 			$(function(){
 			var bookForm = $("#bookForm");
@@ -1222,6 +1233,10 @@ p {
 	openModalBtn2.addEventListener("click", () => {
 	  modal2.style.display = "block";
 	  document.body.style.overflow = "hidden"; // 스크롤바 제거
+	  var manman = document.getElementById("hidesmax").value;
+	  if(manman == "0"){	  
+	  document.getElementById("bman").style.display = "none";
+	  }
 	  checkedToday();
 	  bmanget();
 	});
@@ -1230,6 +1245,7 @@ p {
 	  modal2.style.display = "none";
 	  document.body.style.overflow = "auto"; // 스크롤바 보이기
 	});
+	<!-- book -->
 </script>
 		</div>
 
