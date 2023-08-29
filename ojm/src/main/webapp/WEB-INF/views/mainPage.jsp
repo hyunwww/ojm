@@ -42,6 +42,18 @@
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 	var user = '${uvo}';
+	var errorcode = '${errorCode}';
+	switch (errorcode) {
+	case 'noInfo':
+		alert("존재하지 않는 매장입니다.");
+		break;
+	case 'access':
+		alert("잘못된 접근입니다.");
+		break;
+	
+	default:
+		break;
+	}
 	
 	
 </script>
@@ -66,7 +78,7 @@
 			  <li><a href="/jboard/jlist">3</a></li>
 			</ul>
           </li>
-          <li><a href="/store/storeList">Search</a></li>
+          <li><a href="/store/search">Search</a></li>
           <li><a href="/store/register">Register</a></li>
           <sec:authorize access="hasRole('ROLE_user')">
           	<li><a href="/user/myPage/main">myPage</a></li>

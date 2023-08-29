@@ -269,14 +269,6 @@ $(function() {
 					console.log("현재 위치로부터의 거리 : " + distance + " km");
 					$("#distance").html(distance+" km");
 					
-					// 커스텀 오버레이를 생성합니다
-					var customOverlay = new kakao.maps.CustomOverlay({
-					    map: popMap,
-					    position: currentLocMarker.getPosition(),
-					    content: '<div class="customInfo" style="padding:3px;">현재 위치</div>',
-					    xAnchor: 0.45,
-					    yAnchor: 2.5
-					});
 
 					
 				}, 

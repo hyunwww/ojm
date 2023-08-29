@@ -83,39 +83,40 @@ public class StoreServiceImpl implements StoreService{
 		StoreVO info = mapper.storeInfo(sno);
 		
 		String result = "";
-		
-		// 데이터 >> 요일
-		if (info.getDayOff() != null && !info.getDayOff().equals("")) {
-			for (String day : info.getDayOff().split("")) {
-				switch (day) {
-				case "1":
-					result += "월요일,";
-					break;
-				case "2":
-					result += "화요일,";
-					break;
-				case "3":
-					result += "수요일,";
-					break;
-				case "4":
-					result += "목요일,";
-					break;
-				case "5":
-					result += "금요일,";
-					break;
-				case "6":
-					result += "토요일,";
-					break;
-				case "0":
-					result += "일요일,";
-					break;
-				default:
-					break;
+		if (info != null) {
+			// 데이터 >> 요일
+			if (info.getDayOff() != null && !info.getDayOff().equals("")) {
+				for (String day : info.getDayOff().split("")) {
+					switch (day) {
+					case "1":
+						result += "월요일,";
+						break;
+					case "2":
+						result += "화요일,";
+						break;
+					case "3":
+						result += "수요일,";
+						break;
+					case "4":
+						result += "목요일,";
+						break;
+					case "5":
+						result += "금요일,";
+						break;
+					case "6":
+						result += "토요일,";
+						break;
+					case "0":
+						result += "일요일,";
+						break;
+					default:
+						break;
+					}
 				}
+				info.setDayOff(result.substring(0, result.length()-1));
+			}else {
+				info.setDayOff("없음");
 			}
-			info.setDayOff(result.substring(0, result.length()-1));
-		}else {
-			info.setDayOff("없음");
 		}
 		
 		

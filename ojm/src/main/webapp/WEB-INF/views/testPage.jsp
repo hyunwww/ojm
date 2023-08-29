@@ -12,7 +12,8 @@
 	    				//새로고침 판단
 	    		    	var refreshCheck = performance.getEntriesByType("navigation")[0];
 	    		    	if (refreshCheck.type === 'reload') {
-	    		    		getStoreListByRownum();
+	    		    		//getStoreListByRownum();
+	    		    		getAllStore();
 	    		    	}else{
 	    					loadFromSession(); 
 	    		    	}
@@ -22,7 +23,8 @@
     		<c:otherwise>
 	    		<script type="text/javascript">
 	    			$(function() {
-	    				getStoreListByRownum();
+	    				//getStoreListByRownum();
+	    				getAllStore();
 					})
 	    		</script>
     		</c:otherwise>
@@ -99,7 +101,11 @@
 			</div>
 			<div class="col-lg-8 p-3 min-vh-100">
 				<div class="mapBox" style="position: sticky; background-color: white;">
-					<div class="mapContainer"></div>
+					<div class="mapContainer">
+						<div style="text-align: center; position: relative; z-index: 10; top: 3px;">
+							<button type="button" class="getMoreInfo" style="display: none;">결과 더 보기 <span class="infoState"></span></button>
+						</div>
+					</div>
 					<div style="text-align: right; padding: 10px;">
 						<select class="form-select form-select-sm" name="sort" style="width: 15%; display: inline-block;">
 							<option selected>정렬기준</option>
@@ -117,12 +123,6 @@
 				</section>
 			</div>
 			<div class="col p-3">
-				<div class="row mx-auto align-items-center">
-					<div class="col-12 card rankingArea">
-						<table>
-						</table>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -180,7 +180,9 @@
 		
 		//순위 차트 불러오기
 		getRanking();
-		
+		$(".getMoreInfo").click(function() {
+			getFromStoreResult(point, 5);
+		});
 		//검색 버튼
 		$("#searchBtn").on("click", function() {
 			if ($("input[name='searchInput']").val() == '') {
@@ -217,7 +219,7 @@
 				point = 1;
 				storeResult = [];
 				$("#searchResult .row").empty();
-				getStoreListByRownum();
+				getAllStore();
 				return;
 			}
 			
@@ -471,8 +473,19 @@
 	}
 	//amount 만큼 불러오기  
 	function getFromStoreResult(current, amount) {
+		console.log(storeResult);
+		
+		//결과 더 보기 갱신
+		if (storeResult.length > amount*point) {
+			$(".getMoreInfo").show();
+			$(".infoState").html(""+point+"/"+(Math.ceil(storeResult.length/amount)));
+		}else{
+			$(".getMoreInfo").hide();
+		}
+		
 		point++;
 		console.log("point : " + current);
+		
 		
 		if (storeResult.length > 0 && storeResult != null) {
 			$(".mapContainer").show();
@@ -609,6 +622,51 @@
 		});
 	}
 	
+	function getAllStore() {	//전체 목록 ajax로 로드
+		
+		var blankArr = [];
+		blankArr.push("");
+		$.ajax({
+		      type: "get",
+		      url: "/store/search/filter",
+		      data: {
+		    	  scate : blankArr,
+		    	  location : "",
+		    	  delivery : blankArr,
+		    	  reservation : blankArr
+		      },
+		      success: function (result, status, xhr) {
+		    	  bounds = new kakao.maps.LatLngBounds();
+			  	  map = new kakao.maps.Map($(".mapContainer")[0],
+			  				{ 
+			  					center: new kakao.maps.LatLng(0, 0), 
+			  					level: 4
+			  				}); //지도 생성 및 객체 리턴
+		    	  $("#searchResult .row").empty();
+		    	  
+		    	  storeResult = [];
+		    	  if (result.length > 0) {
+			    	  for (var store of result) {
+			    		  //거리 정보(현재 위치 기준)부여
+			    		  store.distance = getDistance(Number(store.kd), Number(store.wd), currPosition.coords.latitude, currPosition.coords.longitude)
+			    		//출력될 태그 부여
+			    		store.str = '';
+			    		store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
+			    		store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
+			    		store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+			    		store.str += '<p>'+store.saddress+'</p>';
+			    		store.str += '</div>';
+			    		store.str += '</div>';
+							
+			    		storeResult.push(store);
+					  }
+			    	  
+			    	  
+			    	  getFromStoreResult(point, 5);
+				}
+		      }
+		});
+	}
 </script>
 <script type="text/javascript">/* 스크롤 */
 	
@@ -617,11 +675,7 @@
 	    // entries는 IntersectionObserverEntry 객체의 리스트로 배열 형식을 반환합니다.
 	    entries.forEach(entry => {
 	        if(entry.isIntersecting){
-	        	if (filterState) {
-	        		getFromStoreResult(point, 5);
-				}else{
-		        	getStoreListByRownum();
-				}
+	        	getFromStoreResult(point, 5);
 	        }
 	    });
 	};
@@ -737,6 +791,8 @@
 			kakao.maps.event.addListener(marker, 'click', function() {
 				$("#searchResult div[data-sno='"+sno+"']").focus();
 			});
+			
+			
 		}
 		
 		return addE();

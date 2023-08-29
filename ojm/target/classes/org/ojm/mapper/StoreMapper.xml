@@ -90,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 매장 정보 수정  -->
 	<update id="updateStore" parameterType="org.ojm.domain.StoreVO">
 		update store set scate = #{scate} , sdepo = #{sdepo} , sphone = #{sphone} , openhour = #{openHour} , scrn = #{scrn} , dayoff = #{dayOff},
-		smaxreserv = #{smaxreserv}
+		smaxreserv = #{smaxreserv}, sdeli = #{sdeli}
 		where sno = #{sno}
 	</update>
 	

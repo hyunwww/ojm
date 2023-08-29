@@ -168,6 +168,10 @@
 		height: 150px;
 		object-fit : fill;
 	}
+	.warning-message{
+		font-size: .875em;
+		color: #dc3545;
+	}
 </style>
 </head>
 <script type="text/javascript">
@@ -197,7 +201,7 @@
 			  <li><a href="#">3</a></li>
 			</ul>
           </li>
-          <li><a href="/store/storeList">Search</a></li>
+          <li><a href="/store/search">Search</a></li>
           <li><a href="/store/register">Register</a></li>
           <li><a href="/user/myPage/main">myPage</a></li>
           <li><a href="/user/login">Login</a></li>
