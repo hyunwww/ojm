@@ -32,7 +32,6 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @RequestMapping("/board/*")
 public class BoardController {
-	// 커밋용 코드
 	// 서비스 객체 받아오기
 	@Setter(onMethod_ = @Autowired)
 	private BoardService service;

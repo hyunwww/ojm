@@ -165,12 +165,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{rpcontent}
 		)
 	</insert>
-	<!-- 커밋용 코드 -->
+	<!-- 예약 등록 -->
 	<insert id="addbook" parameterType="org.ojm.domain.BookVO">
 		insert into book (bkno, sno,
-		uno, bdate, btime, bman, bname, bphone, bdepo, breq)
+		uno, bdate, btime, bman, bname, bphone, bdepo, breq, bcdate)
 		values(seq_bkno.nextval, #{sno}, #{uno}, #{bdate}, #{btime}, #{bman}, #{bname}, #{bphone},
-		#{bdepo}, #{breq})
+		#{bdepo}, #{breq}, sysdate)
 
 	</insert>
 	

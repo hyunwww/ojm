@@ -194,7 +194,7 @@ public class StoreServiceImpl implements StoreService{
 	// 스토어 예약 신청 
 	@Override
 	public void addBook(BookVO vo) {
-		log.info("register serv...");
+		log.info("register serv...@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		mapper.addbook(vo);
 	}
 	

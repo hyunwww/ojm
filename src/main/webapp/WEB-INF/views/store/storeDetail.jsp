@@ -592,20 +592,20 @@ p {
 	
 </script>
 </head>
+<!-- 달력 스크립트 -->
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script type="text/javascript">
 		
 		
-		var openHour = 109;
-		var endHour = 118;
-		var currentDate = new Date();
-		var realDate = new Date();
+	var openHour = 109;
+	var endHour = 118;
+	var currentDate = new Date();
+	var realDate = new Date();
 	 	
-	 	var openHourm = openHour-24;
-	 	//사용자가 시간표에서 선택한 시간
-	 	var selectedFirstTime = 24*1;
-		//var year = currentDate.getFullYear().toString;
-		//var result = year.substring(2, 8);
+	 var openHourm = openHour-24;
+	 //사용자가 시간표에서 선택한 시간
+	 var selectedFirstTime = 24*1;
+	
 	function buildCalendar() { // 달력 만드는 함수
 		var row = null; // 높이
 		var cnt = 0; // 요일 카운트 일 1 월 2 화 3 수 4 목 5 금 6 토 7 cnt를 7로 나눌시 
@@ -656,16 +656,21 @@ p {
 				cell.innerHTML = "<font color=skyblue>" + i + "</font>";
 				row = calendarTable.insertRow();
 			}
-			if (i <= nowDate && nowMonth == realDate.getMonth()){	// 일수가 현 일수보다 전이고 표시된 월과 현재 월이 같을 경우 
+			if (i <= nowDate-1 && nowMonth == realDate.getMonth()){	// 일수가 현 일수보다 전이고 표시된 월과 현재 월이 같을 경우 
 				document.getElementById(i).style.color = "#585858";	// 표시되는 일수 회색 표시
 				//document.getElementById(i).readOnly = true; // readonly 활성화
 			}
-			if (nowMonth > realDate.getMonth()+1){					// 표시된 월이 현재 월보다 2이상 큰경우 (예약 가능날짜 이번달 기준 다음달까지 제한)
-				document.getElementById(i).style.color = "#585858";
+			 if (i == nowDate && nowMonth == realDate.getMonth()){
+				document.getElementById(i).style.color = "#FFFFFF";
+				document.getElementById(i).style.backgroundColor = "#00FF00";
+			} 
+				
+		//	if (nowMonth > realDate.getMonth()+1){					// 표시된 월이 현재 월보다 2이상 큰경우 (예약 가능날짜 이번달 기준 다음달까지 제한)
+		//		document.getElementById(i).style.color = "#585858";
 				//document.getElementById(i).readOnly = true; // readonly 활성화
-			}
-			cell.onclick = function() {
-				//selectedTimeAndTotalPriceInit();	클릭마다 타임테이블이 쌓이기때문에 초기화 필요
+		//	}
+	
+			cell.onclick = function(){
 				// 셀 클릭시 월, 일 값 전역변수에 저장 
 				cellTime = this.getAttribute('id');
 				cellTime = cellTime*1;
@@ -676,51 +681,73 @@ p {
 				clickedMonth = currentDate.getMonth() + 1;
 				clickedDateId = this.getAttribute('id'); // this=cell에 있는 id 속성 변수에적용
 				clickedDate = clickedDateId;
+				clickedDateNum = parseInt(clickedDateId);
 				clickedDayqs = parseInt(clickedDateId)+cnttt;
+				clickedrealDate = parseInt(clickedDateId)-cnttt;
 				clickedDate = clickedDate >= 10 ? clickedDate : '0'
 						+ clickedDate;
 				clickedMonth = clickedMonth >= 10 ? clickedMonth : '0'
 						+ clickedMonth;
 				clickedYMD = clickedYear + "/" + clickedMonth + "/"
 						+ clickedDate;
+				if(clickedDate != nowDate){	
+				clearAll();
+				}
+				
 				if(clickedDayqs < 7){ // 1째 주 getDay 값 무슨요일인지 판별 ex) getDay가 0이면 일요일 토요일은 6
 					clickedDay = clickedDayqs;
-					}
+				}
 				else if(7 <= clickedDayqs && clickedDayqs < 14){ // 2번째 주 
-				clickedDay = clickedDayqs - 7;
+					clickedDay = clickedDayqs - 7;
 				}
 				else if(14 <= clickedDayqs && clickedDayqs < 21){ // 3번째 주 
 					clickedDay = clickedDayqs - 14;
-					}
+				}
 				else if(21 <= clickedDayqs && clickedDayqs < 28){ // 4번째 주 
 					clickedDay = clickedDayqs - 21;
-					}
+				}
 				else if(28 <= clickedDayqs && clickedDayqs < 35){ // 5번째 주 
 					clickedDay = clickedDayqs - 28;
-					}
+				}
 				document.getElementById("bdate").value = clickedYMD;
-				
-				cntt+=1;
+				if(nowDate <= clickedDateNum && nowMonth == realDate.getMonth() || nowMonth != realDate.getMonth()){
+					cntt+=1;
+				}	
 				
 				document.getElementById("bday").value = clickedDay;
 				if(cntt == 1){
-				rememberId = clickedDateId;					
+					rememberId = clickedDateId;	
 				}
-				if(nowDate >= clickedDateId && nowMonth == realDate.getMonth() || nowMonth > realDate.getMonth()+1){
-					document.getElementById("date").value = "";
-					alert("예약할 수 없는 날짜입니다.")
+				showTimeTable();
+				if(nowDate > clickedDateNum && nowMonth == realDate.getMonth()){
+					document.getElementById(rememberId).style.color = "black";
+					document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
+					alert("예약할 수 없는 날짜입니다.");
+					hideTimeTable();
+					clearAll();
 				}
-				if(nowDate < clickedDateId && nowMonth == realDate.getMonth()){
-					
-				document.getElementById(rememberId).style.color = "black";
-				document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
-				document.getElementById(clickedDateId).style.color = "#FFFFFF";
-				document.getElementById(clickedDateId).style.backgroundColor = "#00FF00";
-				rememberId = clickedDateId;
+				if(clickedDateNum > nowDate && nowMonth == realDate.getMonth()){
+					document.getElementById(nowDate).style.color = "black";
+					document.getElementById(nowDate).style.backgroundColor = "#FFFFFF";
+				}	
+				if (nowDate < clickedDateNum && nowMonth == realDate.getMonth()){
+					document.getElementById(clickedDateNum).style.color = "black";
+					document.getElementById(clickedDateNum).style.backgroundColor = "#FFFFFF";
 				}
-				buildTimeTable();
+				if(nowDate <= clickedDateNum && nowMonth == realDate.getMonth() || realDate.getMonth() + 1 == nowMonth){					
+					document.getElementById(rememberId).style.color = "black";
+					document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
+					document.getElementById(clickedDateId).style.color = "#FFFFFF";
+					document.getElementById(clickedDateId).style.backgroundColor = "#00FF00";
+					rememberId = clickedDateId;
+				}
+				
+				document.getElementById("show1").value = nowDate; // 현달력 값
+				document.getElementById("show2").value = realDate.getMonth();	// 변하지 않는 월값
+				if(nowDate-1 < clickedDateId || realDate.getMonth() + 1 == nowMonth || nowDate < clickedDateNum && nowMonth != realDate.getMonth()){			
+					buildTimeTable();
+				}			
 			}
-
 		}
 
 		if (cnt % 7 != 0) { // 마지막주에 공백포함 마지막날까지 33 % 7
@@ -800,6 +827,7 @@ p {
 					cellTime = this.getAttribute('id');
 					document.getElementById("btime").value = cellTime;
 					
+
 					if(cntcnt == 1){
 						rcellTime = cellTime;
 					}
@@ -825,7 +853,9 @@ p {
 				.getMonth() + 1, currentDate.getDate())
 			return;
 		}
-		buildCalendar();
+		buildCalendar();	// 달력 생성
+		clearAll();			// 전달로 이동시 초기화
+		checkedToday();		// 초기화와 동시에 오늘 날짜 선택
 	}
 	
 	function nextCalendar() {
@@ -838,11 +868,45 @@ p {
 			return;	
 		}
 		buildCalendar();
+		clearAll();
 	}
 	function check() {
 		console.log("current : " + currentDate.getMonth() + ", " + realDate.getMonth());
 	}
-	
+	function checkedToday(){
+		var nowYear = currentDate.getFullYear();
+		var crMonth = parseInt(currentDate.getMonth())+1;
+		var nowDate = currentDate.getDate();
+		var nowday = currentDate.getDay();
+		if(currentDate.getMonth() == realDate.getMonth()){
+				
+				var ak12 = nowYear + "/" + crMonth + "/" + nowDate;
+				
+				
+				document.getElementById("bdate").value = ak12;
+				document.getElementById("bday").value = nowday;
+				buildTimeTable();
+			}
+		
+	}
+	function clearAll(){		// 다음으로 넘어가거나 이전할때 테이블 데이터 남아있으므로 해당 함수 필요 
+		document.getElementById("bdate").value = '';
+		document.getElementById("bday").value = '';
+		document.getElementById("bman").value = 'none';
+		document.getElementById("bname").value = '';
+		document.getElementById("bphone").value = '';
+		document.getElementById("breq").value = '';
+		document.getElementById("btime").value = '';
+		buildTimeTable();
+	}
+	function hideTimeTable(){
+		const row = document.getElementById('timeTable');
+		row.style.display = 'none';
+	}
+	function showTimeTable(){
+		const row = document.getElementById('timeTable');
+		row.style.display = '';	
+	}
 </script>
 
 <body>
@@ -875,10 +939,13 @@ p {
 			<p>
 				이름 : ${store.sname }<span id="distance"></span>
 			</p>
+			<p> 데이오프 : ${dayOff }[0]
+			</p>
 			<p>주소 : ${store.saddress }</p>
 			<p>휴무일 : ${dayOff }</p>
 			<p>영업시간 : ${store.openHour }</p>
 			<p>예약금 : ${store.sdepo }</p>
+			<p>예약금 : ${store.smaxreserv }</p>
 			<p>
 				<c:choose>
 					<c:when test="${store.sdeli eq 1 }">
@@ -947,22 +1014,15 @@ p {
 						</tr>
 					</table>
 					<table id="timeTable"></table>
-					<h2></h2>
-					<p>예약 정보 입력.</p>
-					<form action="/store/bookregister" method="post" role="form">
-						<select name="bman" id="bman">
+
+					<input type='text' id="show1"> <input type="text"
+						id="show2"><input type='hidden' id='hidesmax' value="${store.smaxreserv }">
+
+					<p>예약 정보 입력</p>
+					<!-- 예약 폼 -->
+					<form action="/store/bookregister" method="post" role="form" id="bookForm">
+						<select name="bman" id="bman" class="bman">
 							<option value="none" selected disabled hidden>인원 선택</option>
-							<!-- 관리자 계정이 아니면 공지사항 보이지 않도록 수정해야 함 -->
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							<option value="6">6</option>
-							<option value="7">7</option>
-							<option value="8">8</option>
-							<option value="9">9</option>
-							<option value="10">10</option>
 						</select><br /> 예약자:<input type="text" id="bname" name="bname"><br />
 						전화번호:<input type="text" id="bphone" name="bphone"><br />
 						요청사항:
@@ -970,39 +1030,93 @@ p {
 						<br />
 						<h6 align="center" id="realcalendar"></h6>
 						<script type="text/javascript">
-				buildCalendar();
-			</script>
+							buildCalendar();
+						</script>
 
-						<input type="hidden" id="sno" name="sno" value="${store.sno }"><br />
-						<input type="hidden" id="uno" name="uno" value="${store.uno }"><br />
-						<input type="hidden" id="bdate" name="bdate"><br /> <input
-							type="hidden" id="bday"><br /> <input type="hidden"
-							id="btime" name="btime"><br /> <input type="hidden"
-							id="bkno" name="bkno" value="1001"><br /> <input
-							type="hidden" id="bdepo" name="bdepo" value="5000"><br />
-						<!--<input type="text" id="openHour" name="openHour" value="9"><br /> 
-							<input type="text" id="endHour" name="endHour" value="18"><br /> -->
-
-						<!--  예약 인원, 요일 제한 미구현 보류 미구현 기본값 1-->
-						<%-- <input type="text" id="bman" name="bman" value="${param.dayoff }"> --%>
-
-						<input type="submit" value="예약 신청" id="cbtn"> <input
-							type="button" value="취소" id="cbtn"><br />
+						<input type="text" id="sno" name="sno" value="${store.sno }"><br />
+						<input type="text" id="uno" name="uno" value="${store.uno }"><br />
+						<input type="text" id="bdate" name="bdate"><br /> 
+						<input type="text" id="bday" name="bday"><br /> 
+						<input type="text" id="btime" name="btime"><br /> 
+						<input type="text" id="bdepo" name="bdepo" value="${store.sdepo }"><br />
+						<input type="submit" value="예약 신청" data-oper="bookreg" id="cbtn">
+						<input type="button" value="취소" id="cbtn" data-oper="cancle"><br />
 					</form>
 					<button id="close-modal2">닫기</button>
 				</div>
 			</div>
-<script type="text/javascript"> /* 예약 모달  */
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+			<script type="text/javascript">
+			function bmanget(){
+				var smax = document.getElementById('hidesmax').value;
+				var numsmax = parseInt(smax);
+			
+					
+				for(var i = 1; i <= numsmax; i++){
+					var option = $("<option value="+i+">"+i+"</option>");
+					$(".bman").append(option);						
+				}
+			}
+			function bmanclear(){
+				
+			}
+			$(function(){
+			var bookForm = $("#bookForm");
+			
+				$("input").on('click', function(e){
+					e.preventDefault();		//  입력 이벤트 아닐시 이벤트 비활성화
+				
+					var operation = $(this).data("oper");
+					
+					if(operation === 'bookreg'){
+						
+					
+						if(document.getElementById("bman").value == 'none'){
+							alert("예약 인원을 선택해야합니다.");
+							return;
+						}
+						else if(document.getElementById("bname").value == ''){
+							alert("예약자 이름 입력");
+							return;
+						}
+						else if(document.getElementById("bphone").value == ''){
+							alert("휴대폰 번호 입력");
+							return;
+						}
+						else if(document.getElementById("bdate").value == ''){
+							alert("날짜 선택");
+							return;
+						}
+						else if(document.getElementById("btime").value == ''){
+							alert("시간 선택");
+							return;
+						}
+
+						bookForm.attr("action", "/store/bookregister");	
+						
+							
+						
+						bookForm.submit();
+					
+				
+						}
+					});
+				});
+			
+			</script>
+			<script type="text/javascript"> 
 	const modal2 = document.getElementById("modal2");
 	const openModalBtn2 = document.getElementById("open-modal2");
 	const closeModalBtn2 = document.getElementById("close-modal2");
 	
-	// 모달창 열기
+	// 예약 모달 열기
 	openModalBtn2.addEventListener("click", () => {
 	  modal2.style.display = "block";
 	  document.body.style.overflow = "hidden"; // 스크롤바 제거
+	  checkedToday();
+	  bmanget();
 	});
-	// 모달창 닫기
+	// 예약 모달 닫기
 	closeModalBtn2.addEventListener("click", () => {
 	  modal2.style.display = "none";
 	  document.body.style.overflow = "auto"; // 스크롤바 보이기
@@ -1061,9 +1175,9 @@ p {
 						<!--<input type="hidden" name="pageNum" value="1">
 						<input type="hidden" name="amount" value="10">-->
 					</div>
-					<button type="button" id="close-modal" data-oper="reset"
-						class="btn-reset">취소</button>
-					<button type="submit" data-oper="register" class="btn">등록</button>
+					<input type="button" value="취소" id="close-modal" data-oper="reset"
+						class="btn-reset"> <input type="button" value="등록"
+						data-oper="bookreg" class="btn">
 				</div>
 				<input type="hidden" name="sno" value="${store.sno }">
 			</form>
@@ -1119,7 +1233,7 @@ p {
 	</div>
 
 
-	<!-- 커밋용 코드 -->
+	<!-- 리뷰 모달 -->
 	<script type="text/javascript"> /* review 모달 스크립트  */
 		function myFunction(drawstar) {
 			//const drawstar = document.querySelector('.star input');

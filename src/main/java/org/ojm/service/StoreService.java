@@ -36,4 +36,5 @@ public interface StoreService {
 	//book 예약 관련 	
 	public void addBook(BookVO vo);
 	
+	
 }

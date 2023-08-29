@@ -111,7 +111,7 @@ public class StoreController {
 	// 매장 전체 리스트 ( test 끝 , 임시 사용 용도 )
 	@GetMapping("/storeList")
 	public String storeList(Model model) {
-		log.info("getting storeListtttt");
+		log.info("getting storeList");
 		List<StoreVO> list = service.allStores();
 		
 		
@@ -498,9 +498,8 @@ public class StoreController {
 	}
 	@PostMapping("/bookregister")
 	public String addBook(BookVO vo, RedirectAttributes rttr, Model model) {
+		// 안될겨우 principal 받자
 		log.info(vo);
-		log.info(vo);
-		log.info(vo.getBdate());
 		service.addBook(vo);
 		log.info("addBook.......");
 		rttr.addFlashAttribute("result", "ok");
