@@ -183,16 +183,19 @@ $(function() {
 			    	  	 current : nowLike},
 			      success: function (result, status, xhr) {
 			    	  if(result){// 좋아요 적용
-			    		  $("#utilBox span").addClass("enabledLike");
-			    		  $("#utilBox span").removeAttr("id");
 			    		  slike++;
-			    		  $("#utilBox span").html("좋아요 " + slike);
+			    	  	  //아이콘 변경
+			    	  	  $(".likeBtn i").removeClass("bi-hand-thumbs-up");
+			    	  	  $(".likeBtn i").addClass("bi-hand-thumbs-up-fill");
+			    	  	  //숫자 부분
+			    		  $(".likeBtn").text(" "+slike);
 			    		  nowLike = true;
 			    	  }else{//해제
-			    		  $("#utilBox span").removeClass("enabledLike");
-			    		  $("#utilBox span").attr("id", "likeBtn");
 			    		  slike--;
-			    		  $("#utilBox span").html("좋아요 " + slike);
+			    	  	  $(".likeBtn i").removeClass("bi-hand-thumbs-up-fill");
+			    		  $(".likeBtn i").addClass("bi-hand-thumbs-up");
+			    	  	  
+			    		  $(".likeBtn").text(" "+slike);
 			    		  nowLike = false;
 			    	  }
 			    	  
@@ -432,10 +435,10 @@ $(function() {
 				<div id="utilBox" style="text-align: left;">
 					<c:choose>
 						<c:when test="${isLike }">
-							<span class="enabledLike"><i class="bi bi-hand-thumbs-up-fill"></i> ${store.slike }</span>
+							<span class="likeBtn"><i class="bi bi-hand-thumbs-up-fill"></i> ${store.slike }</span>
 						</c:when>
 						<c:otherwise>
-							<span id="likeBtn"><i class="bi bi-hand-thumbs-up"></i> ${store.slike }</span>
+							<span class="likeBtn"><i class="bi bi-hand-thumbs-up"></i> ${store.slike }</span>
 						</c:otherwise>
 					</c:choose>
 					<p><i class="bi bi-star-fill"></i> ${store.sstar }</p>
