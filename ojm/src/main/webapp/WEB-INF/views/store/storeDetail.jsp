@@ -1,216 +1,53 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/security/tags"
-	prefix="sec"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<style type="text/css">
-#real {
-	
-}
-
-#breq {
-	resize: none;
-}
-
-document body {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
-#btnContainer button {
-	color: white;
-	background-color: purple;
-	border-radius: 3px;
-}
-
-.wrapper {
-	width: 800px;
-	text-align: center;
-	border: 1px solid black;
-	margin: auto;
-}
-
-#reportBtn {
-	color: white;
-	background: maroon;
-}
-
-#storeDetail {
-	text-align: left;
-}
-
-.enabledLike { /* 체크 되어있음  */
-	color: white;
-	background: teal;
-}
-
-#likeBtn { /* 체크 안되어있음  */
-	color: white;
-	background: purple;
-}
-
-.mapModal {
-	position: absolute;
-	width: 1000px;
-	height: 700px;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	overflow: hidden;
-}
-
-.map-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.8);
-	display: none;
-	z-index: 1;
-}
-
-.reportOverlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.8);
-	display: none;
-	z-index: 1;
-}
-
-.reportModal {
-	width: fit-content;
-	height: auto;
-	margin: auto;
-	background-color: white;
-	padding: 15px;
-	border-radius: 5px;
-	position: relative;
-	top: 10%;
-}
-
-.recContainer {
-	width: 100%;
-	height: auto;
-	border: 1px solid black;
-}
-
-p {
-	position: relative;
-}
-
-#distance {
-	position: absolute;
-	padding: 10px;
-	right: 0;
-}
-
-.customInfo {
-	padding: 2px;
-	background-color: whitesmoke;
-	border: 2px solid indianred;
-	border-radius: 5px;
-	font-family: sans-serif;
-}
-
-.card {
-	height: auto;
-	width: -webkit-fill-available;
-	border-radius: 15px;
-	display: inline-block;
-	position: relative;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
-		rgba(0, 0, 0, 0.19);
-	overflow: hidden;
-	padding: 15px;
-	background-color: floralwhite;
-}
-
-.owl-next, .owl-prev {
-	background-color: rgba(245, 126, 100, 0.6);
-	color: white;
-	border-radius: 10px;
-	width: auto;
-	display: inline-block;
-	padding: 10px;
-	cursor: pointer;
-	position: relative;
-	transform: translateY(-50%);
-}
-
-.owl-prev {
-	left: -24rem;
-	top: -3rem;
-	z-index: 5;
-}
-
-.owl-next {
-	right: -24rem;
-	top: -3rem;
-	z-index: 5;
-}
-
-.owl-lastItem {
-	background-color: rgba(245, 126, 100, 0.2);
-}
-
-#modal2 {
-	position: fixed;
-	z-index: 7;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgba(0, 0, 0, 0.4);
-	display: none;
-}
-
-.modal-content2 {
-	background-color: #fefefe;
-	margin: 15% auto;
-	padding: 20px;
-	border: 1px solid #888;
-	width: 80%;
-}
-
-.close {
-	color: #aaa;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
-}
-
-.close:hover, .close:focus {
-	color: black;
-	text-decoration: none;
-	cursor: pointer;
-}
-
-#cbtn {
-	background-color: aqua;
-	color: white;
-}
-</style>
-<link rel="stylesheet" href="/resources/css/imgPopup.css">
-<link rel="stylesheet" href="/resources/css/reviewModal.css">
-<link rel="stylesheet" href="/resources/css/owl.theme.default.min.css">
-<link rel="stylesheet" href="/resources/css/owl.carousel.min.css">
-<script src="https://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
-<script type="text/javascript" src="/resources/js/imgPopup.js"></script>
-<script type="text/javascript" src="/resources/js/owl.carousel.min.js"></script>
-<!-- 지도 관련 스크립트 -->
+    pageEncoding="UTF-8"%>
+<%@ include file="../testHeader.jsp" %>
 <script type="text/javascript">
+var errorcode = '${errorCode}';
+//슬라이더 생성
+$(function() {
+	$('.owl-carousel').owlCarousel({
+	    loop: false,
+	    mouseDrag : false,
+	    freeDrag : false,
+	    margin: 10,
+	    items : 1,
+	    nav:false,
+	    dots:false,
+	    center:true
+	});
+	// Go to the next item
+	$('.owl-next').click(function() {
+	    $(".owl-carousel").trigger('next.owl.carousel');
+	});
+	// Go to the previous item
+	$('.owl-prev').click(function() {
+	    // With optional speed parameter
+	    // Parameters has to be in square bracket '[]'
+	     $(".owl-carousel").trigger('prev.owl.carousel', [300]);
+	});
+	
+	//넘기기 버튼 비활성화
+	$('.owl-carousel').on('changed.owl.carousel', function(e) {
+		if (e.item.index == 0) {
+			$(".owl-prev").addClass("owl-lastItem");
+		}else{
+			$(".owl-prev").removeClass("owl-lastItem");
+		}
+		if (e.item.index == e.item.count - 1) {
+			$(".owl-next").addClass("owl-lastItem");
+		}else{
+			$(".owl-next").removeClass("owl-lastItem");
+		}
+		
+	});
+	if ($(".owl-stage .cons").length < 1) {
+		$(".owl-next").addClass("owl-lastItem");
+	}
+});
+	
+</script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
+<script type="text/javascript"> <!-- 지도 관련 스크립트 -->
 	
 	//필요 유저 정보 ?
 	var nowLike = '${isLike}';
@@ -278,7 +115,7 @@ p {
 				$("#mapContainer").hide();
 			}
 		});
-		 
+		
 		
 		
 		
@@ -290,16 +127,6 @@ p {
 			alert("로그인이 필요한 서비스입니다.");
 			location.href = '/user/login';
 		});
-		 $("#open-modal").click(function() {
-			$("#modal").show();
-		});
-		
-		
-		//목록으로 버튼 이벤트
-		$("#backBtn").on("click", function() {
-			location.href = '/store/goTest';
-		});
-		
 		
 		//신고 버튼 이벤트 
 		$("#reportBtn").on("click", function() {
@@ -319,10 +146,6 @@ p {
 			}
 			if (form.rpcontent.value == '') {
 				alert("내용은 필수작성");
-				return;
-				// 신고 사유 선택 추가_0823/노헌
-			}else if (document.getElementById("state").value=="none") {
-				alert("신고 사유를 선택하세요.")
 				return;
 			}
 			
@@ -361,16 +184,12 @@ p {
 			    	  	 current : nowLike},
 			      success: function (result, status, xhr) {
 			    	  if(result){// 좋아요 적용
-			    		  $("#utilBox span").addClass("enabledLike");
-			    		  $("#utilBox span").removeAttr("id");
 			    		  slike++;
-			    		  $("#utilBox span").html("좋아요 " + slike);
+			    		  $(".likeBtn").html('<i class="bi bi-hand-thumbs-up-fill"></i>'+" "+slike);
 			    		  nowLike = true;
 			    	  }else{//해제
-			    		  $("#utilBox span").removeClass("enabledLike");
-			    		  $("#utilBox span").attr("id", "likeBtn");
 			    		  slike--;
-			    		  $("#utilBox span").html("좋아요 " + slike);
+			    		  $(".likeBtn").html('<i class="bi bi-hand-thumbs-up"></i>'+" "+slike);
 			    		  nowLike = false;
 			    	  }
 			    	  
@@ -382,6 +201,10 @@ p {
 		});
 		
 		
+		//예약하기 버튼 이벤트
+		$("#bookBtn").on("click", function() {
+			alert("예약 버튼 이벤트!");
+		});
 		
 		//이미지 클릭 이벤트
 		$("#storeDetail img").on("click", function() {
@@ -396,7 +219,6 @@ p {
 			$(".map-overlay").show();
 			popMap.relayout();
 			popMap.setBounds(bounds);
-			//popMap.panTo(coords);
 			
 		});
 		
@@ -444,14 +266,6 @@ p {
 					console.log("현재 위치로부터의 거리 : " + distance + " km");
 					$("#distance").html(distance+" km");
 					
-					// 커스텀 오버레이를 생성합니다
-					var customOverlay = new kakao.maps.CustomOverlay({
-					    map: popMap,
-					    position: currentLocMarker.getPosition(),
-					    content: '<div class="customInfo" style="padding:3px;">현재 위치</div>',
-					    xAnchor: 0.45,
-					    yAnchor: 2.5
-					});
 
 					
 				}, 
@@ -485,18 +299,8 @@ p {
 		}
 	}
 </script>
-<script type="text/javascript">/* 거리 기반 추천 로직 */
-	$(function() {
-		//슬라이더
-		recommendByDistance();
-		
-		
-		 
-	});
-	
-	
+<script type="text/javascript">
 	function recommendByDistance() {
-		
 		var scate = ['${store.scate}'];
 		var saddr = '${store.saddress}';
 		//지역과 카테고리 기준으로 불러오기
@@ -506,23 +310,26 @@ p {
 		      data: {scate : scate,
 		    	  	location : saddr.split(" ")[0]},
 		      success: function (result, status, xhr) {
-		    	
+		    		console.log(result);
 		    	  
 		    	  for (var store of result) {
-		    		if (sno == store.sno) {
+		    		if (sno == store.sno) { //현재 매장 제외
 						continue;
 					}
-		    		//내 위치로부터 거리 *distance 는 현재 매장에 대한 정보
+		    		//내 위치로부터 거리 *distance 는 현재 매장에 대한 정보 , 단위 : km
 		    		var dist = getDistance(kd, wd, store.kd, store.wd);
 		    		var empty = true;
 		    		if (dist <= 5) {
 		    			empty = false;
 				    	var str = '';
-				    	str += '<div class="card item">';
-				    	str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+				    	
+				    	str += '<div class="post-item clearfix">';
+				    	str += '<img src="/resources/img/ja.jpg" alt="image">';
+				    	str += '<h4><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h4>';
+				    	str += '<time datetime="2020-01-01">detail</time>';
 				    	str += '</div>';
 				    	
-					    $(".owl-carousel").append(str);
+				    	$(".recent-posts").eq(0).append(str);
 					}
 		    		
 		    		
@@ -530,624 +337,338 @@ p {
 				}
 		    	
 		    	
-		    	  $('.owl-carousel').owlCarousel({
-		    		    loop: false,
-		    		    mousedrag : false,
-		    		    touchdrag : false,
-		    		    pulldrag : false,
-		    		    margin: 50,
-		    		    items : 1,
-		    		    nav:false,
-		    		    dots:false,
-		    		    center:true,
-		    		    responsive:{
-		    		        0:{
-		    		            items:1
-		    		        },
-		    		        600:{
-		    		            items:2
-		    		        },
-		    		        1000:{
-		    		            items:3
-		    		        }
-		    		    }
-		    		});
-		    		//이벤트 부여
-		    		$('.owl-carousel').on('changed.owl.carousel', function(e) {
-		    			console.log(e.item.index);
-		    			console.log(e.item.count);
-		    			if (e.item.index == 0) {
-							$(".owl-prev").addClass("owl-lastItem");
-						}else if (e.item.index == e.item.count - 1) {
-							$(".owl-next").addClass("owl-lastItem");
-						}else{
-							$(".owl-next").removeClass("owl-lastItem");
-							$(".owl-prev").removeClass("owl-lastItem");
-						}
-		    			
-		    		});
-		    		// Go to the next item
-		    		$('.owl-next').click(function() {
-		    		    $(".owl-carousel").trigger('next.owl.carousel');
-		    		});
-		    		// Go to the previous item
-		    		$('.owl-prev').click(function() {
-		    		    // With optional speed parameter
-		    		    // Parameters has to be in square bracket '[]'
-		    		     $(".owl-carousel").trigger('prev.owl.carousel', [300]);
-		    		});  
-		    	  	
-		    		if ($(".owl-stage .card").length < 2) {
-						$(".owl-next").addClass("owl-lastItem");
-					}
 		    		
 		      },
 		      error: function(xhr, state, error) {
 				
 			}
 		});
-	
-		
 	}
-	
 </script>
-</head>
-<script type="text/javascript">
-		var reservationResult = '${result}';
-		if (reservationResult == 'ok') {
-			alert("예약이 완료되었습니다.");
-		}
-		// 푸쉬용
-		var openHour = 109;
-		var endHour = 118;
-		var currentDate = new Date();
-		var realDate = new Date();
-	 	
-	 	var openHourm = openHour-24;
-	 	//사용자가 시간표에서 선택한 시간
-	 	var selectedFirstTime = 24*1;
-		//var year = currentDate.getFullYear().toString;
-		//var result = year.substring(2, 8);
-	function buildCalendar() { // 달력 만드는 함수a
-		var row = null; // 높이
-		var cnt = 0; // 요일 카운트 일 1 월 2 화 3 수 4 목 5 금 6 토 7 cnt를 7로 나눌시 
-		var cntt = 0;
-		var cnttt = -1;
-		var cntDate = 0;
-	 	var myday = 0;
-	 	
-		var nowYear = currentDate.getFullYear(); // 현 연도
-		var nowMonth = currentDate.getMonth(); // 현 월
-		var nowDate = currentDate.getDate(); // 현 일
-		var nowHours = currentDate.getHours(); // 현 시간
-		var calendarTable = document.getElementById("bookcalendar");
-		var calendarCurrentDate = document.getElementById("maincalendar");
-		var realcalendar = document.getElementById("realcalendar");
-		calendarCurrentDate.innerHTML = nowYear + "년 " + (nowMonth + 1) + "월"; // 현재 달력 몇년도 몇월 정보 출력
-		var firstDate = new Date(nowYear, nowMonth, 1); // 달력의 첫 날 ex) 2023 08 01 
-		var lastDate = new Date(nowYear, nowMonth + 1, 0);// 달력의 마지막 날
-					
-		// 사용자가 선택한 셀의 월, 일
-		var selectedMonth = null;
-		var selectedDate = null;
-		while (calendarTable.rows.length > 2) { // 달력 테이블의 전체 행(height) 길이가 2보다 클때 
-			calendarTable.deleteRow(calendarTable.rows.length - 1);
-			// 달력 테이블 전체 행 이가 2이하가 될때 까지 삭제 (요일표시 직전까지 초기화)
-		}
-		// 나머지 값에 따라 0이면 토 1이면 일 
-		row = calendarTable.insertRow(); //셀 변수 지정 = 달력 테이블에 insertRow() 메소드
-
-		for (i = 0; i < firstDate.getDay(); i++) { // 현 달의 첫 요일 인덱스값 이용 해당 달에 없는 일의 셀 공백처리
-			cell = row.insertCell(); // cell 은 달력테이블에 insertRow 메소드? 현달력의 없는 일표시 칸은 공백처리
-			cnt += 1; // cnt는 2
-			cnttt += 1;
-		}
-
-		for (i = 1; i <= lastDate.getDate(); i++) {
-			cell = row.insertCell(); // 셀을 date가 31이 마지막이면 30까지 반복 셀 입력?
-			cnt += 1; // 31
-			cntDate += 1; // 31
-			cell.setAttribute('id', i); // 달력의 셀마다(일수) id 값 적용 1일 id = "1" 
-			cell.innerHTML = i; // cell 입력란에 i 값 입력
-			cell.align = "center"; // cell 입력이 되면 cell 가운데 정렬
-			if (cnt % 7 == 1) { // 일요일 조건
-				cell.innerHTML = "<font color=red>" + i + "</font>";
-			}
-
-			if (cnt % 7 == 0) { // 토요일 조건
-				cell.innerHTML = "<font color=skyblue>" + i + "</font>";
-				row = calendarTable.insertRow();
-			}
-			if (i <= nowDate && nowMonth == realDate.getMonth()){	// 일수가 현 일수보다 전이고 표시된 월과 현재 월이 같을 경우 
-				document.getElementById(i).style.color = "#585858";	// 표시되는 일수 회색 표시
-				//document.getElementById(i).readOnly = true; // readonly 활성화
-			}
-			if (nowMonth > realDate.getMonth()+1){					// 표시된 월이 현재 월보다 2이상 큰경우 (예약 가능날짜 이번달 기준 다음달까지 제한)
-				document.getElementById(i).style.color = "#585858";
-				//document.getElementById(i).readOnly = true; // readonly 활성화
-			}
-			cell.onclick = function() {
-				//selectedTimeAndTotalPriceInit();	클릭마다 타임테이블이 쌓이기때문에 초기화 필요
-				// 셀 클릭시 월, 일 값 전역변수에 저장 
-				cellTime = this.getAttribute('id');
-				cellTime = cellTime*1;
-				selectedMonth = currentDate.getMonth() + 1;
-				selectedDate = this.getAttribute('id');
-				//-------------------------------------------------------
-				clickedYear = currentDate.getFullYear();//currentDate.getFullYear();
-				clickedMonth = currentDate.getMonth() + 1;
-				clickedDateId = this.getAttribute('id'); // this=cell에 있는 id 속성 변수에적용
-				clickedDate = clickedDateId;
-				clickedDayqs = parseInt(clickedDateId)+cnttt;
-				clickedDate = clickedDate >= 10 ? clickedDate : '0'
-						+ clickedDate;
-				clickedMonth = clickedMonth >= 10 ? clickedMonth : '0'
-						+ clickedMonth;
-				clickedYMD = clickedYear + "/" + clickedMonth + "/"
-						+ clickedDate;
-				if(clickedDayqs < 7){ // 1째 주 getDay 값 무슨요일인지 판별 ex) getDay가 0이면 일요일 토요일은 6
-					clickedDay = clickedDayqs;
-					}
-				else if(7 <= clickedDayqs && clickedDayqs < 14){ // 2번째 주 
-				clickedDay = clickedDayqs - 7;
-				}
-				else if(14 <= clickedDayqs && clickedDayqs < 21){ // 3번째 주 
-					clickedDay = clickedDayqs - 14;
-					}
-				else if(21 <= clickedDayqs && clickedDayqs < 28){ // 4번째 주 
-					clickedDay = clickedDayqs - 21;
-					}
-				else if(28 <= clickedDayqs && clickedDayqs < 35){ // 5번째 주 
-					clickedDay = clickedDayqs - 28;
-					}
-				document.getElementById("bdate").value = clickedYMD;
-				
-				cntt+=1;
-				
-				document.getElementById("bday").value = clickedDay;
-				if(cntt == 1){
-				rememberId = clickedDateId;					
-				}
-				if(nowDate >= clickedDateId && nowMonth == realDate.getMonth() || nowMonth > realDate.getMonth()+1){
-					document.getElementById("date").value = "";
-					alert("예약할 수 없는 날짜입니다.")
-				}
-				if(nowDate < clickedDateId && nowMonth == realDate.getMonth()){
-					
-				document.getElementById(rememberId).style.color = "black";
-				document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
-				document.getElementById(clickedDateId).style.color = "#FFFFFF";
-				document.getElementById(clickedDateId).style.backgroundColor = "#00FF00";
-				rememberId = clickedDateId;
-				}
-				buildTimeTable();
-			}
-
-		}
-
-		if (cnt % 7 != 0) { // 마지막주에 공백포함 마지막날까지 33 % 7
-			for (i = 0; i < 7 - (cnt % 7); i++) {
-				cell = row.insertCell();
-			}
-		}
-	}
-	function buildTimeTable(selectedMonth, selectedDate){
-		row = null;
-		month = selectedMonth;
-		date = selectedDate;
-		var timeTable = document.getElementById("timeTable");
-		var alltime = 24*1;
-		var	overHours = alltime - openHour;
-		var cntime = 0;
-		var rcellTime = 0;
-		var cntcnt = 0;
-		//var cnttime = overHours + endHour;
-		
-		while(timeTable.rows.length > 0){
-			timeTable.deleteRow(timeTable.rows.length-1);
-		}
-		
-		row = timeTable.insertRow();
-		
-		if(openHour < endHour){
-			for (i = 0; i < endHour - openHour; i++){
-				cntime += 1;
-				cellTime = openHour*1 + i;
-				cellTimeText = cellTime-100 + ":00";
-				inputCellText = cellTimeText;
-				
-				cell = row.insertCell();
-				cell.setAttribute('id', cellTime);
-				cell.innerHTML = inputCellText;
-				cell.bgColor="#CEE3F6";
-				
-				if(cntime % 5 == 0){
-					row = timeTable.insertRow();
-				}
-				cell.onclick = function(){
-					cntcnt+=1;
-					cellTime = this.getAttribute('id');
-					document.getElementById("btime").value = cellTime-100;
-					cellTime = cellTime*1;
-					if(cntcnt == 1){
-						rcellTime = cellTime;
-					}
-					document.getElementById(rcellTime).style.color = "black";
-					document.getElementById(rcellTime).style.backgroundColor = "#CEE3F6";
-					document.getElementById(cellTime).style.color = "#FFFFFF";
-					document.getElementById(cellTime).style.backgroundColor = "#81F781";
-					rcellTime = cellTime;
-				}
-			}
-		}
-		
-		if(openHour > endHour){
-			for(i = 0; i < overHours + endHour; i++){
-				cntime += 1;
-				cellTime = openHourm*1 + i;
-				cellTimeText = cellTime-100 + ":00";
-				inputCellText = cellTimeText;
-				
-				cell = row.insertCell();
-				cell.setAttribute('id', cellTime);
-				cell.innerHTML = inputCellText;
-				cell.bgColor="#CEE3F6";
-				
-				if(cntime % 5 == 0){
-					row = timeTable.insertRow();
-				}
-				cell.onclick = function(){
-					cntcnt+=1;
-					//cellTime = cellTime*1;
-					cellTime = this.getAttribute('id');
-					document.getElementById("btime").value = cellTime;
-					
-					if(cntcnt == 1){
-						rcellTime = cellTime;
-					}
-					document.getElementById(rcellTime).style.color = "black";
-					document.getElementById(rcellTime).style.backgroundColor = "#CEE3F6";
-					document.getElementById(cellTime).style.color = "#FFFFFF";
-					document.getElementById(cellTime).style.backgroundColor = "#81F781";
-					rcellTime = cellTime;
-				}
-			}
-		}
-		
-		
-						
-	}
+<main id="main">
 	
-	function backCalendar() {
-		currentDate = new Date(currentDate.getFullYear(), currentDate
-				.getMonth() - 1, currentDate.getDate())
-		if(realDate.getMonth() > currentDate.getMonth()){
-			alert("지난 달은 예약이 불가능합니다")
-			currentDate = new Date(currentDate.getFullYear(), currentDate
-				.getMonth() + 1, currentDate.getDate())
-			return;
-		}
-		buildCalendar();
-	}
-	
-	function nextCalendar() {
-		currentDate = new Date(currentDate.getFullYear(), currentDate
-				.getMonth() + 1, currentDate.getDate())
-		if(realDate.getMonth()+1 < currentDate.getMonth()){
-			alert("예약은 오늘날부터 다음달까지 가능합니다.")
-			currentDate = new Date(currentDate.getFullYear(), currentDate
-				.getMonth() - 1, currentDate.getDate())
-			return;	
-		}
-		buildCalendar();
-	}
-	function check() {
-		console.log("current : " + currentDate.getMonth() + ", " + realDate.getMonth());
-	}
-	
-</script>
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs" style="margin-top: 70px;">
+      <div class="container">
 
-<body>
-	<sec:authorize access="isAuthenticated()">
-		<sec:authentication property="principal" var="user" />
-	</sec:authorize>
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 style="color: white;">매장 정보</h4>
+        </div>
 
-	<!-- 매장 정보 -->
-	<div class="wrapper">
-		<h2>detail</h2>
-		<div id="storeDetail">
-			<c:if test="${not empty store.imgList }">
-				<link rel="stylesheet" href="/resources/css/slide.css">
-				<!-- 이미지슬라이드 css  -->
-				<script type="text/javascript" src="/resources/js/slide.js"></script>
-				<!-- 이미지슬라이드 js  -->
-				<div class="slide slide_wrap">
-					<c:forEach var="img" items="${store.imgList }">
-						<div class="slide_item item">
-							<img alt="${img.sino }"
-								src="/images/${img.uuid }_${img.fileName}"
-								style="height: -webkit-fill-available">
-						</div>
-					</c:forEach>
-					<div class="slide_prev_button slide_button">◀</div>
-					<div class="slide_next_button slide_button">▶</div>
-					<ul class="slide_pagination"></ul>
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Blog Single Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row">
+
+          <div class="col-lg-8 entries">
+
+            <article class="entry entry-single">
+              <div class="row">
+              	<div class="col-lg-9">
+              	  <h2 class="entry-title">
+	              	${store.sname }
+	              </h2>
+	
+	              <div class="entry-meta"><!-- 우측 정렬 후 거리정보 제공  -->
+	                <ul>
+	                  <li class="d-flex align-items-center"><i class="bi bi-pin-map-fill"></i>${store.saddress }</li>
+	                  <li class="d-flex align-items-center"><i class="bi bi-cursor-fill"></i><span id="distance">거리정보</span></li>
+	                </ul>
+	              </div>
+              	</div>
+              	<div class="col-lg-3" style="border: 1px solid black; height: 150px;" id="mapContainer">
+              	</div>
+              </div>
+              
+
+              <div class="entry-content">
+              	<div class="imgArea" style="width: 50%; height: 200px; overflow: hidden;"><!-- owl carousel 및 lightbox적용하여 이미지 영역 구축  -->
+              		<div class="owl-carousel owl-theme owl-loaded" style="text-align: -webkit-center">
+              			<c:forEach var="img" items="${store.imgList }">
+              				<div class="item cons">
+						          <a data-fslightbox href="/images/${img.uuid }_${img.fileName}">
+						         	<img alt="image" src="/images/${img.uuid }_${img.fileName}" style="object-fit : scale-down; height: 100%">
+								  </a>
+					        </div>
+              			</c:forEach>
+				         <div class="item cons">
+					          <a data-fslightbox href="/resources/img/ja.jpg">
+					         	<img alt="image" src="/resources/img/ja.jpg">
+							  </a>
+				         </div>
+				         <div class="item cons">
+					          <a data-fslightbox href="/resources/img/carousel-1.jpg">
+					         	<img alt="image" src="/resources/img/carousel-1.jpg">
+							  </a>
+				         </div>
+				      </div>
+				      <div class="owl-nav d-flex justify-content-between" style="text-align: center; z-index: 5; position: relative;">
+				         <div class="owl-prev owl-lastItem">&lt;</div>
+				         <div class="owl-next">&gt;</div>
+				      </div>
+              		
+              	</div>
+                <p>이름 : ${store.sname }<span id="distance"></span></p>
+				<p>휴무일 : ${dayOff }</p>
+				<p>영업시간 : ${store.openHour }</p>
+				<p>예약금 : ${store.sdepo }</p>
+				<p>
+					<c:choose>
+						<c:when test="${store.sdeli eq 1 }">
+							배달 o
+						</c:when>
+						<c:otherwise>
+							배달 x
+						</c:otherwise>
+					</c:choose>
+				</p>
+				<div id="utilBox" style="text-align: left;">
+					<c:choose>
+						<c:when test="${isLike }">
+							<span class="likeBtn"><i class="bi bi-hand-thumbs-up-fill"></i> ${store.slike }</span>
+						</c:when>
+						<c:otherwise>
+							<span class="likeBtn"><i class="bi bi-hand-thumbs-up"></i> ${store.slike }</span>
+						</c:otherwise>
+					</c:choose>
+					<p><i class="bi bi-star-fill"></i> ${store.sstar }</p>
 				</div>
-			</c:if>
-			<p>
-				이름 : ${store.sname }<span id="distance"></span>
-			</p>
-			<p>주소 : ${store.saddress }</p>
-			<p>휴무일 : ${store.dayOff }</p>
-			<p>영업시간 : ${store.openHour }</p>
-			<p>예약금 : ${store.sdepo }</p>
-			<p>
-				<c:choose>
-					<c:when test="${store.sdeli eq 1 }">
-						배달 o
-					</c:when>
-					<c:otherwise>
-						배달 x
-					</c:otherwise>
-				</c:choose>
-			</p>
-			<div id="utilBox" style="text-align: left;">
-				<c:choose>
-					<c:when test="${isLike }">
-						<span class="enabledLike">좋아요 ${store.slike }</span>
-					</c:when>
-					<c:otherwise>
-						<span id="likeBtn">좋아요 ${store.slike }</span>
-					</c:otherwise>
-				</c:choose>
-				<p>평점 평균 ${store.sstar }</p>
-			</div>
-		</div>
-		<div id="mapContainer" style="width: 250px; height: 250px;"></div>
-		<br>
-		<hr>
-		<div id="menuContainer" style="text-align: left;">
-			<h4>메뉴</h4>
-			<ul id="menuUL" type="disc">
-				<c:forEach var="menu" items="${store.menuList }">
-					<li>${menu.mname }--${menu.mprice }<c:if
-							test="${menu.mprice eq null}">가격 정보 없음</c:if>
-					</li>
-				</c:forEach>
-			</ul>
 
-		</div>
+              </div>
 
-		<div id="btnContainer" style="text-align: right; padding: 10px;">
-			<button id="backBtn">목록</button>
-			<button id="reportBtn" style="background-color: maroon;">신고</button>
-			<button id="delBtn" style="background-color: maroon;"
-				onclick="location.href='/store/delete?sno=${store.sno}'">삭제test</button>
-			<sec:authorize access="isAuthenticated()">
-				<button id="open-modal">리뷰 작성</button>
-			</sec:authorize>
-			<sec:authorize access="isAnonymous()">
-				<button id="revBtn">리뷰 작성</button>
-			</sec:authorize>
-			<button id="open-modal2">예약</button>
-			<div id="modal2">
-				<div class="modal-content2">
-					<table id="bookcalendar">
-						<tr>
-							<td align="center"><label onclick="backCalendar()">&lt;</label></td>
-							<td colspan="5" align="center" id="maincalendar"></td>
-							<td align="center"><label onclick="nextCalendar()">&gt;</label></td>
-						</tr>
-						<tr id="date">
-							<td>일</td>
-							<td>월</td>
-							<td>화</td>
-							<td>수</td>
-							<td>목</td>
-							<td>금</td>
-							<td>토</td>
-						</tr>
-					</table>
-					<table id="timeTable"></table>
-					<h2></h2>
-					<p>예약 정보 입력.</p>
-					<form action="/store/bookregister" method="post" role="form">
-						<select name="bman" id="bman">
-							<option value="none" selected disabled hidden>인원 선택</option>
-							<!-- 관리자 계정이 아니면 공지사항 보이지 않도록 수정해야 함 -->
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							<option value="6">6</option>
-							<option value="7">7</option>
-							<option value="8">8</option>
-							<option value="9">9</option>
-							<option value="10">10</option>
-						</select><br /> 예약자:<input type="text" id="bname" name="bname"><br />
-						전화번호:<input type="text" id="bphone" name="bphone"><br />
-						요청사항:
-						<textarea id="breq" name="breq"></textarea>
-						<br />
-						<h6 align="center" id="realcalendar"></h6>
-						<script type="text/javascript">
-							buildCalendar();
-						</script>
+              <div class="entry-footer"><!-- tag 사용  -->
+                <i class="bi bi-folder"></i>
+                <ul class="cats">
+                  <li><a href="#">${store.scate }</a></li>
+                </ul>
 
-						<input type="hidden" id="sno" name="sno" value="${store.sno }"><br />
-						<input type="hidden" id="uno" name="uno" value="${store.uno }"><br />
-						<input type="hidden" id="bdate" name="bdate"><br /> <input
-							type="hidden" id="bday"><br /> <input type="hidden"
-							id="btime" name="btime"><br /> <input type="hidden"
-							id="bkno" name="bkno" value="1001"><br /> <input
-							type="hidden" id="bdepo" name="bdepo" value="5000"><br />
-						<!--<input type="text" id="openHour" name="openHour" value="9"><br /> 
-							<input type="text" id="endHour" name="endHour" value="18"><br /> -->
-
-						<!--  예약 인원, 요일 제한 미구현 보류 미구현 기본값 1-->
-						<%-- <input type="text" id="bman" name="bman" value="${param.dayoff }"> --%>
-
-						<input type="submit" value="예약 신청" id="cbtn"> 
-						<input type="button" value="취소" id="cbtn"><br/>
-					</form>
-					<button id="close-modal2">닫기</button>
+                <i class="bi bi-tags"></i>
+                <ul class="tags">
+                  <li><a href="#">smallTag 1</a></li>
+                  <li><a href="#">smallTag 2</a></li>
+                  <li><a href="#">smallTag 3</a></li>
+                </ul>
+                <div id="btnContainer" style="text-align: right; padding: 10px;">
+					<button id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal">신고</button>
+					<sec:authorize access="isAuthenticated()">
+						<button id="open-modal" data-bs-toggle="modal" data-bs-target="#revModal">리뷰 작성</button>
+					</sec:authorize>
+					<sec:authorize access="isAnonymous()">
+						<button id="revBtn">리뷰 작성</button>
+					</sec:authorize>
+					<button id="bookBtn">예약</button>
+					<button data-bs-toggle="modal" data-bs-target="#replyModal">test</button>
 				</div>
-			</div>
-<script type="text/javascript"> /* 예약 모달  */
-	const modal2 = document.getElementById("modal2");
-	const openModalBtn2 = document.getElementById("open-modal2");
-	const closeModalBtn2 = document.getElementById("close-modal2");
-	
-	// 모달창 열기
-	openModalBtn2.addEventListener("click", () => {
-	  modal2.style.display = "block";
-	  document.body.style.overflow = "hidden"; // 스크롤바 제거
-	});
-	// 모달창 닫기
-	closeModalBtn2.addEventListener("click", () => {
-	  modal2.style.display = "none";
-	  document.body.style.overflow = "auto"; // 스크롤바 보이기
-	});
-</script>
-		</div>
+              </div>
 
-		<br> <br>
-		<!-- 리뷰 container  -->
-		<div class="reviewContainer">
-			<c:if test="${not empty store.revList }">
-				<c:forEach var="review" items="${store.revList }">
-					<hr>
-					<p>작성자 : ${review.uno }</p>
-					<p>내용 : ${review.rvcontent }</p>
-					<p>좋 : ${review.rvlike }</p>
-					<p>평 : ${review.rvstar }</p>
-					<p>작성일 : ${review.rvdate }</p>
-				</c:forEach>
-			</c:if>
-		</div>
-		<br> <br>
+            </article><!-- End blog entry -->
 
-		<!-- 비슷한 매장  -->
-		<h3>recommend</h3>
-		<div id="owlContainer">
-			<div class="owl-carousel owl-theme owl-loaded"></div>
-			<div class="owl-nav">
-				<div class="owl-prev owl-lastItem">prev</div>
-				<div class="owl-next">next</div>
-			</div>
-		</div>
+            
 
+            <div class="blog-comments">
 
-	</div>
+              <h4 class="comments-count">reviews</h4><br>
+			  <div class="blog-author d-flex align-items-center">
+	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="">
+	              <div>
+	                <h4>Jane Smith</h4>
+	                <div class="social-links">
+	                  <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
+	                  <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
+	                  <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
+	                </div>
+	                <p>
+	                  Itaque quidem optio quia voluptatibus dolorem dolor. Modi eum sed possimus accusantium. Quas repellat voluptatem officia numquam sint aspernatur voluptas. Esse et accusantium ut unde voluptas.
+	                </p>
+	              </div>
+	            </div><!-- End blog author bio -->
+	            
+			  <div class="blog-author d-flex align-items-center">
+	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="">
+	              <div>
+	                <h4>Jane Smith</h4>
+	                <div class="social-links">
+	                  <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
+	                  <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
+	                  <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
+	                </div>
+	                <p>
+	                  Itaque quidem optio quia voluptatibus dolorem dolor. Modi eum sed possimus accusantium. Quas repellat voluptatem officia numquam sint aspernatur voluptas. Esse et accusantium ut unde voluptas.
+	                </p>
+	              </div>
+	            </div><!-- End blog author bio -->
+	            
+			  <div class="blog-author d-flex align-items-center">
+	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="">
+	              <div>
+	                <h4>Jane Smith</h4>
+	                <div class="social-links">
+	                  <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
+	                  <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
+	                  <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
+	                </div>
+	                <p>
+	                  Itaque quidem optio quia voluptatibus dolorem dolor. Modi eum sed possimus accusantium. Quas repellat voluptatem officia numquam sint aspernatur voluptas. Esse et accusantium ut unde voluptas.
+	                </p>
+	              </div>
+	            </div><!-- End blog author bio -->
+			  
+			  
 
+				
+              <div class="reply-form modal modal-sheet modal-lg" id="replyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><!-- 숨겼다가 모달로 사용  -->
+                <div class="modal-dialog modal-dialog-centered">
+                	<div class="modal-content p-3">
+                		<div>
+	                		<h4 style="float: left;">리뷰 작성</h4>
+	                		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="float: right;"></button>
+                		</div><br>
+		                <form action="#" method="post">
+		                  <div class="row">
+		                    <div class="col form-group">
+		                      <input name="writer" type="text" class="form-control" placeholder="작성자">
+		                    </div>
+		                  </div>
+		                  <div class="row">
+		                    <div class="col form-group">
+		                      <textarea name="comment" class="form-control" placeholder="내용을 입력해주세요" style="resize: none;"></textarea>
+		                    </div>
+		                  </div>
+		                  <div style="text-align: right;">
+			                  <button type="submit" class="btn btn-primary">작성하기</button>
+		                  </div>
+		                </form>
+                	</div>
+                </div>
+                
 
-	<!-- 리뷰 모달  -->
-	<div id="modal">
-		<div class="modal-content">
+              </div>
 
-			<form action="/store/addrv" method="post" role="form">
-				<div id="review-title">
-					<span>평점</span><br />
-					<div class="form-group">
-						<span class="star"> ★★★★★ <span id="rvstar">★★★★★</span> <input
-							type="range" name="rvstar" oninput="myFunction(this.value)"
-							value="0" step="0.5" min="0" max="5">
-						</span>
+            </div><!-- End blog comments -->
+
+          </div><!-- End blog entries list -->
+
+          <div class="col-lg-4">
+
+            <div class="sidebar">
+
+              <h3 class="sidebar-title">비슷한 매장 추천</h3>
+              <div class="sidebar-item recent-posts">
+                <div class="post-item clearfix">
+                  <img src="/resources/img/ja.jpg" alt="">
+                  <h4><a href="blog-single.html">title</a></h4>
+                  <time datetime="2020-01-01">desc</time>
+                </div>
+
+                <div class="post-item clearfix">
+                  <img src="/resources/img/sam.jpg" alt="">
+                  <h4><a href="blog-single.html">Quidem autem et impedit</a></h4>
+                  <time datetime="2020-01-01">Jan 1, 2020</time>
+                </div>
+                
+
+              </div><!-- End sidebar recent posts-->
+
+              <h3 class="sidebar-title">관련 검색어</h3>
+              <div class="sidebar-item tags">
+                <ul>
+                  <li><a href="/store/search?searchInput=1">1</a></li>
+                  <li><a href="#">IT</a></li>
+                  <li><a href="#">Business</a></li>
+                  <li><a href="#">Mac</a></li>
+                  <li><a href="#">Design</a></li>
+                  <li><a href="#">Office</a></li>
+                  <li><a href="#">Creative</a></li>
+                  <li><a href="#">Studio</a></li>
+                  <li><a href="#">Smart</a></li>
+                  <li><a href="#">Tips</a></li>
+                  <li><a href="#">Marketing</a></li>
+                </ul>
+              </div><!-- End sidebar tags-->
+
+            </div><!-- End sidebar -->
+			
+			<div class="sidebar">
+				<h3 class="sidebar-title">222</h3>
+				<div class="sidebar-item recent-posts">
+					<div class="post-item clearfix">
+						<h5>111</h5>
 					</div>
-					<span>내용</span>
-					<div class="form-group">
-						<textarea id="review-content" name="rvcontent"></textarea>
-						<input type="hidden" name="uno" value="5"> <input
-							type="hidden" name="rvlike" value="1">
-						<!--<input type="hidden" name="pageNum" value="1">
-						<input type="hidden" name="amount" value="10">-->
+					<div class="post-item clearfix">
+						<h5>2</h5>
 					</div>
-					<button type="button" id="close-modal" data-oper="reset"
-						class="btn-reset">취소</button>
-					<button type="submit" data-oper="register" class="btn">등록</button>
+					<div class="post-item clearfix">
+						<h5>3</h5>
+					</div>
+
 				</div>
-				<input type="hidden" name="sno" value="${store.sno }">
-			</form>
-		</div>
-	</div>
+			</div>
+          </div><!-- End blog sidebar -->
 
+        </div>
 
-	<!-- 이미지 팝업  -->
-	<div class="slide-overlay">
-		<button class="close-btn">close</button>
-		<button class="slide-btn --prev">prev</button>
-		<button class="slide-btn --next">next</button>
-		<div class="slide__container">
-			<ul class="slides">
-				<c:forEach var="img" items="${store.imgList }">
-					<li><img alt="${img.sino }"
-						src="/images/${img.uuid }_${img.fileName}"></li>
-				</c:forEach>
-			</ul>
-		</div>
-	</div>
+      </div>
+    </section><!-- End Blog Single Section -->
 
-	<!-- 지도 팝업  -->
-	<div class="map-overlay">
-		<div class="mapModal"></div>
-	</div>
-
-	<!-- 신고  -->
-	<div class="reportOverlay">
-		<div class="reportModal">
-			<form action="#" method="post">
+  </main><!-- End #main -->
+  <!-- 모달 test  -->
+  <!-- reviewModal -->
+<div class="modal fade" id="revModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">리뷰 작성</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       	<p>ㅇㅇ</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">작성하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- reportModal -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">신고</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      		<form action="#" method="post">
 				<p>제목</p>
+				<p><input type="text" name="rptitle"></p>
+				<p>사유</p>
 				<p>
-					<input type="text" name="rptitle">
-				</p>
-				<!-- 작성자 추가_0823/노헌 -->
-				<p>작성자</p>
-				<p>
-					<input type="text" name="rpwriter" value="${uvo.username }" readonly="readonly" style="background-color: #ccc">
-				</p>
-				<p>신고 사유</p>
-				<p>
-					<!-- 사유 옵션명 수정_0823/노헌 -->
 					<select name="state">
-						<option value="none" selected disabled hidden>신고 사유 선택</option>
-						<option value="허위 정보">허위 정보</option>
-						<option value="불법 광고">불법 광고</option>
-						<option value="욕설/혐오/차별적 표현">욕설/혐오/차별적 표현</option>
-						<option value="개인정보 노출">개인정보 노출</option>
-						<option value="기타">기타</option>					
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
 					</select>
 				</p>
 				<p>내용</p>
 				<textarea rows="12" cols="30" name="rpcontent" style="resize: none;"></textarea>
-				<br> <br>
-				<div style="text-align: right;">
-					<input type="button" value="뒤로"> <input type="button"
-						value="신고하기">
-				</div>
 			</form>
-		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">작성하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+  	<!-- 지도 팝업  -->
+	<div class="map-overlay">
+		<div class="mapModal"></div>
 	</div>
-
-
-	
-	<script type="text/javascript"> /* review 모달 스크립트  */
-		function myFunction(drawstar) {
-			//const drawstar = document.querySelector('.star input');
-			document.querySelector('.star span').style.width = drawstar * 20
-					+ '%';
-		}
-		const modal = document.getElementById("modal");
-		const closeModalBtn = document.getElementById("close-modal");
-		
-		
-		// 모달창 닫기
-		closeModalBtn.addEventListener("click", () => {
-		  modal.style.display = "none";
-		  document.getElementById("review-content").value = "";
-		  document.querySelector('.star span').style.width = 0+'%';
-		  document.body.style.overflow = "auto"; // 스크롤바 보이기
-		});
-	</script>
-</body>
-</html>
+<script type="text/javascript">
+	recommendByDistance();
+</script>
+<script src="/resources/js/fslightbox.js"></script>
+<%@ include file="../testFooter.jsp" %>    

@@ -40,9 +40,24 @@
   ======================================================== -->
 </head>
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+	var user = '${uvo}';
+	var errorcode = '${errorCode}';
+	switch (errorcode) {
+	case 'noInfo':
+		alert("존재하지 않는 매장입니다.");
+		break;
+	case 'access':
+		alert("잘못된 접근입니다.");
+		break;
+	
+	default:
+		break;
+	}
+	
+	
+</script>
 <body>
-<jsp:include page="testHeader.jsp"></jsp:include>
-<%-- 
   <!-- ======= Header ======= -->
   <header id="header" class="d-flex align-items-center">
     <div class="container d-flex justify-content-between">
@@ -63,7 +78,7 @@
 			  <li><a href="/jboard/jlist">3</a></li>
 			</ul>
           </li>
-          <li><a href="/store/storeList">Search</a></li>
+          <li><a href="/store/search">Search</a></li>
           <li><a href="/store/register">Register</a></li>
           <sec:authorize access="hasRole('ROLE_user')">
           	<li><a href="/user/myPage/main">myPage</a></li>
@@ -83,9 +98,10 @@
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
+
     </div>
   </header><!-- End Header -->
- --%>
+
   <!-- ======= Hero Section ======= -->
   <section id="hero">
     <div id="heroCarousel" data-bs-interval="2500" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -168,9 +184,9 @@
     </div>
   </section><!-- End Hero -->
 	
-<!-- 	
+	
 
-  Vendor JS Files
+  <!-- Vendor JS Files -->
   <script src="/resources/vendor/aos/aos.js"></script>
   <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/resources/vendor/glightbox/js/glightbox.min.js"></script>
@@ -179,10 +195,9 @@
   <script src="/resources/vendor/waypoints/noframework.waypoints.js"></script>
   <script src="/resources/vendor/php-email-form/validate.js"></script>
 
-  Template Main JS File
+  <!-- Template Main JS File -->
   <script src="/resources/js/main.js"></script>
- -->
+
 </body>
-<jsp:include page="testFooter.jsp"></jsp:include>
 
 </html>

@@ -60,13 +60,19 @@ public class StoreController {
 		
 		return "/store/testRegister";
 	}
-	@GetMapping("/registerUpdate")
+	@GetMapping("/updateTest")
 	public String updateTest(@RequestParam("sno")int sno, Model model) {
 		
+		StoreVO storeInfo = service.storeInfo(sno);
+		model.addAttribute("store", storeInfo);
+		String[] time = storeInfo.getOpenHour().split(" ");
+		model.addAttribute("openHour", time[0]);
+		model.addAttribute("closeHour", time[2]);
+		log.info(storeInfo);
 		
 		return "/store/testUpdate";
 	}
-	@GetMapping("/goTest")
+	@GetMapping("/search")
 	public String goTest(HttpSession session, HttpServletRequest request, Model model) {
 		String referer = request.getHeader("referer");
 		if (session.getAttribute("filterData") != null) {
@@ -79,7 +85,7 @@ public class StoreController {
 		}else {
 		}
 		
-		return "testPage";
+		return "/store/storeSearch";
 		
 	}
 	@GetMapping("/detailTest")
@@ -147,21 +153,6 @@ public class StoreController {
 		return new ResponseEntity<List<StoreVO>>(service.rank(), HttpStatus.OK);
 	}
 	
-	
-	
-	//매장 검색( test끝 , 승인되지않은 매장은 결과에서 제외 )
-	@GetMapping("/search")
-	public String searchStore(@RequestParam("searchInput") String input, Model model) {
-		
-		
-		input = "%" + input + "%"; 
-		log.info("searchByKeyword >>> " + input);
-		
-		model.addAttribute("stores", service.searchStore(input));
-		
-		return "/store/storeSearch";
-	}
-	
 	//필터링
 	@GetMapping(value = "/search/filter", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
@@ -217,7 +208,7 @@ public class StoreController {
 		 
 		if (principal != null) {	//로그인 정보가 있을경우에만 실행
 			InfoVO userInfo = service.getUserById(principal.getName()).getInfo();
-			
+			model.addAttribute("uvo", service.getUserById(principal.getName()));
 			//이 아래에 판단하는 코드 작성 후 isLike에 대입
 			if (userInfo.getUlikestore() != null && !userInfo.getUlikestore().equals("")) {
 				log.info(userInfo.getUlikestore());
@@ -236,12 +227,14 @@ public class StoreController {
 		if (svo == null) {
 			model.addAttribute("errorCode", "noInfo");
 			return "mainPage";
+		}else {
+			svo = service.storeInfo(sno);
 		}
 		
 		log.info("현재 매장 좋아요 여부 : " + isLike); 
 		model.addAttribute("isLike", isLike);
 		model.addAttribute("store" , svo);
-		model.addAttribute("uvo", service.getUserById(principal.getName()));
+		
 		return "/store/storeDetail";
 	}
 	
@@ -382,7 +375,8 @@ public class StoreController {
 				return "/store/storeDelete";
 			}
 		}else {
-			return "redirect:/";
+			model.addAttribute("errorCode", "access");
+			return "mainPage";
 		}
 		
 		
@@ -447,7 +441,6 @@ public class StoreController {
 		log.info("updating store >>> " + storeInfo);
 		String time = open + " ~ " + close;
 		storeInfo.setOpenHour(time);
-		
 		
 		
 		if (service.updateStore(storeInfo) > 0) {
