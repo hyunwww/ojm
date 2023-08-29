@@ -233,7 +233,6 @@ public class StoreController {
 		return "/store/storeDetail";
 	}
 	
-	
 	//매장 이미지 등록 ( test 끝 )
 	@PostMapping(value = "/uploadStoreImg", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
@@ -498,7 +497,10 @@ public class StoreController {
 	}
 	@PostMapping("/bookregister")
 	public String addBook(BookVO vo, RedirectAttributes rttr, Model model) {
-		// 안될겨우 principal 받자
+		// 예약 인원 값 정하지 않은 스토어는 1고정
+		if(vo.getBman()==null) {			
+			vo.setBman("1");
+		}
 		log.info(vo);
 		service.addBook(vo);
 		log.info("addBook.......");

@@ -601,10 +601,17 @@ p {
 	var endHour = 118;
 	var currentDate = new Date();
 	var realDate = new Date();
-	 	
+	var nownowd = realDate.getDate(); 	
 	 var openHourm = openHour-24;
 	 //사용자가 시간표에서 선택한 시간
 	 var selectedFirstTime = 24*1;
+	 var doff = String(${store.dayOff});
+	 var off = doff, substring0 = "0", substring1 = "1", substring2 = "2", 
+	 substring3 = "3", substring4 = "4", substring5 = "5", substring6 = "6";
+	 
+	 
+	function checkDayOff(){
+	}
 	
 	function buildCalendar() { // 달력 만드는 함수
 		var row = null; // 높이
@@ -613,7 +620,7 @@ p {
 		var cnttt = -1;
 		var cntDate = 0;
 	 	var myday = 0;
-	 	
+	 	var rememberId = nownowd;
 		var nowYear = currentDate.getFullYear(); // 현 연도
 		var nowMonth = currentDate.getMonth(); // 현 월
 		var nowDate = currentDate.getDate(); // 현 일
@@ -660,11 +667,46 @@ p {
 				document.getElementById(i).style.color = "#585858";	// 표시되는 일수 회색 표시
 				//document.getElementById(i).readOnly = true; // readonly 활성화
 			}
-			 if (i == nowDate && nowMonth == realDate.getMonth()){
+			if (i == nowDate && nowMonth == realDate.getMonth()){
 				document.getElementById(i).style.color = "#FFFFFF";
 				document.getElementById(i).style.backgroundColor = "#00FF00";
 			} 
-				
+			
+			if(off.includes(substring0) == true){	// 일요일
+				if(cnt % 7 == 1){					
+					cell.innerHTML = "<font color=#585858>" + i + "</font>";
+				}
+			}
+			if(off.includes(substring6) == true){	// 토요일
+				if(cnt % 7 == 0){					
+					cell.innerHTML = "<font color=#585858>" + i + "</font>";	
+					}
+			}
+			if(off.includes(substring1) == true){	// 월요일
+				if(cnt % 7 == 2){					
+					cell.innerHTML = "<font color=#585858>" + i + "</font>";	
+					}
+			}
+			if(off.includes(substring2) == true){	// 화요일
+				if(cnt % 7 == 3){					
+					cell.innerHTML = "<font color=#585858>" + i + "</font>";	
+					}
+			}
+			if(off.includes(substring3) == true){	// 수요일
+				if(cnt % 7 == 4){					
+					cell.innerHTML = "<font color=#585858>" + i + "</font>";	
+					}
+			}
+			if(off.includes(substring4) == true){	// 목요일
+				if(cnt % 7 == 5){					
+					cell.innerHTML = "<font color=#585858>" + i + "</font>";	
+					}
+			}
+			if(off.includes(substring5) == true){	// 금요일
+				if(cnt % 7 == 6){					
+					cell.innerHTML = "<font color=#585858>" + i + "</font>";	
+					}
+			}
 		//	if (nowMonth > realDate.getMonth()+1){					// 표시된 월이 현재 월보다 2이상 큰경우 (예약 가능날짜 이번달 기준 다음달까지 제한)
 		//		document.getElementById(i).style.color = "#585858";
 				//document.getElementById(i).readOnly = true; // readonly 활성화
@@ -672,6 +714,7 @@ p {
 	
 			cell.onclick = function(){
 				// 셀 클릭시 월, 일 값 전역변수에 저장 
+				
 				cellTime = this.getAttribute('id');
 				cellTime = cellTime*1;
 				selectedMonth = currentDate.getMonth() + 1;
@@ -682,6 +725,7 @@ p {
 				clickedDateId = this.getAttribute('id'); // this=cell에 있는 id 속성 변수에적용
 				clickedDate = clickedDateId;
 				clickedDateNum = parseInt(clickedDateId);
+				clickedDateNumPlus = clickedDateNum + cnttt;
 				clickedDayqs = parseInt(clickedDateId)+cnttt;
 				clickedrealDate = parseInt(clickedDateId)-cnttt;
 				clickedDate = clickedDate >= 10 ? clickedDate : '0'
@@ -712,12 +756,13 @@ p {
 				document.getElementById("bdate").value = clickedYMD;
 				if(nowDate <= clickedDateNum && nowMonth == realDate.getMonth() || nowMonth != realDate.getMonth()){
 					cntt+=1;
-				}	
+				}
 				
 				document.getElementById("bday").value = clickedDay;
 				if(cntt == 1){
 					rememberId = clickedDateId;	
 				}
+				
 				showTimeTable();
 				if(nowDate > clickedDateNum && nowMonth == realDate.getMonth()){
 					document.getElementById(rememberId).style.color = "black";
@@ -741,9 +786,76 @@ p {
 					document.getElementById(clickedDateId).style.backgroundColor = "#00FF00";
 					rememberId = clickedDateId;
 				}
+				if(nowDate <= clickedDateNum || nowMonth == realDate.getMonth()){
+				// dayoff에 해당 요일 해당할시 이벤트
+				if(off.includes(substring0) == true){	// 일요일
+					if(clickedDateNumPlus % 7 == 0){
+						document.getElementById(rememberId).style.color = "black";
+						document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
+						alert("예약할 수 없는 날짜입니다.");
+						hideTimeTable();
+						clearAll();
+					}
+				}
+				if(off.includes(substring6) == true){	// 토요일 
+					if(clickedDateNumPlus % 7 == 6){
+						document.getElementById(rememberId).style.color = "black";
+						document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
+						alert("예약할 수 없는 날짜입니다.");
+						hideTimeTable();
+						clearAll();
+						}
+				}
+				if(off.includes(substring1) == true){	// 월요일
+					if(clickedDateNumPlus % 7 == 1){	
+						document.getElementById(rememberId).style.color = "black";
+						document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
+						alert("예약할 수 없는 날짜입니다.");
+						hideTimeTable();
+						clearAll();
+						}
+				}
+				if(off.includes(substring2) == true){	// 화요일
+					if(clickedDateNumPlus % 7 == 2){	
+						document.getElementById(rememberId).style.color = "black";
+						document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
+						alert("예약할 수 없는 날짜입니다.");
+						hideTimeTable();
+						clearAll();
+						}
+				}
+				if(off.includes(substring3) == true){	// 수요일
+					if(clickedDateNumPlus % 7 == 3){		
+						document.getElementById(rememberId).style.color = "black";
+						document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
+						alert("예약할 수 없는 날짜입니다.");
+						hideTimeTable();
+						clearAll();
+						}
+				}
 				
-				document.getElementById("show1").value = nowDate; // 현달력 값
-				document.getElementById("show2").value = realDate.getMonth();	// 변하지 않는 월값
+				if(off.includes(substring4) == true){	// 목요일
+					if(clickedDateNumPlus % 7 == 4){	
+						document.getElementById(rememberId).style.color = "black";
+						document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
+						alert("예약할 수 없는 날짜입니다.");
+						hideTimeTable();
+						clearAll();
+						}
+				}
+				if(off.includes(substring5) == true){	// 금요일
+					if(cnt % 7 == 5){		
+						document.getElementById(rememberId).style.color = "black";
+						document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
+						alert("예약할 수 없는 날짜입니다.");
+						hideTimeTable();
+						clearAll();
+						}
+				} 
+				}
+				document.getElementById("show1").value =  "${store.smaxreserv}"; // 현달력 값
+				document.getElementById("show2").value = clickedDateNum;	
+				
 				if(nowDate-1 < clickedDateId || realDate.getMonth() + 1 == nowMonth || nowDate < clickedDateNum && nowMonth != realDate.getMonth()){			
 					buildTimeTable();
 				}			
@@ -861,6 +973,7 @@ p {
 	function nextCalendar() {
 		currentDate = new Date(currentDate.getFullYear(), currentDate
 				.getMonth() + 1, currentDate.getDate())
+		rememberId = null;
 		if(realDate.getMonth()+1 < currentDate.getMonth()){
 			alert("예약은 오늘날부터 다음달까지 가능합니다.")
 			currentDate = new Date(currentDate.getFullYear(), currentDate
@@ -939,13 +1052,10 @@ p {
 			<p>
 				이름 : ${store.sname }<span id="distance"></span>
 			</p>
-			<p> 데이오프 : ${dayOff }[0]
-			</p>
 			<p>주소 : ${store.saddress }</p>
 			<p>휴무일 : ${dayOff }</p>
 			<p>영업시간 : ${store.openHour }</p>
 			<p>예약금 : ${store.sdepo }</p>
-			<p>예약금 : ${store.smaxreserv }</p>
 			<p>
 				<c:choose>
 					<c:when test="${store.sdeli eq 1 }">
@@ -1069,9 +1179,8 @@ p {
 					var operation = $(this).data("oper");
 					
 					if(operation === 'bookreg'){
-						
-					
-						if(document.getElementById("bman").value == 'none'){
+						var maxreserv = "${store.smaxreserv}";
+						if(document.getElementById("bman").value == 'none' && maxreserv != 0){
 							alert("예약 인원을 선택해야합니다.");
 							return;
 						}
