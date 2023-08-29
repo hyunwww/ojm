@@ -24,6 +24,7 @@
 </head>
 
 <body>
+<jsp:include page="../../testHeader.jsp"></jsp:include>
 	<div id="content">
 		<form action="" method="post">
 			프로필 이미지 <br><img src="${imgRoot }"><br>	<!-- 수정도 가능하게 바꿔야함 -->
@@ -76,8 +77,8 @@
 		</form>
 	</div>
 	<jsp:include page="myPageFooter.jsp"></jsp:include>
-	
 </body>
+<jsp:include page="../../testFooter.jsp"></jsp:include>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">

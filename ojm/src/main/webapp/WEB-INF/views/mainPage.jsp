@@ -40,12 +40,9 @@
   ======================================================== -->
 </head>
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/javascript">
-	var user = '${uvo}';
-	
-	
-</script>
 <body>
+<jsp:include page="testHeader.jsp"></jsp:include>
+<%-- 
   <!-- ======= Header ======= -->
   <header id="header" class="d-flex align-items-center">
     <div class="container d-flex justify-content-between">
@@ -86,10 +83,9 @@
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
-
     </div>
   </header><!-- End Header -->
-
+ --%>
   <!-- ======= Hero Section ======= -->
   <section id="hero">
     <div id="heroCarousel" data-bs-interval="2500" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -172,9 +168,9 @@
     </div>
   </section><!-- End Hero -->
 	
-	
+<!-- 	
 
-  <!-- Vendor JS Files -->
+  Vendor JS Files
   <script src="/resources/vendor/aos/aos.js"></script>
   <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/resources/vendor/glightbox/js/glightbox.min.js"></script>
@@ -183,9 +179,10 @@
   <script src="/resources/vendor/waypoints/noframework.waypoints.js"></script>
   <script src="/resources/vendor/php-email-form/validate.js"></script>
 
-  <!-- Template Main JS File -->
+  Template Main JS File
   <script src="/resources/js/main.js"></script>
-
+ -->
 </body>
+<jsp:include page="testFooter.jsp"></jsp:include>
 
 </html>

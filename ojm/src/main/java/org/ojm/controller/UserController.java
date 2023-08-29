@@ -86,7 +86,7 @@ public class UserController {
 	@GetMapping("/reg_user")
 	public String userRegisterG() {
 		log.info("userRegister......");
-		return "user/userRegister";
+		return "user/userRegisterTest";
 	}
 	
 	// authList 부분 때문에 uservo 자동 바인딩이 안되어서 일단 하드 코딩. 해결방법 못찾음
@@ -119,9 +119,7 @@ public class UserController {
 		if (service.regUser(uvo) > 0) {
 			model.addAttribute("register", "buisness");
 		} else {
-			model.addAttribute("register", "fail"
-					
-					);
+			model.addAttribute("register", "fail");
 		}
 
 		return "redirect:login";

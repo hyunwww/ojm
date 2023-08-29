@@ -14,6 +14,7 @@
 	}
 </script>
 </head>
+<jsp:include page="../testHeader.jsp"></jsp:include>
 <body>
 	<form action="login" method="post" id="loginForm">
 		id <input type="text" name="username"><br>
@@ -23,6 +24,7 @@
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }">
 	</form>
 </body>
+<jsp:include page="../testFooter.jsp"></jsp:include>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	var form = $("#loginForm");
