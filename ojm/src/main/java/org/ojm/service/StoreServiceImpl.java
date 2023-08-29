@@ -39,11 +39,15 @@ public class StoreServiceImpl implements StoreService{
 	@Autowired
 	private UserMapper uMapper;
 	
-	@Override
-		public List<StoreVO> allStores() {
-			return mapper.allStore();
-		}
 	
+	@Override
+	public List<StoreVO> allStores(int start, int end) {
+		if (end > mapper.countStore()) {
+			return mapper.allStore(start, mapper.countStore());
+		}else {
+			return mapper.allStore(start, end);
+		}
+	}
 	
 	@Override
 	@Transactional 
@@ -77,7 +81,45 @@ public class StoreServiceImpl implements StoreService{
 	public StoreVO storeInfo(int sno) {
 		
 		StoreVO info = mapper.storeInfo(sno);
-		try {
+		
+		String result = "";
+		
+		// 데이터 >> 요일
+		if (info.getDayOff() != null && !info.getDayOff().equals("")) {
+			for (String day : info.getDayOff().split("")) {
+				switch (day) {
+				case "1":
+					result += "월요일,";
+					break;
+				case "2":
+					result += "화요일,";
+					break;
+				case "3":
+					result += "수요일,";
+					break;
+				case "4":
+					result += "목요일,";
+					break;
+				case "5":
+					result += "금요일,";
+					break;
+				case "6":
+					result += "토요일,";
+					break;
+				case "0":
+					result += "일요일,";
+					break;
+				default:
+					break;
+				}
+			}
+			info.setDayOff(result.substring(0, result.length()-1));
+		}else {
+			info.setDayOff("없음");
+		}
+		
+		
+		try { // list의 null은 무시
 			info.setMenuList(mMapper.getMenu(sno));
 			info.setImgList(iMapper.getImg(sno));
 			info.setRevList(rMapper.storeReviewList(sno));
@@ -170,8 +212,32 @@ public class StoreServiceImpl implements StoreService{
 	
 	//좋아요 적용
 	@Override
-	public int storeLike(int sno, int amount) {
-		return mapper.storeLike(sno, amount);
+	@Transactional
+	public int storeLike(int sno, int amount, String uno) {
+		int result = 0;
+		switch (amount) {
+		case 1:
+				result = uMapper.addLikeStore(String.valueOf(sno), uno);
+				if (result > 0) {
+					result = mapper.storeLike(sno, amount);
+				}else {
+					result = 0;
+				}
+			break;
+		case -1:
+			result = uMapper.deleteLikeStore(String.valueOf(sno), uno);
+			if (result > 0) {
+				result = mapper.storeLike(sno, amount);
+			}else {
+				result = 0;
+			}
+			break;
+
+		default:
+			break;
+		}
+		
+		return result;
 	}
 	
 	// top10
@@ -193,10 +259,10 @@ public class StoreServiceImpl implements StoreService{
 	
 	// 푸쉬용
 	// 스토어 예약 신청 
-		@Override
-		public void addBook(BookVO vo) {
-			log.info("register serv...");
-			mapper.addbook(vo);
-		}
+	@Override
+	public void addBook(BookVO vo) {
+		log.info("register serv...");
+		mapper.addbook(vo);
+	}
 	
 }

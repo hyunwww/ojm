@@ -74,7 +74,7 @@
 				</tr>		
 			</table>
 		</form>
-		<button name="qreplyregisterbtn" type="submit">댓글 달기</button>
+		<button name="qreplyregisterbtn" type="submit">댓글 등록</button>
 		<hr>
 		</c:if>
 		

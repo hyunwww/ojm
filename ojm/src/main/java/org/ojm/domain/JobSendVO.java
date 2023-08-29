@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JobSendVO {
 	private int jsno, jno, uno, sno;
-	private String career, pobu;
+	private String career, pobu, sname;
 	private Date jsdate;
 }

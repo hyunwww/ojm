@@ -69,11 +69,11 @@
 }
 .store:hover{
 	transform: scale(1.01);
-	transition: all 0.2s ease-out;
+	transition: transform 0.2s ease-out;
 }
 .mapContainer {
 	display: none;
-	width: 80%;
+	width: 100%;
 	height: 250px;
 	margin: auto;
 }
@@ -135,6 +135,38 @@
 	.cons{
 		width: 100%;
 		height: 200px;
+	}
+	.sideFilter{
+		position: sticky;
+		top: 0;
+		transition : all 0.3s ease-out 0s;
+	}	
+	.bubble{
+		width: fit-content;
+		height: auto;
+		background-color: white;
+		border: 2px solid indianred;
+		border-radius: 15px;
+		padding: 3px;
+		position: relative;
+		top: -42px;
+		right: 2px;
+	}
+	.imgBox{
+		display: inline-block;
+		position: relative;
+		border: 8px solid lightgray;
+		border-radius: 5px;
+	}
+	.imgBox button{
+		position: absolute;
+		top: 0%;
+		right: 0%;
+	}
+	.imgBox img{
+		width: 150px;
+		height: 150px;
+		object-fit : fill;
 	}
 </style>
 </head>

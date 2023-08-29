@@ -194,7 +194,6 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 	$(function() {
 		
 		
-		
 		//순위 차트 불러오기
 		getRanking();
 		
@@ -232,6 +231,20 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 				scate.push("");
 			}
 			
+			//예약 및 배달 처리
+			var delivery = [];
+			var reservation = [];
+			if ($("input[name='sdeli']").is(":checked")) {
+				delivery.push("1");
+			}else{
+				delivery.push("");
+			}
+			if ($("input[name='smaxreserv']").is(":checked")) {
+				reservation.push("1");
+			}else{
+				reservation.push("");
+			}
+			
 			//ajax 처리가 끝날 때까지 로딩 표시
 			$("#searchResult").html('<div id="loading"></div>');
 			
@@ -240,9 +253,10 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 			      type: "get",
 			      url: "/store/search/filter",
 			      data: {scate : scate,
-			    	  	location : selectedLocation},
+			    	  	location : selectedLocation,
+			    	  	delivery : delivery,
+			    	  	reservation : reservation},
 			      success: function (result, status, xhr) {
-			    	  
 			    	  
 			    	  $("#searchResult").empty();
 			    	  var str = "";
@@ -262,10 +276,10 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 				    			store.str += '<p>'+store.saddress+'</p>';
 				    			store.str += '</div>';
 				    			store.str += '<div class="card-footer">';
-				    			if (store.sdeli == 1) {
+				    			if (store.smaxreserv > 0) {
 				    				store.str += '<i class="attTag">예약</i> ';
 								}
-				    			if (store.smaxreserv > 0) {
+				    			if (store.sdeli == 1) {
 				    				store.str += '<i class="attTag">배달</i> ';
 								}
 				    			store.str += '</div>';
@@ -300,11 +314,6 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 
 			    		var map = new kakao.maps.Map(mapContainer, options); //지도 생성 및 객체 리턴
 			    		
-			    		/* 
-			    		// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
-			    		var zoomControl = new kakao.maps.ZoomControl();
-			    		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-			    		 */
 			    		
 			    		for (var store of storeResult) {
 			    			//이미지 마커 생성 및 지도범위 설정
@@ -410,7 +419,7 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 		
 		
 		// 결과 정렬
-		$("select[name='sort']").click(function() {
+		$("select[name='sort']").change(function() {
 			switch ($(this).val()) {
 			case 'review':
 				storeResult.sort(function(a, b) {
@@ -576,21 +585,6 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 			</div>
 			
 			<div class="sideFilter">
-				<div class="category one">
-					<h5>카테고리</h5>
-					<input type="checkbox" name="scate" value="한식">한식
-					<input type="checkbox" name="scate" value="일식">일식
-					<input type="checkbox" name="scate" value="중식">중식
-					<input type="checkbox" name="scate" value="양식">양식
-					<input type="checkbox" name="scate" value="아시아">아시아
-				</div>
-				<br><hr>
-				<div class="category two">
-					<h5>거리</h5>
-					<span id="distLim"></span>
-					<input type="range" value="0" min="0" max="50" step="1"  style="width: -webkit-fill-available">
-				</div>
-				<br><hr>
 				<div id="category four">
 					<h5>location</h5>
 					<select name="location">
@@ -607,6 +601,28 @@ keyframes spin {to { -webkit-transform:rotate(360deg);
 						<option value="강원도">강원도</option>
 					</select>
 				</div>
+				<div class="category one">
+					<h5>카테고리</h5>
+					<input type="checkbox" name="scate" value="한식">한식
+					<input type="checkbox" name="scate" value="일식">일식
+					<input type="checkbox" name="scate" value="중식">중식
+					<input type="checkbox" name="scate" value="양식">양식
+					<input type="checkbox" name="scate" value="아시아">아시아
+				</div>
+				<br><hr>
+				<div class="category two">
+					<h5>거리</h5>
+					<span id="distLim"></span>
+					<input type="range" value="0" min="0" max="50" step="1"  style="width: -webkit-fill-available">
+				</div>
+				<br><hr>
+				<div class="filterEtc">
+					<span>예약 가능</span>&nbsp;<input type="checkbox" name="smaxreserv" value="1">
+					<br>
+					<span>배달 가능</span>&nbsp;<input type="checkbox" name="sdeli" value="1">
+					<br>
+				</div>
+				<br><hr>
 			</div>
 		</div>
 	</div>

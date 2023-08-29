@@ -8,8 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.ojm.domain.AuthVO;
 import org.ojm.domain.BookVO;
+import org.ojm.domain.FilterVO;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.ReportVO;
 import org.ojm.domain.StoreImgVO;
@@ -48,10 +52,33 @@ public class StoreController {
 	@Autowired
 	private StoreService service;
 	@Autowired
-	BCryptPasswordEncoder encoder;
+	private BCryptPasswordEncoder encoder;
 	
+	@GetMapping("/registerTest")
+	public String regTest() {
+		
+		
+		return "/store/testRegister";
+	}
+	@GetMapping("/registerUpdate")
+	public String updateTest(@RequestParam("sno")int sno, Model model) {
+		
+		
+		return "/store/testUpdate";
+	}
 	@GetMapping("/goTest")
-	public String goTest() {
+	public String goTest(HttpSession session, HttpServletRequest request, Model model) {
+		String referer = request.getHeader("referer");
+		if (session.getAttribute("filterData") != null) {
+			if (referer != null && referer.contains("detail")) {
+				log.info("이전페이지 : detail");
+				log.info("session 정보 : " + session.getAttribute("filterData"));
+			}else {
+				session.removeAttribute("filterData");
+			}
+		}else {
+		}
+		
 		return "testPage";
 		
 	}
@@ -90,7 +117,6 @@ public class StoreController {
 				for (AuthVO avo : user.getUvo().getAuthList()) {
 					if (avo.getAuth().equals("ROLE_user")) {	//일반 유저
 						storeInfo.setSpermmit(0);
-						break;
 					}else if (avo.getAuth().equals("ROLE_business")) {	//사업자
 						storeInfo.setSpermmit(1);
 						break;
@@ -109,14 +135,11 @@ public class StoreController {
 	}
 	
 	// 매장 전체 리스트 ( test 끝 , 임시 사용 용도 )
-	@GetMapping("/storeList")
-	public String storeList(Model model) {
-		log.info("getting storeListtttt");
-		List<StoreVO> list = service.allStores();
-		
-		
-		model.addAttribute("stores", list);
-		return "/store/storeSearch";
+	@GetMapping(value = "/storeList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<StoreVO>> storeList(@RequestParam("point")int point) {
+		log.info("getting storeListtttt" + point);
+		return new ResponseEntity<List<StoreVO>>(service.allStores((point*5-4), (point*5)), HttpStatus.OK);
 	}
 	// top10 매장
 	@GetMapping(value = "/rank", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -143,14 +166,30 @@ public class StoreController {
 	@GetMapping(value = "/search/filter", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<StoreVO>> searchStore(@RequestParam("scate[]")List<String> scate,
-														@RequestParam("location")String location) {
+														@RequestParam("location")String location,
+														@RequestParam("delivery[]")String delivery,
+														@RequestParam("reservation[]")String reservation) {
 		List<StoreVO> result = null;
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		List<String> loc = new ArrayList<String>();
+		List<String> deli = new ArrayList<String>();
+		List<String> reserv = new ArrayList<String>();
 		if (location == null || location.equals("")) {
 		}else {
 			loc.add("%" + location + "%");
 		}
+		if (delivery == null || delivery.equals("")) {
+		}else {
+			deli.add(delivery);
+		}
+		if (reservation  == null || reservation.equals("")) {
+		}else {
+			reserv.add(reservation);
+		}
+	
+		
+		map.put("reservation", reserv);
+		map.put("delivery", deli);
 		map.put("cateList", scate);
 		map.put("location", loc);
 		log.info("searchWithFilter >>> " + map);
@@ -166,6 +205,7 @@ public class StoreController {
 	// 매장 상세정보 ( test 끝 )
 	@GetMapping("/detail")
 	public String detail(Model model, @RequestParam("sno") int sno, Principal principal) {
+		
 		
 		log.info("detail...." + sno);
 		log.info("user : " + principal);
@@ -193,45 +233,15 @@ public class StoreController {
 		
 		
 		StoreVO svo = service.storeInfo(sno);
-		String result = "";
-		
-		// 데이터 >> 요일
-		if (svo.getDayOff() != null && !svo.getDayOff().equals("")) {
-			for (String day : svo.getDayOff().split("")) {
-				switch (day) {
-				case "1":
-					result += "월요일,";
-					break;
-				case "2":
-					result += "화요일,";
-					break;
-				case "3":
-					result += "수요일,";
-					break;
-				case "4":
-					result += "목요일,";
-					break;
-				case "5":
-					result += "금요일,";
-					break;
-				case "6":
-					result += "토요일,";
-					break;
-				case "0":
-					result += "일요일,";
-					break;
-				default:
-					break;
-				}
-			}
-			model.addAttribute("dayOff", result.substring(0, result.length()-1));
-		}else {
-			result = "없음";
-			model.addAttribute("dayOff", result);
+		if (svo == null) {
+			model.addAttribute("errorCode", "noInfo");
+			return "mainPage";
 		}
+		
 		log.info("현재 매장 좋아요 여부 : " + isLike); 
 		model.addAttribute("isLike", isLike);
 		model.addAttribute("store" , svo);
+		model.addAttribute("uvo", service.getUserById(principal.getName()));
 		return "/store/storeDetail";
 	}
 	
@@ -303,8 +313,8 @@ public class StoreController {
 			if (current && uvo.getInfo().getUlikestore() != null) {//좋아요 이미 누른 경우 제거
 				uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore().replace(String.valueOf(sno)+",", ""));
 				
-				//db
-				//service.storeLike(sno, -1);
+				//db 매장정보 수정
+				service.storeLike(sno, -1, String.valueOf(uvo.getUno()));
 			}else {//좋아요 아닌 경우 추가
 				if (uvo.getInfo().getUlikestore() == null || uvo.getInfo().getUlikestore().isEmpty()) {
 					uvo.getInfo().setUlikestore(""+sno+",");
@@ -312,16 +322,13 @@ public class StoreController {
 					uvo.getInfo().setUlikestore(uvo.getInfo().getUlikestore() +sno+",");
 				}
 				
-				//db
-				//service.storeLike(sno, 1);
+				//db 매장정보 수정
+				service.storeLike(sno, 1, String.valueOf(uvo.getUno()));
 			}
 			log.info(uvo.getInfo().getUlikestore());
 			
-			//db에 변경사항 저장
 			
 			
-			//유저
-			//uService.modifyUser(uvo);
 			
 			
 			
@@ -364,12 +371,12 @@ public class StoreController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delete")
 	public String goDelete(@RequestParam("sno") int sno, Model model,
-							@RequestParam("uno")int uno,
 							@AuthenticationPrincipal CustomUser user) {
 		
 		if (user != null) {
-			if (user.getUvo().getUno() != uno) {	//유저 검증
-				return "redirect:/";
+			if (user.getUvo().getUno() != service.storeInfo(sno).getUno()) {	//유저 검증
+				model.addAttribute("errorCode", "access");
+				return "mainPage";
 			}else {
 				model.addAttribute("store", service.storeInfo(sno));
 				return "/store/storeDelete";
@@ -405,13 +412,14 @@ public class StoreController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/update")
 	public String goUpdate(@RequestParam("sno")int sno, Model model,
-							@AuthenticationPrincipal CustomUser user,
-							@RequestParam("uno")int uno) {
+							@AuthenticationPrincipal CustomUser user) {
 		
 		log.info("goUpdate!");
 		if (user != null) {
-			if (user.getUvo().getUno() != uno) {	//유저 검증
-				return "redirect:/";
+			int storeUno = service.storeInfo(sno).getUno();
+			if (user.getUvo().getUno() != storeUno) {	//유저 검증
+				model.addAttribute("errorCode", "access");
+				return "mainPage";
 			}else {
 				
 				StoreVO storeInfo = service.storeInfo(sno);
@@ -507,5 +515,19 @@ public class StoreController {
 		log.info("addBook.......");
 		rttr.addFlashAttribute("result", "ok");
 		return "redirect:/store/detail?sno="+vo.getSno();
+	}
+	
+	@PostMapping(value = "/filterData", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<FilterVO> saveSession(@RequestBody FilterVO fvo, HttpSession session){
+		log.info("saveData : " + fvo);
+		if (fvo == null) {
+			return new ResponseEntity<FilterVO>(new FilterVO(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}else {
+			String realDist = fvo.getDistance().split(" ")[fvo.getDistance().split(" ").length - 1].replace("km", "");
+			fvo.setDistance(realDist);
+			session.setAttribute("filterData", fvo);
+			return new ResponseEntity<FilterVO>(fvo, HttpStatus.OK);
+		}
 	}
 }

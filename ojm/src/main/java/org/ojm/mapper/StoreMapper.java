@@ -10,7 +10,7 @@ import org.ojm.domain.StoreVO;
 
 public interface StoreMapper {
 	public int storeRegister(StoreVO store);
-	public List<StoreVO> allStore();
+	public List<StoreVO> allStore(@Param("start") int start, @Param("end") int end);
 	public List<StoreVO> searchStore(String input);
 	public List<StoreVO> searchStoreByUno(int uno);
 	public List<StoreVO> searchStoreByCate(Map<String, List<String>> map);
@@ -23,5 +23,6 @@ public interface StoreMapper {
 	public int updateStore(StoreVO store);
 	public int storeLike(@Param("sno") int sno, @Param("amount") int amount);
 	public int addbook(BookVO vo);	
+	public int countStore();
 	
 }

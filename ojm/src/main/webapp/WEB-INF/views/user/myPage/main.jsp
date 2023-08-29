@@ -7,20 +7,17 @@
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page import="org.springframework.security.core.Authentication" %>
 <%@ page import="org.ojm.security.domain.CustomUser" %>
-<%
-Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-Object principal = auth.getPrincipal();
-
-pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
-	// jsp 원래 있던 코드 그대로 쓰려고 (uvo 변수) 자바 코드 사용함
-	// 시큐리티로 인증되지 않은 사용자는 접근이 불가능하기에 예외처리도 필요없음.
-%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>내 정보</title>
+<style type="text/css">
+	img{
+		width: 50px;
+	}
+</style>
 <script type="text/javascript">
 
 </script>
@@ -29,6 +26,7 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 <body>
 	<div id="content">
 		<form action="" method="post">
+			프로필 이미지 <br><img src="${imgRoot }"><br>	<!-- 수정도 가능하게 바꿔야함 -->
 			id<input type="text" name="userid" value="${uvo.userid }" readonly="readonly"><br>
 			pw<input type="text" name="userpw" id="userpw" ><br>
 			pw확인<input type="text" id="userpw2"><b id="pwchecked"></b><br>

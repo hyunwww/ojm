@@ -18,9 +18,8 @@ public class StoreServiceTests {
 	
 	@Test
 	public void likeTest() {
-		
-		log.info(service.storeLike(83, -1));
-		
+		int point = 2;
+		log.info(service.allStores((point*3-2), (point*3)));
 		
 		
 	}

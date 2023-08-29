@@ -11,7 +11,7 @@ import org.ojm.domain.UserVO;
 
 public interface StoreService {
 	
-	public List<StoreVO> allStores();
+	public List<StoreVO> allStores(int start, int end);
 	public List<StoreVO> searchStore(String input);
 	public List<StoreVO> searchStoreByUno(int uno);
 	public List<StoreVO> searchStoreWithFilter(Map<String, List<String>> map);
@@ -24,7 +24,7 @@ public interface StoreService {
 	public int deleteStore(int sno);
 	public int updateStore(StoreVO store);
 	public int reportSubmit(ReportVO rvo);
-	public int storeLike(int sno, int amount);
+	public int storeLike(int sno, int amount, String uno);
 	
 	
 	//user관련 (임시 테스트용)

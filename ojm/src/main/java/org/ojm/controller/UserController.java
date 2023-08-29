@@ -3,6 +3,7 @@ package org.ojm.controller;
 
 import org.ojm.domain.AuthVO;
 import org.ojm.domain.InfoVO;
+import org.ojm.domain.ProfileImgVO;
 import org.ojm.domain.UserVO;
 import org.ojm.mail.MailHandler;
 import org.ojm.mail.TempKey;
@@ -75,6 +76,12 @@ public class UserController {
 		log.info("register......");
 		return "user/register";
 	}
+	@PostMapping("/loginfail")
+	public String loginfail(Model model) {
+		log.info("loginfail......");
+		
+		return "user/login";
+	}
 
 	@GetMapping("/reg_user")
 	public String userRegisterG() {
@@ -87,15 +94,11 @@ public class UserController {
 	// 일단 userVO에서 birth를 String으로 변경. service에서 날짜형식으로 변환할 것.
 	// 그리고 view단에서 권한을 name=auth로 넘기지 말고 authList[0].auth 처럼 인덱스를 부여해 배열로 넘겨야함 - service에서 권한부여하게함
 	@PostMapping("/regUser")
-	public String userRegisterP(InfoVO ivo, Model model,UserVO uvo) {
+	public String userRegisterP(InfoVO ivo, Model model,UserVO uvo,ProfileImgVO img) {
 		log.info("userRegister Post......");
-
-		if (service.regUser(uvo, ivo) > 0) {
+		
+		if (service.regUser(uvo,ivo,img) > 0) {
 			model.addAttribute("register", "user");
-			//sendMail(useremail);		// 회원가입 시 인증메일 전송
-										// 유저테이블에 인증정보 컬럼 추가하고 첫메일인증 후에 로그인 가능하게
-										// 메일 인증해야 권한 생기게?
-										// 비동기로 권한이나 인증여부 체크 후 성공 시 login 요청?
 		} else {
 			model.addAttribute("register", "fail");
 		}
@@ -120,8 +123,6 @@ public class UserController {
 					
 					);
 		}
-		// 가입 성공 시 특정 메세지로 일반 유저,사업자 나누고
-		// getRegister 페이지에서 성공/실패에 따라 페이지 나누면 좋을듯.
 
 		return "redirect:login";
 	}

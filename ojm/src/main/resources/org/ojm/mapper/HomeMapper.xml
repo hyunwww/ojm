@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.ojm.mapper.HomeMapper">
+	<resultMap type="org.ojm.domain.StoreVO" id="storeMap">
+		<result column="sno" property="sno"/>
+		<result column="sname" property="sname"/>
+		<result column="saddress" property="saddress"/>
+		<result column="wd" property="wd"/>
+		<result column="kd" property="kd"/>
+		<result column="scate" property="scate"/>
+		<result column="spermmit" property="spermmit"/>
+		<collection property="imgList" resultMap="storeImgMap" />
+	</resultMap>
+	<resultMap type="org.ojm.domain.StoreImgVO" id="storeImgMap">
+		<result column="sino" property="sino"/>
+		<result column="sno" property="sno"/>
+		<result column="uuid" property="uuid"/>
+		<result column="uploadpath" property="uploadPath"/>
+		<result column="filename" property="fileName"/>
+	</resultMap>
+	
+	<select id="allStore" resultMap="storeMap">
+		select 
+			s.sno,sname,saddress,wd,kd,scate,spermmit,sino,uuid,uploadpath,filename 
+		from
+			(select * from store where spermmit=1) s 
+		left join 
+			storeimg i 
+		on s.sno=i.sno
+	</select>
+</mapper>

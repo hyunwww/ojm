@@ -11,11 +11,14 @@
 	
 	<bean id="customAccessDenied" class="org.ojm.security.CustomAccessDeniedHandler"></bean>
 	<bean id="customLoginSuccess" class="org.ojm.security.CustomLoginSuccessHandler"></bean>
+	<bean id="customLoginFailure" class="org.ojm.security.CustomLoginFailureHandler"></bean>
 	<bean id="bcryptPasswordEncoder"
       class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
     </bean>
 	<bean id="customUserDetailService" class="org.ojm.security.CustomUserDetailService"></bean>
 	<security:http auto-config="true" use-expressions="true">
+		<security:intercept-url pattern="/user/reg*" access="isAnonymous()"/>
+		<security:intercept-url pattern="/user/login" access="isAnonymous()"/>
 		<security:intercept-url pattern="/user/findID/**" access="permitAll"/>
 		<!-- <security:intercept-url pattern="/user/myPage/b_*" access="hasRole('ROLE_business')"/> 정규식? 처럼도 가능.-->
 		<security:intercept-url pattern="/user/myPage/b/**" access="hasRole('ROLE_business')"/>
@@ -23,7 +26,9 @@
 		<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_admin')"/>
 		
 		<!-- 로그인 -->
-		<security:form-login login-processing-url="/user/login" login-page="/user/login" authentication-success-handler-ref="customLoginSuccess"/>	<!-- 로그인 -->
+		<security:form-login login-processing-url="/user/login" login-page="/user/login" 
+			authentication-success-handler-ref="customLoginSuccess" authentication-failure-handler-ref="customLoginFailure"/>	<!-- 로그인 -->
+		
 		<!-- 로그아웃 -->
 		<security:logout logout-url="/logout" 
 						invalidate-session="true"

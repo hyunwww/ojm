@@ -5,6 +5,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="org.ojm.mapper.JobSendMapper">
 	<insert id="jsInsert" parameterType="org.ojm.domain.JobSendVO">
-		insert into jobsend(jsno, jno, uno, sno, career, pobu, jsdate) values(seq_jsno.nextval, #{jno}, #{uno}, #{sno}, #{career}, #{pobu}, sysdate)
+		insert into jobsend(jsno, jno, uno, sno, career, pobu, jsdate, sname) values(seq_jsno.nextval, #{jno}, #{uno}, #{sno}, #{career}, #{pobu}, sysdate, #{sname})
 	</insert>
 </mapper>

@@ -195,6 +195,7 @@
 						}
 					}
 					$("#regForm").append('<input type="hidden" name="dayOff" value="'+dayInput+'"/>');
+					$("#regForm").append('<input type="hidden" name="smaxreserv" value="'+$("#reserveValue").text()+'"/>');
 					$("#regForm").submit();
 				});
 				
@@ -263,8 +264,30 @@
 					</td>
 				</tr>
 				<tr>
-					<td>영업시간</td>
-					<td><input type="number" name="openHour" value="${openHour }"> ~ <input type="number" name="closeHour" value="${closeHour }"></td>
+					<td>영업시간<span style="color: red;">*</span></td>
+					<td>
+						<select name="openHour">
+							<c:forEach var="num" begin="0" end="23">
+								<option value="${num }:00">${num }:00</option>
+								<option value="${num }:00">${num }:10</option>
+								<option value="${num }:00">${num }:20</option>
+								<option value="${num }:00">${num }:30</option>
+								<option value="${num }:00">${num }:40</option>
+								<option value="${num }:00">${num }:50</option>
+							</c:forEach>
+						</select>
+						~
+						<select name="closeHour">
+							<c:forEach var="num" begin="0" end="23">
+								<option value="${num }:00">${num }:00</option>
+								<option value="${num }:00">${num }:10</option>
+								<option value="${num }:00">${num }:20</option>
+								<option value="${num }:00">${num }:30</option>
+								<option value="${num }:00">${num }:40</option>
+								<option value="${num }:00">${num }:50</option>
+							</c:forEach>
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<td>사업자등록번호<span style="color: red;">*</span></td>
@@ -378,7 +401,15 @@
 			
 			var storeCategory = '${store.scate}';
 			var categories = $("select[name='scate'] option")
-			console.log('${store.sdeli}');
+			var sdepo = '${store.sdepo}';
+			if ('${store.sdeli}' == '0') {
+				$("#depoInput").attr("disabled", true);
+				$("#depoInput").val("");
+				$("#deposit").attr("disabled", true);
+				$("#noDeposit").attr("checked", true);
+			}
+			
+			//배달 유무
 			if ('${store.sdeli}' == '0') {
 				$("input[name='sdeli']")[1].setAttribute("checked", true);
 			}
@@ -388,35 +419,48 @@
 				}
 			}
 			
-			var dayOff = '${store.dayOff}';
-			console.log(dayOff.split(""));
-			for (var day of dayOff.split("")) {
+			//영업 시간
+			if ('${store.openHour}' != '') {
+				var openHour = '${store.openHour}';
+				var list = openHour.split(" ");
+				console.log(list);
+				$('select[name="openHour"]').val(list[0]).attr("selected","selected");
+				$('select[name="closeHour"]').val(list[2]).attr("selected","selected");
+				
+			}
+			
+			var dayOff = '${store.dayOff}'; // 값 ex) 월요일 일요일
+			console.log(dayOff.split(","));
+			for (var day of dayOff.split(",")) {
 				switch (day) {
-				case "1":
+				case "월요일":
 					$(".dayOff td[data-day='1']").addClass("dayClicked");
 					break;
-				case "2":
+				case "화요일":
 					$(".dayOff td[data-day='2']").addClass("dayClicked");
 					break;
-				case "3":
+				case "수요일":
 					$(".dayOff td[data-day='3']").addClass("dayClicked");
 					break;
-				case "4":
+				case "목요일":
 					$(".dayOff td[data-day='4']").addClass("dayClicked");
 					break;
-				case "5":
+				case "금요일":
 					$(".dayOff td[data-day='5']").addClass("dayClicked");
 					break;
-				case "6":
+				case "토요일":
 					$(".dayOff td[data-day='6']").addClass("dayClicked");
 					break;
-				case "0":
+				case "일요일":
 					$(".dayOff td[data-day='0']").addClass("dayClicked");
 					break;
 				default:
 					break;
 				}
 			}
+			
+			
+			
 			
 		})();
 	
@@ -442,17 +486,29 @@
         // 모달 x 버튼
  		function modalClose() {
             modal.style.display = "none";
+            menuForm.reset();
 		}
         // 모달창 밖 클릭 시 닫힘
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
+                menuForm.reset();
             }
         }
 		
         
         //메뉴 추가하기 버튼
 		$("#addMenuBtn").on("click", function() {
+			
+			if (menuForm.mname.value == '') {
+				alert("메뉴명을 입력해야합니다.");
+				return;
+			}
+			if (menuForm.mcate.value == 0) {
+				alert(2);
+				return;
+			}
+			
 			
 			var selectedAlrg = "";
 			for (var sel of menuForm.maler) {
@@ -473,6 +529,7 @@
 			
 			modal.style.display = "none";
 			alert("추가되었습니다.");
+			menuForm.reset();
 		});
         
         

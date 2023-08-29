@@ -61,9 +61,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    left join 
 		        userauth a 
 		    on u.userid = a.userid
-		where u.userid=#{id} and u.userpw=#{pw}
+		where u.userid=#{id}
 	</select>
 	
+	<!-- 회원가입 -->
 	<insert id="regUser" parameterType="org.ojm.domain.UserVO">
 		insert into usertable 
 			values(
@@ -95,6 +96,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="regUserAuth" parameterType="org.ojm.domain.AuthVO">
 		insert into userauth values(#{userid},#{auth})
 	</insert>
+	<insert id="regUserImg" parameterType="org.ojm.domain.ProfileImgVO">
+		insert into userinfoimg values(seq_uiino.nextval,seq_uno.currval,'tmp',#{uploadpath},#{filename})
+	</insert>
+	<!-- 회원가입 끝 -->
+	<select id="getUserImg" resultType="org.ojm.domain.ProfileImgVO">
+		select * from userinfoimg where uno=#{uno}
+	</select>
+	
 	<update id="modifyUser" parameterType="org.ojm.domain.UserVO">
 		update usertable set
 			userpw=#{userpw},
@@ -156,9 +165,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select uno from usertable where userid=#{userid}
 	</select>
 	
+	<!-- 매장 좋아요 관련 -->
+	<update id="addLikeStore">
+		update userinfo set ulikestore = '${sno},' || ulikestore where uno=#{uno}
+	</update>
+	
+	<update id="deleteLikeStore">
+		update userinfo set ulikestore = to_clob(REPLACE(to_char(ulikestore),'${sno},','')) where uno=#{uno}
+	</update>
+	<!-- 매장 좋아요 관련 -->
 	
 	
 	<!-- myPage -->
+	<!-- 일반유저 -->
 	<select id="getListWithPaging" resultType="org.ojm.domain.BoardVO">
 		<![CDATA[
 			select bno, bcate, btitle, bwriter, bdate, bupdatedate, bview, blike, breplycnt
@@ -198,7 +217,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
 		]]>
 	</select>
+	<select id="getJobSendList" resultType="org.ojm.domain.JobSendVO">
+		select * from jobsend where uno=#{uno}
+	</select>
+	<select id="getBookList" resultType="org.ojm.domain.BookWithStoreVO">
+		select s.sname,b.* from book b join store s on b.sno=s.sno
+	</select>
+	<select id="getReportList" resultType="org.ojm.domain.ReportVO">
+		<![CDATA[
+			select rpno, uno, rpreason, rptitle, rpwriter, rpdate, rpstate
+			from
+				(select /*+INDEX_DESC(board pk_board) */
+				rownum rn, rpno, uno, rpreason, rptitle, rpwriter, rpdate, rpstate from report
+				where]]>
+				<![CDATA[
+				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
+				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+		]]>
+	</select>
+	<select id="getReportTotalCount" resultType="int">
+		select count(*) from report
+	</select>
+	<!-- 일반유저 끝 -->
+	
+	
+	<!-- 사업자 -->
 	<select id="getStoreList" resultType="org.ojm.domain.StoreVO">
 		select * from store where uno=#{uno}
 	</select>
+	<select id="getBookListBusiness" resultType="org.ojm.domain.BookWithStoreVO">
+		select 
+			s.sname,s.uno,b.bkno,b.sno,b.bdate,b.btime,b.bman,b.bname,b.bphone,b.bdepo,b.breq 
+		from 
+			store s 
+		join 
+			book b on b.sno=s.sno 
+		where s.uno=#{uno}
+	</select>
+	<!-- 사업자 끝 -->
 </mapper>
