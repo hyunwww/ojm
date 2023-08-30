@@ -57,8 +57,9 @@
 	
 	
 </script>
+<jsp:include page="testHeader.jsp"></jsp:include>
 <body>
-  <!-- ======= Header ======= -->
+<%--   <!-- ======= Header ======= -->
   <header id="header" class="d-flex align-items-center">
     <div class="container d-flex justify-content-between">
 
@@ -101,7 +102,7 @@
 
     </div>
   </header><!-- End Header -->
-
+ --%>
   <!-- ======= Hero Section ======= -->
   <section id="hero">
     <div id="heroCarousel" data-bs-interval="2500" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -199,5 +200,5 @@
   <script src="/resources/js/main.js"></script>
 
 </body>
-
+<jsp:include page="testFooter.jsp"></jsp:include>
 </html>

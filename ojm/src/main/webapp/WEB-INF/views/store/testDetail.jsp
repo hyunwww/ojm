@@ -1,6 +1,60 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../testHeader.jsp" %>
+<style type="text/css">
+#breq {
+	resize: none;
+}
+
+document body {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#btnContainer button {
+	color: white;
+	background-color: purple;
+	border-radius: 3px;
+}
+#modal2 {
+	position: fixed;
+	z-index: 7;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+	display: none;
+}
+
+.modal-content2 {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#cbtn {
+	background-color: aqua;
+	color: white;
+}
+</style>
 <script type="text/javascript">
 //슬라이더 생성
 $(function() {
@@ -356,6 +410,7 @@ $(function() {
 		});
 	}
 </script>
+
 <main id="main">
 	
     <!-- ======= Breadcrumbs ======= -->
