@@ -21,7 +21,6 @@
 					<th>제목</th>
 					<th>작성자</th>
 					<th>작성일</th>
-					<th>수정일</th>					
 					<th>조회</th>
 					<th>추천</th>
 				</tr>
@@ -46,7 +45,6 @@
 								</td>
 								<td><c:out value="${board.bwriter }"></c:out></td>
 								<td><fmt:formatDate value="${board.bdate }" pattern="yyyy/MM/dd"/></td>
-								<td><fmt:formatDate value="${board.bupdatedate }" pattern="yyyy/MM/dd"/></td>
 								<td><c:out value="${board.bview }"></c:out></td>
 								<td><c:out value="${board.blike }"></c:out></td>
 							</tr>

@@ -59,17 +59,18 @@ public class UserServiceImpl implements UserService{
 	@Transactional
 	@Override
 	public int regUser(UserVO uvo,InfoVO ivo,ProfileImgVO img) {	// 일반유저
-		uvo.setUserpw(passwordEncoder.encode(uvo.getUserpw()));
+		uvo.setUserpw(passwordEncoder.encode(uvo.getUserpw()));		// 비밀번호 인코딩
 		if(mapper.regUser(uvo)>0) {
 			mapper.regUserInfo(ivo);
 			mapper.regUserImg(img);
-			mapper.newMailKey(uvo.getUseremail(), " ");
-			mapper.regUserAuth(new AuthVO(uvo.getUserid(), "ROLE_user"));
+			mapper.newMailKey(uvo.getUseremail(), " ");				// 아이디 찾기 메일 인증용
+			mapper.regUserAuth(new AuthVO(uvo.getUserid(), "ROLE_user"));	// 권한 부여
 		}else {
 			return -1;
 		}
 		return 1;
 	}
+	
 	@Transactional
 	@Override
 	public int regUser(UserVO uvo) {	// 사업자
