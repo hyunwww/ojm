@@ -185,9 +185,9 @@
     </div>
   </section><!-- End Hero -->
 	
-<!-- 	
+	
 
-  Vendor JS Files
+  <!-- Vendor JS Files -->
   <script src="/resources/vendor/aos/aos.js"></script>
   <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/resources/vendor/glightbox/js/glightbox.min.js"></script>
@@ -196,9 +196,9 @@
   <script src="/resources/vendor/waypoints/noframework.waypoints.js"></script>
   <script src="/resources/vendor/php-email-form/validate.js"></script>
 
-  Template Main JS File
+  <!-- Template Main JS File -->
   <script src="/resources/js/main.js"></script>
- -->
+
 </body>
 <jsp:include page="testFooter.jsp"></jsp:include>
 </html>

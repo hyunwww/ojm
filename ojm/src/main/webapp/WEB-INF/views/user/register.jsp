@@ -16,7 +16,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	$("#reg_user").on("click",function(){
-		location.href="regUser";
+		location.href="reg_user";
 	});
 	$("#reg_buisness").on("click",function(){
 		location.href="regBuisness";
