@@ -8,8 +8,8 @@
 </head>
 <body>
 	<form action="" method="post">
-		비밀번호 <input type="text" name="userpw" id="pw"><br>
-		비밀번호확인 <input type="text" id="pw2"><br>
+		비밀번호 <input type="password" name="userpw" id="pw"><br>
+		비밀번호확인 <input type="password" id="pw2"><br>
 		<input type="button" value="확인" onclick="change(this.form)">
 		<input type="hidden" value="${userid }" name="userid">
 	</form>
