@@ -5,13 +5,11 @@
 <!DOCTYPE html>
 <head>
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-<title>Flattern Bootstrap Template - Index</title>
-<meta content="" name="description">
-<meta content="" name="keywords">
-
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Flattern Bootstrap Template - Index</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
 <!-- Favicons -->
 <link href="/resources/img/apple-touch-icon.png" rel="apple-touch-icon">
 
@@ -237,7 +235,7 @@
 							<li><a href="/qboard/qlist">2</a></li>
 							<li><a href="/jboard/jlist">3</a></li>
 						</ul></li>
-					<li><a href="/store/storeList">Search</a></li>
+					<li><a href="/store/search">Search</a></li>
 					<li><a href="/store/register">Register</a></li>
 					<sec:authorize access="hasRole('ROLE_user')">
 						<li><a href="/user/myPage/main">myPage</a></li>
