@@ -70,29 +70,33 @@ public class UserController {
 	 * 
 	 * return "redirect:/user/myPage/tmp"; } return "redirect:login"; }
 	 */
-	
-	@GetMapping("/register")
-	public String register() {
-		log.info("register......");
-		return "user/register";
-	}
 	@PostMapping("/loginfail")
 	public String loginfail(Model model) {
 		log.info("loginfail......");
 		
 		return "user/login";
 	}
-
-	@GetMapping("/reg_user")
+	
+	// 회원가입 페이지 이동
+	@GetMapping("/register")
+	public String register() {
+		log.info("register......");
+		return "user/register";
+	}
+	
+	// 유저용 회원가입 페이지 이동
+	@GetMapping("/regUser")
 	public String userRegisterG() {
 		log.info("userRegister......");
-		return "user/userRegisterTest";
+		return "user/userRegister";
 	}
 	
 	// authList 부분 때문에 uservo 자동 바인딩이 안되어서 일단 하드 코딩. 해결방법 못찾음
 	// authList가 아니라 userbirth가 date 형식인데 형식에 안맞게 넘어와서 안됐었던 것
 	// 일단 userVO에서 birth를 String으로 변경. service에서 날짜형식으로 변환할 것.
 	// 그리고 view단에서 권한을 name=auth로 넘기지 말고 authList[0].auth 처럼 인덱스를 부여해 배열로 넘겨야함 - service에서 권한부여하게함
+	
+	// 유저 회원가입 수행
 	@PostMapping("/regUser")
 	public String userRegisterP(InfoVO ivo, Model model,UserVO uvo,ProfileImgVO img) {
 		log.info("userRegister Post......");
@@ -105,13 +109,15 @@ public class UserController {
 
 		return "redirect:login";
 	}
-
+	
+	// 사업자 회원가입 페이지 이동
 	@GetMapping("/regBuisness")
 	public String buisnessRegisterG() {
 		log.info("buisnessRegister......");
 		return "user/buisnessRegister";
 	}
-
+	
+	// 사업자 회원가입 페이지 수행
 	@PostMapping("/regBuisness")
 	public String buisnessRegisterP(Model model,UserVO uvo) {
 		log.info("buisnessRegister Post......");
@@ -220,8 +226,9 @@ public class UserController {
 		return check > 0 ? new ResponseEntity<>("success", HttpStatus.OK)
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
 	@ResponseBody
-	@RequestMapping(value = "/userIdCheck", method = RequestMethod.POST)
+	@RequestMapping(value = "/userIdCheck", method = RequestMethod.GET)
 	public ResponseEntity<String> userIdCheck(@RequestParam("userid") String userid) {
 		
 		log.info("userid : " + userid);

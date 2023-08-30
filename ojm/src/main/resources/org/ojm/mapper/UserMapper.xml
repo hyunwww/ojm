@@ -100,6 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into userinfoimg values(seq_uiino.nextval,seq_uno.currval,'tmp',#{uploadpath},#{filename})
 	</insert>
 	<!-- 회원가입 끝 -->
+	
 	<select id="getUserImg" resultType="org.ojm.domain.ProfileImgVO">
 		select * from userinfoimg where uno=#{uno}
 	</select>
@@ -153,6 +154,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    on u.userid = a.userid
 		where u.userid=#{id}
 	</select>
+	
 	<select id="idCheck" resultType="int">
 		select count(*) from usertable where userid=#{userid}
 	</select>
