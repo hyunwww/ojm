@@ -206,7 +206,9 @@ public class StoreServiceImpl implements StoreService{
 	public List<StoreVO> searchStoreWithFilter(Map<String, List<String>> map) {
 		
 		List<StoreVO> result = mapper.searchStoreByCate(map);
-		
+		for (StoreVO store : result) {
+			store.setImgList(iMapper.getImg(store.getSno()));
+		}
 		
 		
 		return result;

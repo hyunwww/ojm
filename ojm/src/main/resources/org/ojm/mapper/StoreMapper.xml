@@ -23,8 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{spermmit}, 
 			#{openHour},
 			#{smaxreserv},
-			#{dayOff},
-			sysdate
+			#{dayOff}
 		)
 	</insert>
 	
@@ -122,8 +121,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 리뷰 정보  -->
 	<resultMap type="org.ojm.domain.ReviewVO" id="reviewMap">
 		<result property="rvno" column="rvno"/>
-		<result property="sno" column="sno_1"/>
-		<result property="uno" column="uno_1"/>
+		<result property="sno" column="rsno"/>
+		<result property="uno" column="runo"/>
 		<result property="rvstar" column="rvstar"/>
 		<result property="rvcontent" column="rvcontent"/>
 		<result property="rvlike" column="rvlike"/>
@@ -131,7 +130,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<select id="searchStoreByCate" parameterType="Map" resultMap="storeMap">
-			select * from store s left join review r on s.sno = r.sno 
+			select s.sno,s.uno,sname,saddress,wd,kd,sphone,sdeli,scrn,sdepo,slike,sstar,spermmit,openhour,smaxreserv,dayoff,rvno,r.sno rsno,r.uno runo,rvstar,rvcontent,rvlike,rvdate  
+			from store s left join review r on s.sno = r.sno 
 			<choose>
 				<when test="cateList != null and cateList.size() > 0">
 					where scate in 

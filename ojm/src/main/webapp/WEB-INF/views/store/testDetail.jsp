@@ -123,8 +123,10 @@ $(function() {
 		
 		//리뷰버튼(비로그인) 이벤트
 		$("#revBtn").on("click", function() {
-			alert("로그인이 필요한 서비스입니다.");
-			location.href = '/user/login';
+			var conf = confirm("로그인이 필요한 서비스입니다. 로그인하시겠습니까?");
+			if (conf) {
+				location.href = '/user/login';
+			}
 		});
 		
 		//신고 버튼 이벤트 
@@ -201,7 +203,10 @@ $(function() {
 			    	  
 			      },
 			      error: function(xhr, status, error) {
-					alert("로그인이 필요한 서비스입니다.");
+			    	  var conf = confirm("로그인이 필요한 서비스입니다. 로그인하시겠습니까?");
+						if (conf) {
+							location.href = '/user/login';
+						}
 				}
 			});
 		});

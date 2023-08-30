@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../testHeader.jsp" %>
 <script type="text/javascript">
-var errorcode = '${errorCode}';
 //슬라이더 생성
 $(function() {
 	$('.owl-carousel').owlCarousel({
@@ -124,8 +123,10 @@ $(function() {
 		
 		//리뷰버튼(비로그인) 이벤트
 		$("#revBtn").on("click", function() {
-			alert("로그인이 필요한 서비스입니다.");
-			location.href = '/user/login';
+			var conf = confirm("로그인이 필요한 서비스입니다. 로그인하시겠습니까?");
+			if (conf) {
+				location.href = '/user/login';
+			}
 		});
 		
 		//신고 버튼 이벤트 
@@ -195,7 +196,10 @@ $(function() {
 			    	  
 			      },
 			      error: function(xhr, status, error) {
-					alert("로그인이 필요한 서비스입니다.");
+			    	  var conf = confirm("로그인이 필요한 서비스입니다. 로그인하시겠습니까?");
+						if (conf) {
+							location.href = '/user/login';
+						}
 				}
 			});
 		});
@@ -242,37 +246,61 @@ $(function() {
 <script type="text/javascript">  /* 현재 위치 및 거리 계산*/
 	var distance;	//현재 위치로부터의 거리
 	var currentPosition;
+	navigator.geolocation.getCurrentPosition(
+			function(position) {
+				console.log(position);
+				currentPosition = {
+						"latitude" : position.coords.latitude,
+						"longitude" : position.coords.longitude
+				};
+			}, 
+			function() {
+				//임시 좌표 
+				var geocoder = new kakao.maps.services.Geocoder();
+				var x;
+				var y;
+				
+				geocoder.addressSearch('서울특별시 구로구 서울시 구로구 시흥대로 163길 33', function(result, status) {
+					if (status === kakao.maps.services.Status.OK) {
+							x = result[0].road_address.x;
+							y = result[0].road_address.y;
+						
+					}
+					
+					currentPosition = {
+							"latitude" : y,
+							"longitude" : x
+					}
+					
+				});
+				
+			});
+	
 	$(function() {
-		navigator.geolocation.getCurrentPosition(
-				function(position) {
-					currentPosition = position.coords;
-					// 마커 이미지 생성
-					var targetImageUrl = '/resources/img/icon/free-icon-location-pointer-2098567.png', 
-					    targetImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
-					    targetImageOptions = { 
-					        offset : new kakao.maps.Point(13, 42)// 마커 좌표에 일치시킬 이미지 안의 좌표
-					    };
-					
-					var targetMarkerImage = new kakao.maps.MarkerImage(targetImageUrl, targetImageSize, targetImageOptions);
-
-					
-					var currentLocMarker = new kakao.maps.Marker({
-			            map: popMap,
-			            position: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
-			            image : targetMarkerImage
-			        });
-					bounds.extend(currentLocMarker.getPosition());
-					distance = getDistance(kd,wd,position.coords.latitude,position.coords.longitude);
-					console.log("현재 위치로부터의 거리 : " + distance + " km");
-					$("#distance").html(distance+" km");
-					
-
-					
-				}, 
-				function() {
-					alert("geolocation error");
-				}
-				);
+		
+		
+		console.log(currentPosition);
+		
+		// 마커 이미지 생성
+		var targetImageUrl = '/resources/img/icon/free-icon-location-pointer-2098567.png', 
+		    targetImageSize = new kakao.maps.Size(40, 42), // 마커 이미지의 크기
+		    targetImageOptions = { 
+		        offset : new kakao.maps.Point(13, 42)// 마커 좌표에 일치시킬 이미지 안의 좌표
+		    };
+		
+		var targetMarkerImage = new kakao.maps.MarkerImage(targetImageUrl, targetImageSize, targetImageOptions);
+		var currentLocMarker = new kakao.maps.Marker({
+	         map: popMap,
+	         position: new kakao.maps.LatLng(currentPosition.latitude, currentPosition.longitude),
+	         image : targetMarkerImage
+	     });
+		
+		bounds.extend(currentLocMarker.getPosition());
+		distance = getDistance(kd,wd,currentPosition.latitude,currentPosition.longitude);
+		
+		console.log("현재 위치로부터의 거리 : " + distance + " km");
+		$("#distance").html(distance+" km");
+		
 	});
 	
 	//거리계산함수
@@ -303,39 +331,54 @@ $(function() {
 	function recommendByDistance() {
 		var scate = ['${store.scate}'];
 		var saddr = '${store.saddress}';
+		var sdel = [];
+		var sres = [];
+		if ('${store.sdeli}' == 0) {
+			sdel.push("");
+		}else{
+			sdel.push("1");
+		}
+		if ('${store.smaxreserv}' == 0) {
+			sres.push("");
+		}else{
+			sres.push("1");
+		}
+		
 		//지역과 카테고리 기준으로 불러오기
 		$.ajax({
 		      type: "get",
 		      url: "/store/search/filter",
 		      data: {scate : scate,
-		    	  	location : saddr.split(" ")[0]},
+		    	  	location : saddr.split(" ")[0],
+		    	  	delivery : sdel,
+		    	  	reservation : sres},
 		      success: function (result, status, xhr) {
 		    		console.log(result);
-		    	  
-		    	  for (var store of result) {
-		    		if (sno == store.sno) { //현재 매장 제외
-						continue;
+					for (var store of result) {
+			    		if (sno == store.sno) { //현재 매장 제외
+							continue;
+						}
+			    		//내 위치로부터 거리 *distance 는 현재 매장에 대한 정보 , 단위 : km
+			    		var dist = getDistance(kd, wd, store.kd, store.wd);
+			    		var empty = true;
+			    		if (dist <= 5) {	//5km 범위
+			    			empty = false;
+					    	var str = '';
+					    	
+					    	str += '<div class="post-item clearfix">';
+					    	str += '<img src="/resources/img/ja.jpg" alt="image">';
+					    	str += '<h4><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h4>';
+					    	str += '<time datetime="2020-01-01">detail</time>';
+					    	str += '</div>';
+					    	
+					    	$(".recent-posts").eq(0).append(str);
+						}
+			    		
 					}
-		    		//내 위치로부터 거리 *distance 는 현재 매장에 대한 정보 , 단위 : km
-		    		var dist = getDistance(kd, wd, store.kd, store.wd);
-		    		var empty = true;
-		    		if (dist <= 5) {
-		    			empty = false;
-				    	var str = '';
-				    	
-				    	str += '<div class="post-item clearfix">';
-				    	str += '<img src="/resources/img/ja.jpg" alt="image">';
-				    	str += '<h4><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h4>';
-				    	str += '<time datetime="2020-01-01">detail</time>';
-				    	str += '</div>';
-				    	
-				    	$(".recent-posts").eq(0).append(str);
+		    	  	
+					if ($(".recent-posts").eq(0).find(".post-item").length < 1) { //매칭 결과 없을 경우
+					    $(".recent-posts").eq(0).append("메세지");
 					}
-		    		
-		    		
-		    		
-				}
-		    	
 		    	
 		    		
 		      },
@@ -378,6 +421,9 @@ $(function() {
 	                  <li class="d-flex align-items-center"><i class="bi bi-pin-map-fill"></i>${store.saddress }</li>
 	                  <li class="d-flex align-items-center"><i class="bi bi-cursor-fill"></i><span id="distance">거리정보</span></li>
 	                </ul>
+	                <ul>
+	                  <li class="d-flex align-items-center"><i class="bi bi-telephone-fill"></i>${store.sphone }</li>
+	                </ul>
 	              </div>
               	</div>
               	<div class="col-lg-3" style="border: 1px solid black; height: 150px;" id="mapContainer">
@@ -411,21 +457,7 @@ $(function() {
 				         <div class="owl-next">&gt;</div>
 				      </div>
               		
-              	</div>
-                <p>이름 : ${store.sname }<span id="distance"></span></p>
-				<p>휴무일 : ${dayOff }</p>
-				<p>영업시간 : ${store.openHour }</p>
-				<p>예약금 : ${store.sdepo }</p>
-				<p>
-					<c:choose>
-						<c:when test="${store.sdeli eq 1 }">
-							배달 o
-						</c:when>
-						<c:otherwise>
-							배달 x
-						</c:otherwise>
-					</c:choose>
-				</p>
+              	</div><br>
 				<div id="utilBox" style="text-align: left;">
 					<c:choose>
 						<c:when test="${isLike }">
@@ -448,10 +480,17 @@ $(function() {
 
                 <i class="bi bi-tags"></i>
                 <ul class="tags">
+                  <c:if test="${store.sdeli eq 1 }">
+                  	<li><a href="#">배달 가능</a></li>
+                  </c:if>	
+                  <c:if test="${store.smaxreserv gt 0 }">
+                  	<li><a href="#">예약 가능</a></li>
+                  </c:if>	
                   <li><a href="#">smallTag 1</a></li>
                   <li><a href="#">smallTag 2</a></li>
                   <li><a href="#">smallTag 3</a></li>
                 </ul>
+                <div class="border-bottom py-3"></div>
                 <div id="btnContainer" style="text-align: right; padding: 10px;">
 					<button id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal">신고</button>
 					<sec:authorize access="isAuthenticated()">
@@ -467,25 +506,42 @@ $(function() {
 
             </article><!-- End blog entry -->
 
-            
+            <article class="entry entry-single">
+            	<div class="entry-content"><!-- 영업시간  -->
+            		<h3 style="margin-top: 0px;">영업시간</h3>
+            		<p>${store.openHour }</p>
+            		<p>휴무 : ${store.dayOff }</p>
+            	</div><br>
+            	<div class="entry-footer"><!-- 메뉴 정보  -->
+            		<br>
+            		<h4>메뉴</h4>
+            		<div class="menuBox">
+            			<c:forEach var="menu" items="${store.menuList }">
+            				<p>${menu.mname } =============== ${menu.mprice }</p>
+            			</c:forEach>
+            		</div>
+            	</div>
+            </article>
 
             <div class="blog-comments">
 
               <h4 class="comments-count">reviews</h4><br>
-			  <div class="blog-author d-flex align-items-center">
-	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="">
+              <c:forEach var="review" items="${store.revList }">
+              	<div class="blog-author d-flex align-items-center">
+	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="images"><!-- 프로필사진  -->
 	              <div>
-	                <h4>Jane Smith</h4>
+	                <h4>유저 아이디</h4>
 	                <div class="social-links">
 	                  <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
 	                  <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
 	                  <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
+	                  <a href="https://instagram.com/#"><i class="bi bi-star-fill"></i>${review.rvstar }</a>
 	                </div>
-	                <p>
-	                  Itaque quidem optio quia voluptatibus dolorem dolor. Modi eum sed possimus accusantium. Quas repellat voluptatem officia numquam sint aspernatur voluptas. Esse et accusantium ut unde voluptas.
-	                </p>
+	                <p>${review.rvcontent }</p>
 	              </div>
 	            </div><!-- End blog author bio -->
+              </c:forEach>
+			  
 	            
 			  <div class="blog-author d-flex align-items-center">
 	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="">
@@ -563,13 +619,6 @@ $(function() {
                   <h4><a href="blog-single.html">title</a></h4>
                   <time datetime="2020-01-01">desc</time>
                 </div>
-
-                <div class="post-item clearfix">
-                  <img src="/resources/img/sam.jpg" alt="">
-                  <h4><a href="blog-single.html">Quidem autem et impedit</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
-                </div>
-                
 
               </div><!-- End sidebar recent posts-->
 
