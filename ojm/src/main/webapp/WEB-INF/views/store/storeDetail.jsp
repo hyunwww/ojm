@@ -519,6 +519,7 @@ $(function() {
 			cntDate += 1; // 31
 			cell.setAttribute('id', i); // 달력의 셀마다(일수) id 값 적용 1일 id = "1" 
 			cell.innerHTML = i; // cell 입력란에 i 값 입력
+			cell.style.color = "black";
 			cell.align = "center"; // cell 입력이 되면 cell 가운데 정렬
 			if (cnt % 7 == 1) { // 일요일 조건
 				cell.innerHTML = "<font color=red>" + i + "</font>";
@@ -767,7 +768,6 @@ $(function() {
 			for (i = 0; i < endHour - openHour; i++){
 				cntime += 1;
 				cellTime = openHour*1 + i;
-				//if(cellTime > compareTime && nowDate == realDate.getDate() && nowMonth == realDate.getMonth()){			// 현재 시간기준 지난 시간대 예약 불가	
 					cellTimeText = cellTime-100 + ":00";
 					inputCellText = cellTimeText;
 					
@@ -775,11 +775,10 @@ $(function() {
 					cell.setAttribute('id', cellTime);
 					cell.innerHTML = inputCellText;
 					cell.bgColor="#CEE3F6";
-					
+					cell.style.color= "black";
 					if(cntime % 5 == 0){
 						row = timeTable.insertRow();
 					}
-				//}
 				cell.onclick = function(){
 					cntcnt+=1;
 					cellTime = this.getAttribute('id');
@@ -802,32 +801,27 @@ $(function() {
 			for(i = 0; i < overHours + endHour; i++){
 				cntime += 1;
 				cellTime = openHour*1 + i;
-				//if(cellTime > compareTime && nowDate == realDate.getDate() && nowMonth == realDate.getMonth()){
 					if(cellTime < 124){					
 						cellTimeText = cellTime-100 + ":00";
 						inputCellText = cellTimeText;
-						}else{
-							cellTimeText = cellTime-124 + ":00";
-							inputCellText = cellTimeText;
-						}
-				
-				
+					}else{
+						cellTimeText = cellTime-124 + ":00";
+						inputCellText = cellTimeText;
+					}
+					
 				cell = row.insertCell();
 				cell.setAttribute('id', cellTime);
 				cell.innerHTML = inputCellText;
 				cell.bgColor="#CEE3F6";
-				
+				cell.style.color= "black";
 				if(cntime % 5 == 0){
 					row = timeTable.insertRow();
 				}
-				//}
 				cell.onclick = function(){
 					cntcnt+=1;
-					//cellTime = cellTime*1;
 					cellTime = this.getAttribute('id');
-					document.getElementById("btime").value = cellTime;
-					
-
+					document.getElementById("btime").value = cellTime-100;
+					cellTime = cellTime*1;
 					if(cntcnt == 1){
 						rcellTime = cellTime;
 					}
@@ -838,7 +832,7 @@ $(function() {
 					rcellTime = cellTime;
 				}
 			}
-		}				
+		}	
 	}
 	
 	function backCalendar() {
@@ -1232,7 +1226,7 @@ $(function() {
 <!-- 리뷰 모달  -->
 	<div id="modal1">
 		<div class="modal-content1">
-			<form action="/store/addrv" method="post" role="form">
+			<form action="/store/addrv" method="post" role="form" id="revForm">
 				<div id="review-title1">
 					<span>평점</span><br />
 					<div class="form-group1">
@@ -1249,7 +1243,7 @@ $(function() {
 						 <input type="hidden" name="rvlike" value="1">
 					</div>
 					<input type="button" value="취소" id="close-modal1" data-oper="reset" class="btn"> 
-					<input type="submit" value="등록" class="btn">
+					<input type="submit" value="등록" class="btn" data-oper="revreg">
 				</div>
 			</form>
 		</div>
@@ -1336,6 +1330,20 @@ $(function() {
 	});
 </script>
 <script type="text/javascript">
+//	$(function()){
+//		var revForm = $("#revForm");
+//		$("input").on('click', function(e){
+//			e.preventDefault();		// 입력 이벤트 아닐시 이벤트 비활성화
+		
+//			var operation = $(this).data("oper");
+///			
+//			if(operation = $(this).data("oper"));
+//			
+//			if(operation === 'revreg'){
+//				if(document.getElementById(""))
+//			}
+//		}
+//	}
 	function bmanget(){
 		var smax = document.getElementById('hidesmax').value;
 		var numsmax = parseInt(smax);
