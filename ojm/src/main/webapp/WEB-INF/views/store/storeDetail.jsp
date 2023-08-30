@@ -1032,7 +1032,7 @@ $(function() {
 
               </div>
 
-              <div class="entry-footer"><!-- tag 사용  -->
+              <div class="entry-footer"><!-- tag 사용  --><br>
                 <i class="bi bi-folder"></i>
                 <ul class="cats">
                   <li><a href="#">${store.scate }</a></li>
@@ -1052,9 +1052,9 @@ $(function() {
                 </ul>
                 <div class="border-bottom py-3"></div>
                 <div id="btnContainer" style="text-align: right; padding: 10px;">
-					<button id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal">신고</button>
-					<button id="open-modal1">리뷰 작성</button>
-					<button id="open-modal2">예약</button>
+					<button id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal" class="btn btn-outline-danger"><i class="bi bi-exclamation-triangle"></i> 신고</button>
+					<button id="open-modal1" class="btn btn-outline-dark"><i class="bi bi-chat-right-text" style="color: black; "></i> 리뷰 작성</button>
+					<button id="open-modal2" class="btn btn-outline-dark"><i class="bi bi-calendar3 bs-dark"></i> 예약</button>
 				</div>
               </div>
 
