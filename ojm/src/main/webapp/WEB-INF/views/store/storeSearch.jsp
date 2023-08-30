@@ -591,6 +591,7 @@
 						  }
 				    	  getFromStoreResult(point, 5);
 					}
+				    getFromStoreResult(point, 5);
 			    	  
 			    	  
 			    	  

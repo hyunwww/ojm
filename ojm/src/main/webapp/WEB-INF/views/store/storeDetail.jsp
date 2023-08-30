@@ -75,7 +75,7 @@
 	cursor: pointer;
 }
 
-.star span {
+#rvstar{
 	width: 0;
 	position: absolute;
 	left: 0;
@@ -166,12 +166,17 @@ $(function() {
 	var nowLike = '${isLike}';
 	var sno = '${store.sno}';
 	var slike = '${store.slike}';
+	
 
 	var popMap;	//지도 객체
 	var kd = '${store.kd}';
 	var wd = '${store.wd}';
 	var bounds = new kakao.maps.LatLngBounds(); //지도 범위
 	$(function() {
+		
+		var sstar = '${store.sstar}';
+		console.log('star : ' + sstar);
+		fillStar(sstar);
 		
 		// 마커 이미지의 주소(현재 위치)
 		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
@@ -289,7 +294,7 @@ $(function() {
 		
 		
 		//좋아요 버튼 이벤트
-		$("#utilBox span").on("click", function() {
+		$(".likeBtn").on("click", function() {
 			
 			
 			console.log("nowLike : " + nowLike);
@@ -302,11 +307,11 @@ $(function() {
 			      success: function (result, status, xhr) {
 			    	  if(result){// 좋아요 적용
 			    		  slike++;
-			    		  $(".likeBtn").html('<i class="bi bi-hand-thumbs-up-fill"></i>'+" "+slike);
+			    		  $(".likeBtn").html('<i class="bi bi-hand-thumbs-up"></i>'+" 좋아요 "+slike);
 			    		  nowLike = true;
 			    	  }else{//해제
 			    		  slike--;
-			    		  $(".likeBtn").html('<i class="bi bi-hand-thumbs-up"></i>'+" "+slike);
+			    		  $(".likeBtn").html('<i class="bi bi-hand-thumbs-up"></i>'+" 좋아요 "+slike);
 			    		  nowLike = false;
 			    	  }
 			    	  
@@ -1022,15 +1027,10 @@ $(function() {
               		
               	</div><br>
 				<div id="utilBox" style="text-align: left;">
-					<c:choose>
-						<c:when test="${isLike }">
-							<span class="likeBtn"><i class="bi bi-hand-thumbs-up-fill"></i> ${store.slike }</span>
-						</c:when>
-						<c:otherwise>
-							<span class="likeBtn"><i class="bi bi-hand-thumbs-up"></i> ${store.slike }</span>
-						</c:otherwise>
-					</c:choose>
-					<p><i class="bi bi-star-fill"></i> ${store.sstar }</p>
+					<p style="font-size: 20px; margin-bottom : 5px;">평균 평점 ${store.sstar } 점</p>
+					<p><span class="star"> ★★★★★ <span class="staravg" style="width: 0; position: absolute; left: 0; color: indianred; overflow: hidden; height: -webkit-fill-available">★★★★★</span></span>
+						<span>총 리뷰수 ${fn:length(store.revList)}</span>
+					</p>
 				</div>
 
               </div>
@@ -1049,12 +1049,17 @@ $(function() {
                   <c:if test="${store.smaxreserv gt 0 }">
                   	<li><a href="#">예약 가능</a></li>
                   </c:if>	
-                  <li><a href="#">smallTag 1</a></li>
-                  <li><a href="#">smallTag 2</a></li>
-                  <li><a href="#">smallTag 3</a></li>
                 </ul>
                 <div class="border-bottom py-3"></div>
                 <div id="btnContainer" style="text-align: right; padding: 10px;">
+                	<c:choose>
+						<c:when test="${isLike }">
+							<button style="float: left; " class="likeBtn btn btn-outline-dark"><i class="bi bi-hand-thumbs-up-fill"></i> 좋아요 ${store.slike }</button>
+						</c:when>
+						<c:otherwise>
+							<button style="float: left;" class="likeBtn btn btn-outline-dark"><i class="bi bi-hand-thumbs-up"></i> 좋아요 ${store.slike }</button>
+						</c:otherwise>
+					</c:choose>
 					<button class="btn btn-outline-dark" id="listBtn">목록으로</button>
 					<button id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal" class="btn btn-outline-danger"><i class="bi bi-exclamation-triangle"></i> 신고</button>
 					<button id="open-modal1" class="btn btn-outline-dark"><i class="bi bi-chat-right-text"></i> 리뷰 작성</button>
@@ -1354,9 +1359,13 @@ $(function() {
 	
 <!-- 리뷰 모달 -->
 <script type="text/javascript"> /* review 모달 스크립트  */
+	function fillStar(avg) {
+		document.querySelector('.staravg').style.width = avg * 20 - 3
+		+ '%';
+	}
 	function myFunction(drawstar) {
 		//const drawstar = document.querySelector('.star input');
-		document.querySelector('.star span').style.width = drawstar * 20
+		document.querySelector('#rvstar').style.width = drawstar * 20
 				+ '%';
 	}
 	const modal1 = document.getElementById("modal1");
