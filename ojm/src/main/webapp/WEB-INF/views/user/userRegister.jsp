@@ -16,8 +16,8 @@
 		id<input type="text" name="userid" id="userid">
 		<input type="button" value="중복확인" onclick="idCheck()"><br>
 		
-		pw<input type="text" name="userpw" id="userpw"><br>
-		pw확인<input type="text" id="userpw2"><b id="pwchecked"></b><br>
+		pw<input type="password" name="userpw" id="userpw"><br>
+		pw확인<input type="password" id="userpw2"><b id="pwchecked"></b><br>
 		이름<input type="text" name="username"><br>
 		생일<input type="text" name="userbirth" placeholder="생년월일 6자리" maxlength="6"><br>
 		번호<input type="text" name="userphone"><br>
@@ -142,7 +142,7 @@
 		}
 		
 		$.ajax({	
-	      	type : 'post',
+	      	type : 'get',
 	     	url : 'userIdCheck',
 	      	data: {userid:userid},
 	     	success : function(){ 
