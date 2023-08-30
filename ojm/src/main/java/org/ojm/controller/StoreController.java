@@ -75,8 +75,9 @@ public class StoreController {
 	@GetMapping("/search")
 	public String goTest(HttpSession session, HttpServletRequest request, Model model) {
 		String referer = request.getHeader("referer");
+		log.info(referer);
 		if (session.getAttribute("filterData") != null) {
-			if (referer != null && referer.contains("detail")) {
+			if (referer != null && (referer.contains("detail") || referer.contains("recommend"))) {
 				log.info("이전페이지 : detail");
 				log.info("session 정보 : " + session.getAttribute("filterData"));
 			}else {
@@ -88,6 +89,16 @@ public class StoreController {
 		return "/store/storeSearch";
 		
 	}
+	@GetMapping("/recommend")
+	public String mainRecommend(HttpSession session, @RequestParam("category")String category) {
+		FilterVO fvo = new FilterVO();
+		fvo.setCategories(category);
+		fvo.setDistance("0");
+		session.setAttribute("filterData", fvo);
+		
+		return "/store/recommend";
+	}
+	
 	@GetMapping(value = "/keyword", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<StoreVO>> searchByKeyword(@RequestParam("keyword")String keyword){

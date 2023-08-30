@@ -612,7 +612,6 @@
 			}
 		}
 		filterData.categories = cates;
-		
 		$.ajax({
 			  type: "post",
 		      url: "/store/filterData",

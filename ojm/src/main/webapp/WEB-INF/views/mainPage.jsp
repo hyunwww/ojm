@@ -139,7 +139,7 @@
 		      <div class="carousel-content">
 		        <h2>오늘 점심 뭐 먹을까?</h2>
 		        <p></p>
-		        <div class="text-center"><a href="" class="btn-get-started">중식?</a></div>
+		        <div class="text-center"><a href="/store/recommend?category=중식," class="btn-get-started">중식?</a></div>
 		      </div>
 		    </div>
 		</div>
@@ -148,7 +148,7 @@
 		      <div class="carousel-content">
 		        <h2>오늘 점심 뭐 먹을까?</h2>
 		        <p></p>
-		        <div class="text-center"><a href="" class="btn-get-started">한식?</a></div>
+		        <div class="text-center"><a href="/store/recommend?category=한식," class="btn-get-started">한식?</a></div>
 		      </div>
 		    </div>
 		</div>

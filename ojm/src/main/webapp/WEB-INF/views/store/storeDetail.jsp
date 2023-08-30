@@ -231,10 +231,16 @@ $(function() {
 		
 		
 		
-		
-		
-		
-		
+		$("#btnContainer button").mouseover(function() {
+			$(this).find("i").css("color", "white");
+		});
+		$("#btnContainer button").mouseout(function() {
+			$(this).find("i").css("color", "");
+		});
+		//목록
+		$("#listBtn").click(function() {
+			location.href = '/store/search';
+		});
 		//리뷰버튼(비로그인) 이벤트
 		$("#revBtn").on("click", function() {
 			var conf = confirm("로그인이 필요한 서비스입니다. 로그인하시겠습니까?");
@@ -243,18 +249,16 @@ $(function() {
 			}
 		});
 		
-		//신고 버튼 이벤트 
-		$("#reportBtn").on("click", function() {
-			$(".reportOverlay").show();
-		});
-		//신고 모달 내 버튼 이벤트
-		$(".reportOverlay input[value='뒤로']").click(function() {
-			$(".reportOverlay").hide();
-			$(".reportOverlay form")[0].reset();
-		});
-		$(".reportOverlay input[value='신고하기']").click(function() {
+		//신고모달 초기화
+		var repModal = document.getElementById('reportModal')
+		repModal.addEventListener('hidden.bs.modal', event => {
+			$("#reportModal form")[0].reset();
+		})
+		//신고
+		$("#reportSubmit").click(function() {
 			
-			var form = $(".reportOverlay form")[0];
+			var form = $("#reportModal form")[0];
+			console.log(form);
 			if (form.rptitle.value == '') {
 				alert("제목 필수작성");
 				return;
@@ -266,7 +270,7 @@ $(function() {
 			
 			var check = confirm("신고내용을 제출하시겠습니까?"); // 확인 메세지
 			if (check) {
-				var formData = $(".reportOverlay form").serialize() ;
+				var formData = $("#reportModal form").serialize() ;
 
 				$.ajax({
 					type : 'post',
@@ -277,8 +281,6 @@ $(function() {
 					},
 					success : function(result){
 						alert("제출되었습니다.");
-						$(".reportOverlay").hide();
-						$(".reportOverlay form")[0].reset();
 					}
 				});
 			}
@@ -508,8 +510,8 @@ $(function() {
 	var getTime = "${store.openHour}";
 	var times = getTime.split('~');
 	
-	var openHour = parseInt(times[0])+100;
-	var endHour = parseInt(times[1])+100;
+	var openHour = parseInt(times[0].split(":")[0]+1)+100;
+	var endHour = parseInt(times[1].split(":")[0])+100;
 	
 	var currentDate = new Date();
 	var realDate = new Date();
@@ -807,6 +809,7 @@ $(function() {
 		
 		row = timeTable.insertRow();
 		// 당일 시작후 당일날 끝날때 Time View
+		
 		if(openHour < endHour){
 			for (i = 0; i < endHour - openHour; i++){
 				cntime += 1;
@@ -1052,8 +1055,9 @@ $(function() {
                 </ul>
                 <div class="border-bottom py-3"></div>
                 <div id="btnContainer" style="text-align: right; padding: 10px;">
+					<button class="btn btn-outline-dark" id="listBtn">목록으로</button>
 					<button id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal" class="btn btn-outline-danger"><i class="bi bi-exclamation-triangle"></i> 신고</button>
-					<button id="open-modal1" class="btn btn-outline-dark"><i class="bi bi-chat-right-text" style="color: black; "></i> 리뷰 작성</button>
+					<button id="open-modal1" class="btn btn-outline-dark"><i class="bi bi-chat-right-text"></i> 리뷰 작성</button>
 					<button id="open-modal2" class="btn btn-outline-dark"><i class="bi bi-calendar3 bs-dark"></i> 예약</button>
 				</div>
               </div>
@@ -1261,7 +1265,7 @@ $(function() {
 			</form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">작성하기</button>
+        <button type="button" class="btn btn-dark" id="reportSubmit">신고하기</button>
       </div>
     </div>
   </div>
