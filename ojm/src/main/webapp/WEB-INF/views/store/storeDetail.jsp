@@ -27,7 +27,7 @@
 
 #modal1 {
 	position: fixed;
-	z-index: 1;
+	z-index: 10;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -1053,14 +1053,8 @@ $(function() {
                 <div class="border-bottom py-3"></div>
                 <div id="btnContainer" style="text-align: right; padding: 10px;">
 					<button id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal">신고</button>
-					<sec:authorize access="isAuthenticated()">
-						<button id="open-modal" data-bs-toggle="modal" data-bs-target="#revModal">리뷰 작성</button>
-					</sec:authorize>
 					<button id="open-modal1">리뷰 작성</button>
-					<sec:authorize access="isAnonymous()">
-					</sec:authorize>
 					<button id="open-modal2">예약</button>
-					<button data-bs-toggle="modal" data-bs-target="#replyModal">test</button>
 				</div>
               </div>
 
@@ -1353,7 +1347,8 @@ $(function() {
 	<div class="map-overlay">
 		<div class="mapModal"></div>
 	</div>
-	<!-- 리뷰 모달 -->
+	
+<!-- 리뷰 모달 -->
 <script type="text/javascript"> /* review 모달 스크립트  */
 	function myFunction(drawstar) {
 		//const drawstar = document.querySelector('.star input');
@@ -1378,116 +1373,7 @@ $(function() {
 		document.body.style.overflow = "auto"; // 스크롤바 보이기
 	});
 </script>
-	<!-- 리뷰 모달 -->
-<script type="text/javascript"> /* review 모달 스크립트  */
-	function myFunction(drawstar) {
-		//const drawstar = document.querySelector('.star input');
-		document.querySelector('.star span').style.width = drawstar * 20
-				+ '%';
-	}
-	const modal1 = document.getElementById("modal1");
-	const openModalBtn = document.getElementById("open-modal1");
-	const closeModalBtn = document.getElementById("close-modal1");
-	
-	// 모달창 열기
-	openModalBtn.addEventListener("click", () => {
-		modal1.style.display = "block";
-		document.body.style.overflow = "hidden"; // 스크롤바 제거
-	});
-	
-	// 모달창 닫기
-	closeModalBtn.addEventListener("click", () => {
-		modal1.style.display = "none";
-		document.getElementById("review-content1").value = "";
-		document.querySelector('.star span').style.width = 0+'%';
-		document.body.style.overflow = "auto"; // 스크롤바 보이기
-	});
-</script>
-<script type="text/javascript">
-//	$(function()){
-//		var revForm = $("#revForm");
-//		$("input").on('click', function(e){
-//			e.preventDefault();		// 입력 이벤트 아닐시 이벤트 비활성화
-		
-//			var operation = $(this).data("oper");
-///			
-//			if(operation = $(this).data("oper"));
-//			
-//			if(operation === 'revreg'){
-//				if(document.getElementById(""))
-//			}
-//		}
-//	}
-	function bmanget(){
-		var smax = document.getElementById('hidesmax').value;
-		var numsmax = parseInt(smax);
-			
-					
-		for(var i = 1; i <= numsmax; i++){
-			var option = $("<option value="+i+">"+i+"</option>");
-			$(".bman").append(option);						
-		}
-	}
-	$(function(){
-		var bookForm = $("#bookForm");
-		$("input").on('click', function(e){
-			e.preventDefault();		//  입력 이벤트 아닐시 이벤트 비활성화
-				
-			var operation = $(this).data("oper");
-					
-			if(operation === 'bookreg'){
-				var maxreserv = "${store.smaxreserv}";
-				if(document.getElementById("bman").value == 'none' && maxreserv != 0){
-					alert("예약 인원을 선택해야합니다.");
-					return;
-				}
-				else if(document.getElementById("bname").value == ''){
-					alert("예약자 이름 입력");
-					return;
-				}
-				else if(document.getElementById("bphone").value == ''){
-					alert("휴대폰 번호 입력");
-					return;
-				}
-				else if(document.getElementById("bdate").value == ''){
-					alert("날짜 선택");
-					return;
-				}
-				else if(document.getElementById("btime").value == ''){
-					alert("시간 선택");
-					return;
-				}
 
-				bookForm.attr("action", "/store/bookregister");	
-						
-				bookForm.submit();
-			}
-		});
-	});		
-</script>
-<script type="text/javascript"> 
-	const modal2 = document.getElementById("modal2");
-	const openModalBtn2 = document.getElementById("open-modal2");
-	const closeModalBtn2 = document.getElementById("close-modal2");
-	
-	// 예약 모달 열기
-	openModalBtn2.addEventListener("click", () => {
-		modal2.style.display = "block";
-		document.body.style.overflow = "hidden"; // 스크롤바 제거
-		var manman = document.getElementById("hidesmax").value;
-		if(manman == "0"){	  
-			document.getElementById("bman").style.display = "none";
-		}
-		checkedToday();
-		bmanget();
-	});
-	// 예약 모달 닫기
-	closeModalBtn2.addEventListener("click", () => {
-		modal2.style.display = "none";
-		document.body.style.overflow = "auto"; // 스크롤바 보이기
-	});
-	<!-- book -->
-</script>
 <script type="text/javascript">
 //	$(function()){
 //		var revForm = $("#revForm");
