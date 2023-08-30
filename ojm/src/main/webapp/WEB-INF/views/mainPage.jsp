@@ -134,6 +134,24 @@
 	        </div>
         </sec:authorize>
 		
+		<div class="carousel-item" style="background-image: url(/resources/img/ja.jpg);">
+		    <div class="carousel-container">
+		      <div class="carousel-content">
+		        <h2>오늘 점심 뭐 먹을까?</h2>
+		        <p></p>
+		        <div class="text-center"><a href="" class="btn-get-started">중식?</a></div>
+		      </div>
+		    </div>
+		</div>
+		<div class="carousel-item" style="background-image: url(/resources/img/sam.jpg);">
+		    <div class="carousel-container">
+		      <div class="carousel-content">
+		        <h2>오늘 점심 뭐 먹을까?</h2>
+		        <p></p>
+		        <div class="text-center"><a href="" class="btn-get-started">한식?</a></div>
+		      </div>
+		    </div>
+		</div>
 		<!-- 가게 이미지 반복 -->
 		<c:forEach var="store" items="${slist }">
 			<div class="carousel-item" style="background-image: url('/images/${store.imgList[0].uuid }_${store.imgList[0].fileName}');">
@@ -186,8 +204,8 @@
   </section><!-- End Hero -->
 	
 	
-
-  <!-- Vendor JS Files -->
+<!-- 
+  Vendor JS Files
   <script src="/resources/vendor/aos/aos.js"></script>
   <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/resources/vendor/glightbox/js/glightbox.min.js"></script>
@@ -196,9 +214,9 @@
   <script src="/resources/vendor/waypoints/noframework.waypoints.js"></script>
   <script src="/resources/vendor/php-email-form/validate.js"></script>
 
-  <!-- Template Main JS File -->
+  Template Main JS File
   <script src="/resources/js/main.js"></script>
-
+ -->
 </body>
 <jsp:include page="testFooter.jsp"></jsp:include>
 </html>

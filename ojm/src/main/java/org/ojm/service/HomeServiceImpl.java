@@ -2,6 +2,8 @@ package org.ojm.service;
 
 import lombok.extern.log4j.Log4j;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.ojm.domain.StoreVO;
@@ -23,8 +25,14 @@ public class HomeServiceImpl implements HomeService{
 	
 	@Override
 	public List<StoreVO> allStore() {
-		log.warn(hm.allStore());
-		return hm.allStore();
+		List<StoreVO> slist = hm.allStore();
+		
+		Collections.shuffle(slist);
+		
+		if(slist.size()>2) {
+			slist=slist.subList(0, 2);
+		}
+		return slist;
 	}
 
 }
