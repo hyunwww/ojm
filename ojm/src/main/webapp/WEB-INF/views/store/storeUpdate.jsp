@@ -317,12 +317,30 @@ var sno = '${store.sno}';
 				$("#regForm").attr("method", "post");
 				$("#regForm").attr("action", "/store/update");
 				
+				//메뉴데이터
 				var menuInput = '';
 				for (var i = 0; i < menuList.length; i++) {
 					menuInput += '<input type="hidden" name="menuList['+i+'].mname" value="'+menuList[i].mname+'" />';
 					menuInput += '<input type="hidden" name="menuList['+i+'].mcate" value="'+menuList[i].mcate+'" />';
 					menuInput += '<input type="hidden" name="menuList['+i+'].maler" value="'+menuList[i].maler+'" />';
 					menuInput += '<input type="hidden" name="menuList['+i+'].mprice" value="'+menuList[i].mprice+'" />';
+				}
+				
+				//기존 파일
+				if (deleteTarget != null) {
+					//ajax를 통해 기존파일 삭제된 부분 처리
+					console.log("deleteTarget is not null");
+					
+					$.ajax({
+					      type: "post",
+					      url: "/store/deleteImg",
+					      data: JSON.stringify(deleteTarget),
+					      contentType: "application/json",
+					      success: function (result, status, xhr) {
+					    	  console.log(result);
+					      }
+					});
+					 
 				}
 				
 				
@@ -550,16 +568,37 @@ var sno = '${store.sno}';
 			
 			console.log($(this).closest("div").find("img").data("name"));
 			
-			for (var i = 0; i < files.length; i++) {
-				if (files[i].name == $(this).closest("div").find("img").data("name")) {
-					files.splice(i,1);
-					$(this).closest("div").remove();
-					console.log(files);
-					return;
-					
+			//기존의 파일
+			if ($(this).closest("div").find("img").data("type") == 'local') {
+				alert("기존 파일입니다.");
+				
+				//기존 파일 삭제
+				var fName  = $(this).closest("div").find("img").data("name");
+				var uuid  = $(this).closest("div").find("img").data("uuid");
+				var path = $(this).closest("div").find("img").data("path");
+				var imgNo = $(this).closest("div").find("img").data("inumber");
+				deleteTarget.push({uuid : uuid,
+									uploadPath : path,
+									sino : imgNo,
+									fileName : fName});
+				console.log(deleteTarget);
+				$(this).closest("div").remove();
+				
+				
+				
+			}else{	//추가 이미지 파일
+				// submit할 배열에서 제거
+				for (var i = 0; i < files.length; i++) {
+					if (files[i].name == $(this).closest("div").find("img").data("name")) {
+						files.splice(i,1);
+						$(this).closest("div").remove();
+						console.log(files);
+						return;
+					}
 				}
+				
 			}
-			  
+			
 		});
 		
 		
