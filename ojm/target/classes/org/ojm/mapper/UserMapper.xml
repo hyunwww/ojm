@@ -255,6 +255,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			book b on b.sno=s.sno 
 		where s.uno=#{uno}
 	</select>
+	<select id="getJobList" resultType="org.ojm.domain.JobVO">
+		<![CDATA[
+			select jno, sno, jaddress, jtitle, jwriter, jdate, jview, jupdatedate
+			from
+				(select /*+INDEX_DESC(job pk_job) */
+				rownum rn, jno, sno, jaddress, jtitle, jwriter, jdate, jview, jupdatedate from job
+				where]]>
+				<![CDATA[
+				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
+				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+		]]>
+	</select>
 	<!-- 사업자 끝 -->
 	
 	<!-- uno로 유저 검색 추가_노헌_0829 -->

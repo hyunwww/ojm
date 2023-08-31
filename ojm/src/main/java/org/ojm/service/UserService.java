@@ -7,6 +7,7 @@ import org.ojm.domain.BookVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.JobSendVO;
+import org.ojm.domain.JobVO;
 import org.ojm.domain.ProfileImgVO;
 import org.ojm.domain.QboardVO;
 import org.ojm.domain.ReportVO;
@@ -53,6 +54,8 @@ public interface UserService {
 	// business
 	public List<StoreVO> getStoreList(int uno);
 	public List<BookVO> getBookListBusiness(int uno);
+	public List<JobVO> getJlist(Criteria cri,int uno);
+	public List<JobSendVO> getJobApplyList(int jno);
 	
 	
 	// 노헌추가_0829

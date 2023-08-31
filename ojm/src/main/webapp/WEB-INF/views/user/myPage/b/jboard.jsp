@@ -76,7 +76,7 @@
 		
 		<button onclick="location.href='/'">메인</button>
 		
-		<form action="/jboard/jlist" method="get" id="jActionForm">
+		<form action="jboard" method="get" id="jActionForm">
 			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
 			<input type="hidden" name="total" value="${total }">
@@ -103,8 +103,8 @@
 	$(".paginate_button a").on('click', function(e){
 		e.preventDefault();	//
 		
-		actionForm.find("input[name='pageNum']").val($(this).attr("href"));
-		actionForm.submit();
+		jActionForm.find("input[name='pageNum']").val($(this).attr("href"));
+		jActionForm.submit();
 	});
 	
 </script>
