@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 특정 매장의 정보 가져오기  -->
 	<select id="storeInfo" parameterType="int" resultType="org.ojm.domain.StoreVO">
 		select * from store where sno = #{sno}
-	</select>
+	</select>	
 	
 	<!-- 평가 작성 시 평점 평균 최신화  -->
 	<update id="updateRate" parameterType="int">
@@ -211,7 +211,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				where]]>
 				<![CDATA[
 				rownum <= #{pageNum} * #{amount})
-				where rn > (#{pageNum} - 1) * #{amount}
+				where rn > (#{pageNum} - 1) * #{amount} and
+				spermmit = 0
 		]]>
 	</select>
 

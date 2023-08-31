@@ -21,8 +21,10 @@
 		pw<input type="password" name="password"><br>
 		<input type="button" name="loginBtn" value="로그인">
 		<input type="button" name="registerBtn" value="회원가입">
+		
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }">
 	</form>
+	<a href="findID">아이디 찾기</a> / <a href="findPw">비밀번호 찾기</a>
 </body>
 <jsp:include page="../testFooter.jsp"></jsp:include>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

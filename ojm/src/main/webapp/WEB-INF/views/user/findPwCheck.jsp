@@ -51,7 +51,7 @@
 		     	url : 'mail_keyCheck',
 		      	data: {mail_key:mail_key,useremail:useremail},
 		     	success : function(result){ 
-		     		alert();
+		     		alert("인증되었습니다.");
 					form.attr("action", "/user/changePw");
 					form.submit();
 		     	},
@@ -60,11 +60,11 @@
 		      	}
 			});
 		}else{
-			alert('${mail_key}');
+			alert('인증번호가 틀립니다.');
 		}
 	});
 	home.on("click",function(){
-		location.href="/user/register";
+		location.href="/";
 	});
 </script>
 </html>

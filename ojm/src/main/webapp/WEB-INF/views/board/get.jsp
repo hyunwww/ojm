@@ -16,45 +16,62 @@
       }
 %>
 <!DOCTYPE html>
+<%@ include file="../testHeader.jsp" %>
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 		<title>Insert title here</title>
 		<style type="text/css">
-			table {
-				border: 1px solid black;
-				border-collapse: collapse;
+			.div1 {
+				margin-top: 120px;
+				margin-bottom: 50px;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
 			}
-			th, td{
-				border: 1px solid black;
+			.div2 {
+				margin-bottom: 50px;
+			}
+			.div3 {
+				text-align: right;
+				margin-bottom: 50px;
+				margin-right: 100px;
+			}
+			a:hover {
+				color: #ff9999;
 			}
 		</style>
 	</head>
 	<body>
-		<h1>게시글 화면</h1>
+		<div class="div1">
 		<hr>
-		
-		<table>
+		<div class="border d-flex justify-content-center">
+		<table class="table table-bordered">
 			<tr>
-				<td>제목</td>
-				<td><input name="btitle" value="${vo.btitle }" readonly="readonly" style="background-color: #ccc"></td>
+				<td class="table-dark w-25 p-3">제목</td>
+				<td>${vo.btitle }</td>
 			</tr>
 			<tr>
-				<td>말머리</td>
-				<td><input name="bcate" value="${vo.bcate }" readonly="readonly" style="background-color: #ccc"></td>
+				<td class="table-dark">말머리</td>
+				<td>${vo.bcate }</td>
 			</tr>
 			<tr>
-				<td>작성자</td>
-				<td><input name="bwriter" value="${vo.bwriter }" readonly="readonly" style="background-color: #ccc"></td>
+				<td class="table-dark">작성자</td>
+				<td>${vo.bwriter }</td>
 			</tr>
 			<tr>
-				<td>내용</td>
-				<td><textarea rows="15" cols="100" name="bcontent" readonly="readonly" style="background-color: #ccc">${vo.bcontent }</textarea></td>
+				<td class="table-dark">내용</td>
+				<td>${vo.bcontent }</td>
 			</tr>
 			
 			<!-- 첨부 이미지 -->
 			<tr>
-				<td>이미지</td>
+				<td class="table-dark">이미지</td>
 				<td class = 'uploadResult'>
 					<ul></ul>
 				</td>
@@ -64,7 +81,7 @@
 					<tr id="blike">
 						<td colspan="2">
 							<input class="like" type="hidden" value="${like }">
-							<button name="blikeBtn">추천</button>
+							<button class="btn btn-primary" name="blikeBtn">추천</button>
 							${vo.blike}
 						</td>
 					</tr>
@@ -73,14 +90,15 @@
 					<tr id="blike">
 						<td colspan="2">
 							<input class="like" type="hidden" value="${like }">
-							<button name="blikeBtn">추천 취소</button>
+							<button class="btn btn-primary" name="blikeBtn">추천 취소</button>
 							${vo.blike}
 						</td>
 					</tr>
 				</c:when>
 			</c:choose>
-			 
 		</table>
+		</div>
+		</div>
 		<hr>
 		
 		<!-- 댓글 입력 -->
@@ -223,7 +241,7 @@
 					$(result).each(function(i, obj){
 						// 인코딩
 						var fileCallPath = encodeURIComponent(obj.uploadpath + "/" + obj.uuid + "_" + obj.filename);
-						str += '<img alt="' + obj.filename + '" src="/ojm/' + obj.uploadpath + '/' + obj.uuid + '_' + obj.filename + '">';
+						str += '<img class="img-thumbnail" style="height: 200px" alt="' + obj.filename + '" src="/ojm/' + obj.uploadpath + '/' + obj.uuid + '_' + obj.filename + '">';
 					});
 					$(".uploadResult ul").html(str);
 				}			
@@ -324,3 +342,4 @@
 		});
 	</script>
 </html>
+<%@ include file="../testFooter.jsp"%>

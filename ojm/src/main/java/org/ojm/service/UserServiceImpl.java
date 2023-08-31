@@ -14,6 +14,7 @@ import org.ojm.domain.ReportVO;
 import org.ojm.domain.ReviewVO;
 import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
+import org.ojm.domain.UsertableVO;
 import org.ojm.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -183,4 +184,10 @@ public class UserServiceImpl implements UserService{
 		
 		return mapper.getBookListBusiness(uno);
 	}
+
+	@Override
+	public UsertableVO getUvoByUno(int uno) {
+		return mapper.getUvoByUno(uno);
+	}
 }
+

@@ -17,41 +17,46 @@
       }
 %>
 <!DOCTYPE html>
+<%@ include file="../testHeader.jsp" %>
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>등록 요청</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+		<title>Insert title here</title>
 		<style type="text/css">
-			table {
-				border: 1px solid black;
-				border-collapse: collapse;
-			}
-			th, td{
-				border: 1px solid black;
-			}
-			.banner {
-				position: fixed;
-				right: 10%;
+			.div1 {
+				margin-top: 120px;
+				margin-bottom: 50px;
+				margin-left: 100px;
+				margin-right: 100px;
 				text-align: center;
+			}
+			.div2 {
+				margin-bottom: 50px;
+			}
+			.div3 {
+				text-align: right;
+				margin-bottom: 50px;
+				margin-right: 100px;
+			}
+			a:hover {
+				color: #ff9999;
 			}
 		</style>
 	</head>
 	<body>
-		<h1>등록 요청 관리 페이지</h1>
+		<div class="div1">
+		<h2 style="text-align: center; font-weight: 700;">등록 요청 관리 페이지</h2>
 		<hr>
-		
-		<div class="banner">
-			<table>
-				<tr><td><a href="/admin/reportList">신고 관리</a></td></tr>
-				<tr><td><a href="/qboard/qlist">Q&A 관리</a></td></tr>
-				<tr><td><a href="/admin/srList">등록 요청 관리</a></td></tr>
-			</table>
-		</div>
-		
-		<table>
-			<thead>
+		<div class="border d-flex justify-content-center">
+		<table class="table table-bordered table-hover table-sm">
+			<thead class="thead-dark">
 				<c:choose>
-					<c:when test="${empty srList }">
+					<c:when test="${empty srList}">
 						<tr>
 							<td colspan="2">등록 요청 내역이 없습니다.</td>
 						</tr>
@@ -79,31 +84,35 @@
 				</c:forEach>
 			</tbody>
 		</table>
+		</div>
+		</div>
 		
-				<!-- page -->
-		<div>
-			<ul>
+		<!-- page -->
+		<div class="div2">
+			<ul class="pagination justify-content-center">
 				<c:if test="${pageMaker.prev }">
-					<li class="paginate_button previous">
-						<a href="${pageMaker.startPage-1 }">&lt;</a>
+					<li class="paginate_button previous page-item">
+						<a class="page-link" href="${pageMaker.startPage-1 }">&lt;</a>
 					</li>
 				</c:if>
 				<c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }" step="1">
-					<li class="paginate_button ${pageMaker.cri.pageNum == num ? 'active' : '' }">
-						<a href="${num }">${num }</a>
+					<li class="paginate_button ${pageMaker.cri.pageNum == num ? 'active' : '' } page-item">
+						<a class="page-link" href="${num }">${num }</a>
 					</li>
 				</c:forEach>
 				<c:if test="${pageMaker.next }">
-					<li class="paginate_button">
-						<a href="${pageMaker.endPage+1 }">&gt;</a>
+					<li class="paginate_button page-item">
+						<a class="page-link" href="${pageMaker.endPage+1 }">&gt;</a>
 					</li>
 				</c:if>
 			</ul>
 		</div>
 		<hr>
 		
-		<button onclick="location.href='/'">메인</button>
-		
+		<div class="div3">
+			<button class="btn btn-dark" onclick="location.href='/'">메인</button>
+		</div>
+			
 		<form action="/admin/srList" method="get" id="srActionForm">
 			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
@@ -131,8 +140,9 @@
 		$(".paginate_button a").on('click', function(e){
 			e.preventDefault();	// <a> 클릭 시 페이지 이동이 이루어지지 않게 하기
 			
-			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
-			actionForm.submit();
+			srActionForm.find("input[name='pageNum']").val($(this).attr("href"));
+			srActionForm.submit();
 		});
 	</script>
 </html>
+<%@ include file="../testFooter.jsp"%>

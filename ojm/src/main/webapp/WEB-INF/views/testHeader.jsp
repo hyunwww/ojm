@@ -232,10 +232,11 @@
 					<li class="dropdown"><a href="#"><span>Community</span><i
 							class="bi bi-chevron-down"></i></a>
 						<ul>
-							<li><a href="/board/list">1</a></li>
-							<li><a href="/qboard/qlist">2</a></li>
-							<li><a href="/jboard/jlist">3</a></li>
-						</ul></li>
+							<li><a href="/board/list">자유게시판</a></li>
+							<li><a href="/qboard/qlist">Q&A 게시판</a></li>
+							<li><a href="/jboard/jlist">구인구직 게시판</a></li>
+						</ul>
+					</li>
 					<li><a href="/store/search">Search</a></li>
 					<li><a href="/store/register">Register</a></li>
 					<sec:authorize access="hasRole('ROLE_user')">
@@ -245,7 +246,13 @@
 						<li><a href="/user/myPage/main">myPage</a></li>
 					</sec:authorize>
 					<sec:authorize access="hasRole('ROLE_admin')">
-						<li><a href="/admin/main">adminPage</a></li>
+						<li class="dropdown"><a href="#"><span>adminPage</span><i class="bi bi-chevron-down"></i></a>
+							<ul>
+								<li><a href="/admin/reportList">신고 관리</a></li>
+								<li><a href="/qboard/qlist">Q&A 관리</a></li>
+								<li><a href="/admin/srList">등록 요청 관리</a></li>
+							</ul>
+						</li>	
 					</sec:authorize>
 					<sec:authorize access="isAuthenticated()">
 						<li><a href="/logout">Logout</a></li>

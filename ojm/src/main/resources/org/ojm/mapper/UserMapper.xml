@@ -256,4 +256,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where s.uno=#{uno}
 	</select>
 	<!-- 사업자 끝 -->
+	
+	<!-- uno로 유저 검색 추가_노헌_0829 -->
+	<select id="getUvoByUno" resultType="org.ojm.domain.UsertableVO">
+		select * from usertable where uno = #{uno}
+	</select>
 </mapper>
