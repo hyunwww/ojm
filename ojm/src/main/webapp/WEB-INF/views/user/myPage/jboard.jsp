@@ -70,7 +70,7 @@
 						<c:forEach var="job" items="${jlist }" varStatus="i">
 							<tr>
 								<td><c:out value = "${i.count }"/></td>
-								<td style="color: blue" onclick="show('${job.jsno}')">
+								<td>
 									<c:out value="${job.sname }"></c:out>
 								</td>
 								<td><fmt:formatDate value="${job.jsdate }" pattern="yyyy년 MM월 dd일"/></td>	
