@@ -88,6 +88,17 @@ public class StoreController {
 		return "/store/storeSearch";
 		
 	}
+	@GetMapping(value = "/keyword", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<StoreVO>> searchByKeyword(@RequestParam("keyword")String keyword){
+		
+		log.info("검색어 : " + keyword);
+		List<StoreVO> list = service.searchStore("%" + keyword + "%");
+		
+		
+		return new ResponseEntity<List<StoreVO>>(list, HttpStatus.OK); 
+	}
+	
 	@GetMapping("/detailTest")
 	public String goTestDetail(@RequestParam("sno")int sno, Model model) {
 		
@@ -286,7 +297,7 @@ public class StoreController {
 	}
 	
 	
-	//매장 좋아요 적용 ( 테스트 미완 , parameter는 정상 전달 됨 )
+	//매장 좋아요 적용
 	@GetMapping(value = "/likeStore", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<Boolean> likeStore(@RequestParam("sno") int sno,
@@ -382,6 +393,7 @@ public class StoreController {
 		
 	}
 	
+	//비밀번호 검증 후 삭제
 	@PostMapping(value = "/delete", produces = "application/text; charset=UTF-8")
 	@ResponseBody
 	public ResponseEntity<String> storeDelete(@RequestParam("sno")int sno,

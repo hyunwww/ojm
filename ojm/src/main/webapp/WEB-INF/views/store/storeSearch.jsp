@@ -31,12 +31,7 @@
     	</c:choose>
       <div class="container">
         <div class="d-flex justify-content-between align-items-center">
-          <h2>매장 찾기</h2>
-          <ol>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li>Blog Single</li>
-          </ol>
+          <h4 style="color: white;">매장 찾기</h4>
         </div>
 
       </div>
@@ -51,7 +46,7 @@
 					<div class="sidebar-item search-form">
 						<form action="#">
 							<input type="text" name="keyword">
-							<button type="submit">
+							<button type="button" id="keywordSearchBtn">
 								<i class="bi bi-search"></i>
 							</button>
 						</form>
@@ -103,7 +98,7 @@
 				<div class="mapBox" style="position: sticky; background-color: white;">
 					<div class="mapContainer">
 						<div style="text-align: center; position: relative; z-index: 10; top: 3px;">
-							<button type="button" class="getMoreInfo" style="display: none;">결과 더 보기 <span class="infoState"></span></button>
+							<button type="button" class="getMoreInfo btn btn-secondary" style="display: none; opacity: 0.9; border-radius: 10px;"><i class="bi bi-arrow-clockwise"></i> 결과 더 보기 <span class="infoState"></span></button>
 						</div>
 					</div>
 					<div style="text-align: right; padding: 10px;">
@@ -132,64 +127,88 @@
 <!-- =====================================script===========================================================================================  -->
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e2f52d388244ff7c0c91379904a49a35&libraries=services"></script>
-<script type="text/javascript"> /* 현재 위치정보 및 거리계산 스크립트 */
-	var currPosition;	//현재 위치정보
-	
-	
-	
-		navigator.geolocation.getCurrentPosition(
-				function(position) {
-					currPosition = position;
-				}, 
-				function() {
-					alert("geolocation error");
-				});
-	
-	//거리계산함수
-	function getDistance(lat1, lon1, lat2, lon2) {
-		if ((lat1 == lat2) && (lon1 == lon2)) {
-			return 0;
-		}
-		else {
-			var radlat1 = Math.PI * lat1/180;
-			var radlat2 = Math.PI * lat2/180;
-			var theta = lon1-lon2;
-			var radtheta = Math.PI * theta/180;
-			var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-			if (dist > 1) {
-				dist = 1;
-			}
-			dist = Math.acos(dist);
-			dist = dist * 180/Math.PI;
-			dist = dist * 60 * 1.1515;
-			dist = dist * 1.609344;
-			
-			//결과 단위 : km
-			return dist.toFixed(1);
-		}
-	}
-</script>
+
 <script type="text/javascript">
 	var storeResult = [];
 	var map;
 	var bounds;
 	var filterState = false;
-	
+	var currentPosition;
+
+	navigator.geolocation.getCurrentPosition(
+			function(position) {
+				console.log(position);
+				currentPosition = {
+						"latitude" : position.coords.latitude,
+						"longitude" : position.coords.longitude
+				};
+			}, 
+			function() {
+				//임시 좌표 
+				var geocoder = new kakao.maps.services.Geocoder();
+				var x;
+				var y;
+				
+				geocoder.addressSearch('서울특별시 구로구 서울시 구로구 시흥대로 163길 33', function(result, status) {
+					if (status === kakao.maps.services.Status.OK) {
+							x = result[0].road_address.x;
+							y = result[0].road_address.y;
+						
+					}
+					
+					currentPosition = {
+							"latitude" : y,
+							"longitude" : x
+					}
+					
+				});
+			});
+		
+				
+		//거리계산함수
+		function getDistance(lat1, lon1, lat2, lon2) {
+			if ((lat1 == lat2) && (lon1 == lon2)) {
+				return 0;
+			}
+			else {
+				var radlat1 = Math.PI * lat1/180;
+				var radlat2 = Math.PI * lat2/180;
+				var theta = lon1-lon2;
+				var radtheta = Math.PI * theta/180;
+				var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+				if (dist > 1) {
+					dist = 1;
+				}
+				dist = Math.acos(dist);
+				dist = dist * 180/Math.PI;
+				dist = dist * 60 * 1.1515;
+				dist = dist * 1.609344;
+				
+				//결과 단위 : km
+				return dist.toFixed(1);
+			}
+		}
 	
 	$(function() {
-		
 		//순위 차트 불러오기
-		getRanking();
+		//getRanking();
+		
+		
+		console.log(currentPosition);
+		
 		$(".getMoreInfo").click(function() {
 			getFromStoreResult(point, 5);
 		});
+		
 		//검색 버튼
-		$("#searchBtn").on("click", function() {
-			if ($("input[name='searchInput']").val() == '') {
+		$("#keywordSearchBtn").on("click", function() {
+			if ($("input[name='keyword']").val() == '') {
 				alert("검색어 입력 필요.");
 				return;
 			}
-			$("#searchBox form").submit(); 
+			//keywordsearch 비동기 처리
+			point = 1;
+			keywordSearch($("input[name='keyword']").val());
 		});
 		
 		//메인으로
@@ -260,8 +279,7 @@
 			
 			
 			
-			//ajax 처리가 끝날 때까지 로딩 표시
-			$("#searchResult row").html('<div id="loading"></div>');
+			//로딩 표시 이 밑에 작성
 			
 			
 			$.ajax({
@@ -284,9 +302,11 @@
 			    	  storeResult = [];
 			    	  if (result.length > 0) {
 				    	  for (var store of result) {
-				    		  //거리 정보(현재 위치 기준)부여
-				    		  store.distance = getDistance(Number(store.kd), Number(store.wd), currPosition.coords.latitude, currPosition.coords.longitude)
-				    		//출력될 태그 부여
+				    		 //거리 정보(현재 위치 기준)부여
+				    		 console.log(currentPosition);
+					    	 store.distance = getDistance(Number(store.kd), Number(store.wd), currentPosition.latitude, currentPosition.longitude);
+				    		
+				    		 //출력될 태그 부여
 				    		if (Number(store.distance) <= Number(distLimit) || Number(distLimit) == 0) {
 				    			store.str = '';
 				    			store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
@@ -330,10 +350,13 @@
 				})
 				
 				console.log(storeResult);
-				var str = "";
-				for (var store of storeResult) {
-					str += store.str + "현재 리뷰 수 : " + store.revList.length;
-				}
+				bounds = new kakao.maps.LatLngBounds();
+		  		map = new kakao.maps.Map($(".mapContainer")[0],
+		  				{ 
+		  					center: new kakao.maps.LatLng(0, 0), 
+		  					level: 4
+		  				}); //지도 생성 및 객체 리턴
+				$("#searchResult .row").empty();
 				point = 1;
 				getFromStoreResult(point, 5);
 				break;
@@ -343,10 +366,12 @@
 				})
 				
 				console.log(storeResult);
-				var str = "";
-				for (var store of storeResult) {
-					str += store.str + "평균 평점 : " + store.sstar;
-				}
+				bounds = new kakao.maps.LatLngBounds();
+		  		map = new kakao.maps.Map($(".mapContainer")[0],
+		  				{ 
+		  					center: new kakao.maps.LatLng(0, 0), 
+		  					level: 4
+		  				}); //지도 생성 및 객체 리턴
 				$("#searchResult .row").empty();
 				point = 1;
 				getFromStoreResult(point, 5);
@@ -357,25 +382,30 @@
 					return b.slike - a.slike;
 				})
 				console.log(storeResult);
-				var str = "";
-				for (var store of storeResult) {
-					str += store.str + "현재 좋아요수 : " + store.slike;
-				}
-				$("#searchResult").empty();
-				$("#searchResult").append(str);
+				bounds = new kakao.maps.LatLngBounds();
+		  		map = new kakao.maps.Map($(".mapContainer")[0],
+		  				{ 
+		  					center: new kakao.maps.LatLng(0, 0), 
+		  					level: 4
+		  				}); //지도 생성 및 객체 리턴
+				$("#searchResult .row").empty();
+				point = 1;
+				getFromStoreResult(point, 5);
 				break;
 			case 'distance':
 				storeResult.sort(function(a, b) {
 					return a.distance - b.distance;
 				});
 				console.log(storeResult);
-				var str = "";
-				for (var store of storeResult) {
-					str += store.str + "거리 : " + store.distance + " km";
-				}
-				$("#searchResult").empty();
-				$("#searchResult").append(str);
-				
+				bounds = new kakao.maps.LatLngBounds();
+		  		map = new kakao.maps.Map($(".mapContainer")[0],
+		  				{ 
+		  					center: new kakao.maps.LatLng(0, 0), 
+		  					level: 4
+		  				}); //지도 생성 및 객체 리턴
+				$("#searchResult .row").empty();
+				point = 1;
+				getFromStoreResult(point, 5);
 				break;
 			case 'name' :
 				storeResult.sort(function(a,b) {
@@ -390,12 +420,15 @@
 					}
 				});
 				console.log(storeResult);
-				var str = "";
-				for (var store of storeResult) {
-					str += store.str;
-				}
-				$("#searchResult").empty();
-				$("#searchResult").append(str);				
+				bounds = new kakao.maps.LatLngBounds();
+		  		map = new kakao.maps.Map($(".mapContainer")[0],
+		  				{ 
+		  					center: new kakao.maps.LatLng(0, 0), 
+		  					level: 4
+		  				}); //지도 생성 및 객체 리턴
+				$("#searchResult .row").empty();
+				point = 1;
+				getFromStoreResult(point, 5);			
 				break;
 				
 			default:
@@ -434,43 +467,7 @@
 </script>
 <script type="text/javascript">/* 매장 append */
 	var point = 1;
-	function getStoreListByRownum() {
-		$(".mapContainer").hide();
-		$.ajax({
-		      type: "get",
-		      url: "/store/storeList",
-		      data: {point : point},
-		      success: function (result, status, xhr) {
-		    	  point++; //페이지와 같은 역할
-		    	  if (!$("#blank")[0]) { //감지할 blank div 최초 생성
-		    		  $("#searchResult .row").append('<div id="blank"><div>');
-		    		  observer.observe($("#blank")[0]);
-		    		  }
-		    	  var str = "";
-		    	  if (result.length > 0) {
-			    	  for (var store of result) {
-			    		  	//거리 정보(현재 위치 기준)부여
-			    		    store.distance = getDistance(Number(store.kd), Number(store.wd), currPosition.coords.latitude, currPosition.coords.longitude)
-			    			//출력될 태그 부여
-			    			store.str = '';
-			    			store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
-			    			store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
-			    			store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
-			    			store.str += '<p>'+store.saddress+'</p>';
-			    			store.str += '</div>';
-			    			store.str += '</div>';
-							
-				    		storeResult.push(store);
-				    		str += store.str;
-					  }
-			    	  $("#blank").before(str);
-			    	  console.log(storeResult);
-				}
-		    	  
-		      }
-		}); 
-		
-	}
+	
 	//amount 만큼 불러오기  
 	function getFromStoreResult(current, amount) {
 		console.log(storeResult);
@@ -489,6 +486,7 @@
 		
 		if (storeResult.length > 0 && storeResult != null) {
 			$(".mapContainer").show();
+			$(".mapBox").show();
 			map.relayout();
 			var str = '';
 			if (!$("#blank")[0]) { //감지할 blank div 최초 생성
@@ -511,7 +509,7 @@
 			}
 		}else{
 			console.log("결과없음");
-			$(".mapContainer").hide();
+			$(".mapBox").hide();
 			$("#searchResult .row").empty();
 			$("#searchResult .row").append('<p>일치하는 결과가 없습니다.</p>');
 		}
@@ -568,15 +566,19 @@
 			    	  storeResult = [];
 			    	  if (result.length > 0) {
 				    	  for (var store of result) {
-				    		  //거리 정보(현재 위치 기준)부여
-				    		  store.distance = getDistance(Number(store.kd), Number(store.wd), currPosition.coords.latitude, currPosition.coords.longitude)
+				    		//거리 정보(현재 위치 기준)부여
+					    	store.distance = getDistance(Number(store.kd), Number(store.wd), currentPosition.latitude, currentPosition.longitude);
 				    		//출력될 태그 부여
 				    		if (Number(store.distance) <= dist || dist == 0) {
 				    			store.str = '';
 				    			store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
 				    			store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
 				    			store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
-				    			store.str += '<p>'+store.saddress+'</p>';
+				    			store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
+				    			store.str += '<p style="text-align : right; margin : 0;">';
+				    			store.str += '<i class="bi bi-star-fill">'+store.sstar+'</i>  ';
+				    			store.str += '<i class="bi bi-hand-thumbs-up">'+store.slike+'</i>  ';
+				    			store.str += '</p>';
 				    			store.str += '</div>';
 				    			store.str += '</div>';
 				    			
@@ -647,16 +649,20 @@
 		    	  storeResult = [];
 		    	  if (result.length > 0) {
 			    	  for (var store of result) {
-			    		  //거리 정보(현재 위치 기준)부여
-			    		  store.distance = getDistance(Number(store.kd), Number(store.wd), currPosition.coords.latitude, currPosition.coords.longitude)
+			    		//거리 정보(현재 위치 기준)부여
+				    	store.distance = getDistance(Number(store.kd), Number(store.wd), currentPosition.latitude, currentPosition.longitude);
 			    		//출력될 태그 부여
 			    		store.str = '';
-			    		store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
-			    		store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
-			    		store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
-			    		store.str += '<p>'+store.saddress+'</p>';
-			    		store.str += '</div>';
-			    		store.str += '</div>';
+					    store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
+					    store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
+					    store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+					    store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
+					    store.str += '<p style="text-align : right; margin : 0;">';
+					    store.str += '<i class="bi bi-star-fill">'+store.sstar+'</i>  ';
+					    store.str += '<i class="bi bi-hand-thumbs-up">'+store.slike+'</i>  ';
+					    store.str += '</p>';
+					    store.str += '</div>';
+					    store.str += '</div>';
 							
 			    		storeResult.push(store);
 					  }
@@ -665,6 +671,56 @@
 			    	  getFromStoreResult(point, 5);
 				}
 		      }
+		});
+	}
+	
+	function keywordSearch(word) {
+		console.log(word);
+		$.ajax({
+		      type: "get",
+		      url: "/store/keyword",
+		      data: {
+		    	  keyword : word
+		      },
+		      success: function (result, status, xhr) {
+		    	  
+		    	  bounds = new kakao.maps.LatLngBounds();
+			  		map = new kakao.maps.Map($(".mapContainer")[0],
+			  				{ 
+			  					center: new kakao.maps.LatLng(0, 0), 
+			  					level: 4
+			  				}); //지도 생성 및 객체 리턴
+		    	  $("#searchResult .row").empty();
+		    	  
+		    	  storeResult = [];
+		    	  if (result.length > 0) {
+			    	  for (var store of result) {
+			    		//거리 정보(현재 위치 기준)부여
+				    	store.distance = getDistance(Number(store.kd), Number(store.wd), currentPosition.latitude, currentPosition.longitude);
+			    		//출력될 태그 부여
+			    		store.str = '';
+			    		store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
+			    		store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
+			    		store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+			    		store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
+			    		store.str += '<p style="text-align : right; margin : 0;">';
+			    		store.str += '<i class="bi bi-star-fill">'+store.sstar+'</i>  ';
+			    		store.str += '<i class="bi bi-hand-thumbs-up">'+store.slike+'</i>  ';
+			    		store.str += '</p>';
+			    		store.str += '</div>';
+			    		store.str += '</div>';
+			    	
+					
+			    		storeResult.push(store);
+			    		  
+			    		
+					  }
+			    	  getFromStoreResult(point, 5);
+				}else{
+					getFromStoreResult(point, 5);
+				}
+			  }
+		      
 		});
 	}
 </script>

@@ -5,8 +5,10 @@ import java.util.List;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.PageDTO;
 import org.ojm.domain.ReportVO;
+import org.ojm.service.MenuService;
 import org.ojm.service.ReportService;
 import org.ojm.service.StoreService;
+import org.ojm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +36,12 @@ public class AdminController {
 	@Setter(onMethod_ = @Autowired)
 	private StoreService sService;
 	
+	@Setter(onMethod_ = @Autowired)
+	private UserService uService;	
+	
+	@Setter(onMethod_ = @Autowired)
+	private MenuService mService;	
+
 	@GetMapping("/main")
 	public String adminMain() {
 		return "admin/main";
@@ -63,7 +71,7 @@ public class AdminController {
 		model.addAttribute("srList", sService.getSrList(cri));
 		model.addAttribute("tota", sService.getSrTotal());
 		model.addAttribute("pageMaker", new PageDTO(cri, sService.getSrTotal()));
-		return "admin/storeRegister";
+		return "admin/storeRegisterList";
 	}
 	
 	@GetMapping("/srGet")
@@ -71,9 +79,18 @@ public class AdminController {
 		log.info("srGet...");
 		model.addAttribute("svo", sService.storeInfo(sno));
 		int uno = sService.storeInfo(sno).getUno();
+		model.addAttribute("uvo", uService.getUvoByUno(uno));
+		model.addAttribute("mvoList", mService.getMenu(sno));
 		model.addAttribute("cri", cri);
 		model.addAttribute("total", sService.getSrTotal());
 		return "admin/storeGet";
+	}
+	
+	@GetMapping("/srPermmit")
+	public String srPermmit(@RequestParam("sno") int sno) {
+		log.info("srPermmit...");
+		sService.storePermit(sno);
+		return "admin/storeRegisterList";
 	}
 	
 	@GetMapping(value = "/{rpno}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})

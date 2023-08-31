@@ -184,8 +184,12 @@ public class UserServiceImpl implements UserService{
 		
 		return mapper.getBookListBusiness(uno);
 	}
+<<<<<<< HEAD
 	@Override
 	public UsertableVO getUvoByUno(int uno) {
 		return mapper.getUvoByUno(uno);
 	}
 }
+=======
+}
+>>>>>>> branch 'master' of https://github.com/hyunwww/ojm.git

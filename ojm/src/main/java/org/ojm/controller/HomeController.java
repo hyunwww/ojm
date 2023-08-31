@@ -1,7 +1,12 @@
 package org.ojm.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
+import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
 import org.ojm.service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +26,8 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		
-		model.addAttribute("slist",hs.allStore());
+		List<StoreVO> slist = hs.allStore();
+		model.addAttribute("slist",slist);
 		// 현재는 가게 리스트 전체를 보내지만 랜덤으로 몇개만 보내게 수정 예정
 		
 		return "mainPage";

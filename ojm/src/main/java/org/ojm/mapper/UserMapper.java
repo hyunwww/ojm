@@ -15,6 +15,7 @@ import org.ojm.domain.ReportVO;
 import org.ojm.domain.ReviewVO;
 import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
+import org.ojm.domain.UsertableVO;
 
 public interface UserMapper {
 	public UserVO login(@Param("id") String id, @Param("pw") String pw);
@@ -67,7 +68,8 @@ public interface UserMapper {
 	public List<StoreVO> getStoreList(int uno);
 	public List<BookVO> getBookListBusiness(int uno);
 	
-	
+	// 노헌추가_0829
+	public UsertableVO getUvoByUno(int uno);
 	
 	
 }

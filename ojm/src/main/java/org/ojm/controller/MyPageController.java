@@ -56,6 +56,18 @@ public class MyPageController {
 		model.addAttribute("imgRoot", service.getUserImg(user.getUno()));
 		return "user/myPage/main";
 	}
+	@GetMapping("/mainModify")
+	public String myPageMainModify(Principal pr,Model model) {
+		log.info("myPageMain...... id : " + pr.getName());
+		
+		UserVO user = service.getUser(pr.getName());
+		log.info(user);
+		
+		model.addAttribute("uno", user.getUno());
+		model.addAttribute("uvo", user);
+		model.addAttribute("imgRoot", service.getUserImg(user.getUno()));
+		return "user/myPage/mainModify";
+	}
 	@GetMapping("/board")
 	public String myPageBoard(Model model,Criteria cri, @ModelAttribute("uno") int uno) {
 		log.info("myPageBoard...... ");

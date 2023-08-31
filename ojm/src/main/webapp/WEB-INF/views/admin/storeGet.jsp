@@ -37,89 +37,89 @@
 		
 		<table>
 			<tr>
-				<td>매장명</td>
-				<td><input name="sname" value="${svo.sname }" readonly="readonly" style="background-color: #ccc"></td>
+				<td>요청자</td>
+				<td><input name="username" value="${uvo.username }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
 			<tr>
 				<td>매장명</td>
 				<td><input name="sname" value="${svo.sname }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
 			<tr>
-				<td>매장명</td>
-				<td><input name="sname" value="${svo.sname }" readonly="readonly" style="background-color: #ccc"></td>
+				<td>주소</td>
+				<td><input name="saddress" value="${svo.saddress }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
 			<tr>
-				<td>매장명</td>
-				<td><input name="sname" value="${svo.sname }" readonly="readonly" style="background-color: #ccc"></td>
+				<td>카테고리</td>
+				<td><input name="scate" value="${svo.scate }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
 			<tr>
-				<td>매장명</td>
-				<td><input name="sname" value="${svo.sname }" readonly="readonly" style="background-color: #ccc"></td>
+				<td>배달가능 여부</td>
+				<c:choose>
+					<c:when test="${svo.sdeli eq 1}">
+						<td><input name="sdeli" value="가능" readonly="readonly" style="background-color: #ccc"></td>
+					</c:when>
+					<c:otherwise>
+						<td><input name="sdeli" value="불가능" readonly="readonly" style="background-color: #ccc"></td>
+					</c:otherwise>
+				</c:choose>
 			</tr>
 			<tr>
-				<td>매장명</td>
-				<td><input name="sname" value="${svo.sname }" readonly="readonly" style="background-color: #ccc"></td>
+				<td>사업자등록번호</td>
+				<td><input name="scrn" value="${svo.scrn }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
 			<tr>
-				<td>매장명</td>
-				<td><input name="sname" value="${svo.sname }" readonly="readonly" style="background-color: #ccc"></td>
+				<td>예약금</td>
+				<td><input name="sdepo" value="${svo.sdepo }" readonly="readonly" style="background-color: #ccc"></td>
 			</tr>
-			
+			<tr>
+				<td>메뉴</td>
+				<td>
+					<c:forEach var="mvo" items="${mvoList }">
+						<input name="mname" value="${mvo.mname }" readonly="readonly" style="background-color: #ccc">
+						<input name="mcate" value="${mvo.mcate }" readonly="readonly" style="background-color: #ccc">
+						<input name="maler" value="${mvo.maler }" readonly="readonly" style="background-color: #ccc">
+						<input name="mprice" value="${mvo.mprice }" readonly="readonly" style="background-color: #ccc">
+						<br>
+					</c:forEach>
+				</td>
+			</tr>			
+			<tr>
+				<td>등록 요청일</td>
+				<td><fmt:formatDate value="${svo.sdate}" pattern="yyyy년 MM월 dd일"/></td>
+			</tr>
 		</table>
-		
-				<!-- page -->
-		<div>
-			<ul>
-				<c:if test="${pageMaker.prev }">
-					<li class="paginate_button previous">
-						<a href="${pageMaker.startPage-1 }">&lt;</a>
-					</li>
-				</c:if>
-				<c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }" step="1">
-					<li class="paginate_button ${pageMaker.cri.pageNum == num ? 'active' : '' }">
-						<a href="${num }">${num }</a>
-					</li>
-				</c:forEach>
-				<c:if test="${pageMaker.next }">
-					<li class="paginate_button">
-						<a href="${pageMaker.endPage+1 }">&gt;</a>
-					</li>
-				</c:if>
-			</ul>
-		</div>
 		<hr>
 		
-		<button onclick="location.href='/'">메인</button>
+		<button data-oper="srPermmit">승인</button>
+		<button data-oper="srList">목록</button>
 		
 		<form action="/admin/srList" method="get" id="srActionForm">
-			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
-			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
+			<input type="hidden" name="sno" id="sno" value="${svo.sno }">			
+			<input type="hidden" name="pageNum" value="${cri.pageNum }">
+			<input type="hidden" name="amount" value="${cri.amount }">
 			<input type="hidden" name="total" value="${total }">
+			<input type="hidden" name="uno" value="${uvo.uno }">
 		</form>
-		
 	</body>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script type="text/javascript">
-		// ---------- 조회 화면 이동 이벤트 처리 ----------	
-		var srActionForm = $("#srActionForm");
+	<!-- 화면 이동 스크립트 -->
+		var srActionForm = $("#srActionForm");  
+
+		$(function(){
+			$("button[data-oper='srList']").on('click', function(){
+				srActionForm.find("#sno").remove();
+				srActionForm.submit();
+			});
+		})
 		
-		$(".move").on('click', function(e){
-			e.preventDefault(); // <a> 클릭 시 페이지 이동이 이루어지지 않게 하기
-			
-			// $(this) 의 요소 중 href의 속성 값 (value)
-			srActionForm.attr('action', 'srGet'); // 경로 변경
-			srActionForm.append("<input type='hidden' name='uno' value='" + ${uvo.uno} +"'>");	// uno 저장
-			srActionForm.append("<input type='hidden' name='sno' value='" + $(this).attr('href') + "'>");	// bno 저장
-			srActionForm.submit();
-		});
-		
-		// ---------- 페이징 버튼 이벤트 처리 ----------	 
-		$(".paginate_button a").on('click', function(e){
-			e.preventDefault();	// <a> 클릭 시 페이지 이동이 이루어지지 않게 하기
-			
-			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
-			actionForm.submit();
-		});
+		$(function(){
+			$("button[data-oper='srPermmit']").on('click', function(){
+				srActionForm.attr('action', 'srPermmit');
+				srActionForm.submit();
+				alert("승인 처리가 완료되었습니다.");
+			});
+		})
 	</script>
 </html>

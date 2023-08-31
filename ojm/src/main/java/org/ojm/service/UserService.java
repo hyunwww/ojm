@@ -13,6 +13,7 @@ import org.ojm.domain.ReportVO;
 import org.ojm.domain.ReviewVO;
 import org.ojm.domain.StoreVO;
 import org.ojm.domain.UserVO;
+import org.ojm.domain.UsertableVO;
 
 public interface UserService {
 	public UserVO login(String id, String pw);
@@ -53,4 +54,7 @@ public interface UserService {
 	public List<StoreVO> getStoreList(int uno);
 	public List<BookVO> getBookListBusiness(int uno);
 	
+	
+	// 노헌추가_0829
+	public UsertableVO getUvoByUno(int uno);
 }
