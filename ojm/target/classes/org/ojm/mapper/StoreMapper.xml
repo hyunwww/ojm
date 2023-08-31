@@ -168,7 +168,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					and smaxreserv >= 0
 				</otherwise>
 			</choose>
-			
+			and spermmit = 1
 			
 			
 	</select>
@@ -176,7 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 신고 제출  -->
 	<!-- rpdate sysdate, rpwriter 추가_0823/노헌 -->
 	<insert id="reportSubmit" parameterType="org.ojm.domain.ReportVO">
-		insert into report values(
+		insert into report(rpno,uno,rpreason,rptitle,rpwriter,rpcontent,rpdate) values(
 			seq_rpno.nextval,
 			#{uno},
 			#{rpreason},

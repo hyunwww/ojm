@@ -512,6 +512,7 @@ public class StoreController {
 		
 		if(user != null) {
 			report.setUno(user.getUvo().getUno());	//신고 유저 정보 입력해주기
+			report.setRpwriter(user.getUsername());	//신고 유저 정보 입력해주기
 		}
 		
 		

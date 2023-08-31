@@ -255,10 +255,19 @@ $(function() {
 		});
 		
 		//신고모달 초기화
-		var repModal = document.getElementById('reportModal')
+		const reportModal = new bootstrap.Modal(document.getElementById('reportModal'), {
+			focus : true
+		});
+		var repModal = document.getElementById('reportModal');
 		repModal.addEventListener('hidden.bs.modal', event => {
 			$("#reportModal form")[0].reset();
 		})
+		$("#reportWithoutLogin").click(function() {
+			var conf = confirm("로그인이 필요한 서비스입니다. 로그인하시겠습니까?");
+			if (conf) {
+				location.href = '/user/login';
+			}
+		});
 		//신고
 		$("#reportSubmit").click(function() {
 			
@@ -286,6 +295,8 @@ $(function() {
 					},
 					success : function(result){
 						alert("제출되었습니다.");
+						reportModal.hide();
+						
 					}
 				});
 			}
@@ -325,6 +336,11 @@ $(function() {
 			});
 		});
 		
+		
+		
+		$("#open-reportModal").click(function name() {
+			reportModal.show();
+		}); 
 		
 		//예약하기 버튼 이벤트
 		$("#bookBtn").on("click", function() {
@@ -1061,7 +1077,12 @@ $(function() {
 						</c:otherwise>
 					</c:choose>
 					<button class="btn btn-outline-dark" id="listBtn">목록으로</button>
-					<button id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal" class="btn btn-outline-danger"><i class="bi bi-exclamation-triangle"></i> 신고</button>
+					<sec:authorize access="isAnonymous()">
+						<button id="reportWithoutLogin" class="btn btn-outline-danger"><i class="bi bi-exclamation-triangle"></i> 신고</button>
+					</sec:authorize>
+					<sec:authorize access="isAuthenticated()">
+						<button id="open-reportModal" class="btn btn-outline-danger"><i class="bi bi-exclamation-triangle"></i> 신고</button>
+					</sec:authorize>
 					<button id="open-modal1" class="btn btn-outline-dark"><i class="bi bi-chat-right-text"></i> 리뷰 작성</button>
 					<button id="open-modal2" class="btn btn-outline-dark"><i class="bi bi-calendar3 bs-dark"></i> 예약</button>
 				</div>
@@ -1228,23 +1249,6 @@ $(function() {
 
   </main><!-- End #main -->
   <!-- 모달 test  -->
-  <!-- reviewModal -->
-<div class="modal fade" id="revModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">리뷰 작성</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-       	<p>ㅇㅇ</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">작성하기</button>
-      </div>
-    </div>
-  </div>
-</div>
   <!-- reportModal -->
 <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -1259,10 +1263,12 @@ $(function() {
 				<p><input type="text" name="rptitle"></p>
 				<p>사유</p>
 				<p>
-					<select name="state">
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
+					<select name="rpreason">
+						<option value="허위 정보">허위 정보</option>
+						<option value="불법 광고">불법 광고</option>
+						<option value="욕설/혐오/차별적 표현">욕설/혐오/차별적 표현</option>
+						<option value="개인정보 노출">개인정보 노출</option>
+						<option value="기타">기타</option>
 					</select>
 				</p>
 				<p>내용</p>
@@ -1275,12 +1281,13 @@ $(function() {
     </div>
   </div>
 </div>
+
 <!-- 리뷰 모달  -->
 	<div id="modal1">
 		<div class="modal-content1">
 			<form action="/store/addrv" method="post" role="form" id="revForm">
 				<div id="review-title1">
-					<span>평점</span><br />
+					<span>평점</span><br/>
 					<div class="form-group1">
 						<span class="star"> ★★★★★ <span id="rvstar">★★★★★</span> <input
 							type="range" name="rvstar" oninput="myFunction(this.value)"
@@ -1290,12 +1297,15 @@ $(function() {
 					<span>내용</span>
 					<div class="form-group1">
 						<textarea id="review-content1" name="rvcontent" maxlength="200" placeholder="내용을 입력해주세요."></textarea>
-						<input type="text" id="sno" name="sno" value="${store.sno }"><br />
-						<input type="text" id="uno" name="uno" value="${store.uno }"><br />
+						<input type="hidden" id="sno" name="sno" value="${store.sno }"><br />
+						<input type="hidden" id="uno" name="uno" value="${uvo.uno }"><br />
 						 <input type="hidden" name="rvlike" value="1">
+					</div><br>
+					<div class="border-top py3 mb-3"></div>
+					<div class="revBtnBox">
+						<button type="button" id="close-modal1" data-oper="reset" class="btn btn-dark btn-sm">취소</button>
+						<button type="button" class="btn btn-dark btn-sm" data-oper="revreg">등록</button>
 					</div>
-					<input type="button" value="취소" id="close-modal1" data-oper="reset" class="btn"> 
-					<input type="submit" value="등록" class="btn" data-oper="revreg">
 				</div>
 			</form>
 		</div>
@@ -1388,20 +1398,13 @@ $(function() {
 </script>
 
 <script type="text/javascript">
-//	$(function()){
-//		var revForm = $("#revForm");
-//		$("input").on('click', function(e){
-//			e.preventDefault();		// 입력 이벤트 아닐시 이벤트 비활성화
+	$("button[data-oper='revreg']").click(function() { //리뷰 폼 버튼
+		//유효성 검사 추가할거면 밑에 작성
+		$("#modal1 form").submit();
 		
-//			var operation = $(this).data("oper");
-///			
-//			if(operation = $(this).data("oper"));
-//			
-//			if(operation === 'revreg'){
-//				if(document.getElementById(""))
-//			}
-//		}
-//	}
+	});
+	
+	
 	function bmanget(){
 		var smax = document.getElementById('hidesmax').value;
 		var numsmax = parseInt(smax);

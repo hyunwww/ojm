@@ -60,7 +60,6 @@ public class ReviewController {
 	@PostMapping("/addrv")
 	public String addrv(ReviewVO vo, Model model) {
 		log.info("addrv......" + vo);
-		vo.setUno(1);
 		service.addrv(vo);
 		storeService.updateRate((int)vo.getSno());
 		return "redirect:/store/detail?sno="+vo.getSno();
