@@ -14,8 +14,8 @@
 	}
 </script>
 </head>
-<jsp:include page="../testHeader.jsp"></jsp:include>
 <body>
+<jsp:include page="../testHeader.jsp"></jsp:include>
 	<form action="login" method="post" id="loginForm">
 		id <input type="text" name="username"><br>
 		pw<input type="password" name="password"><br>
@@ -24,9 +24,9 @@
 		
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }">
 	</form>
-	<a href="findID">아이디 찾기</a> / <a href="findPw">비밀번호 찾기</a>
-</body>
+	<a href="findID" style="width:100px">아이디 찾기</a> / <a href="findPw">비밀번호 찾기</a>
 <jsp:include page="../testFooter.jsp"></jsp:include>
+</body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	var form = $("#loginForm");

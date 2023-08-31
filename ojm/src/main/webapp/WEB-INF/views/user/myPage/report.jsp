@@ -83,7 +83,7 @@
 		<hr>
 		
 		
-		<form action="/admin/reportList" method="get" id="rpActionForm">
+		<form action="report" method="get" id="rpActionForm">
 			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
 			<input type="hidden" name="total" value="${total }">
@@ -112,8 +112,8 @@
 		$(".paginate_button a").on('click', function(e){
 			e.preventDefault();	// <a> 클릭 시 페이지 이동이 이루어지지 않게 하기
 			
-			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
-			actionForm.submit();
+			rpActionForm.find("input[name='pageNum']").val($(this).attr("href"));
+			rpActionForm.submit();
 		});
 	</script>
 </html>
