@@ -49,19 +49,9 @@ public class StoreMapperTest {
 	@Test
 	public void zeroTest() {
 		
-		StoreVO store = new StoreVO();
 		
-		store.setKd("1");
-		store.setWd("0");
-		store.setSaddress("nope");
-		store.setSname("abc");
-		store.setDayOff("0");
-		store.setSdeli(0);
-		store.setScrn("1");
-		store.setSpermmit(0);
-		store.setUno(43);
 		
-		log.info(mapper.storeRegister(store));
+		log.info(mapper.storePermit(2));
 		
 	}
 }

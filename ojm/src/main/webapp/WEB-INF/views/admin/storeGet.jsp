@@ -116,9 +116,9 @@
 		
 		$(function(){
 			$("button[data-oper='srPermmit']").on('click', function(){
-				srActionForm.attr('action', 'srPermmit');
-				srActionForm.submit();
 				alert("승인 처리가 완료되었습니다.");
+				var sno = '${svo.sno}';
+				location.href = '/admin/srPermmit?sno='+sno;
 			});
 		})
 	</script>

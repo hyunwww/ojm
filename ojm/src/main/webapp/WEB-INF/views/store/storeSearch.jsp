@@ -46,6 +46,7 @@
 					<div class="sidebar-item search-form">
 						<form action="#">
 							<input type="text" name="keyword">
+							<input type="text" style="display: none;">
 							<button type="button" id="keywordSearchBtn">
 								<i class="bi bi-search"></i>
 							</button>
@@ -201,6 +202,14 @@
 		});
 		
 		//검색 버튼
+		$("input[name='keyword']").on("keydown", function(e) {
+			if (e.keyCode == 13) {
+				e.preventDefault();
+				alert("!!!");
+				return;
+			}
+		});
+		
 		$("#keywordSearchBtn").on("click", function() {
 			if ($("input[name='keyword']").val() == '') {
 				alert("검색어 입력 필요.");
