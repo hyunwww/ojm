@@ -46,7 +46,7 @@
 					      <div class="invalid-feedback">전화번호를 입력해주세요.</div>
 					    </div>
 					    <div class="col-auto">
-					    	<span style="font-size: 12px; color: gray;">부가 설명</span>
+					    	<span style="font-size: 12px; color: gray;">하이픈 없이 입력</span>
 					    </div>
 					  </div>
 					<div class="row mb-3">
@@ -56,7 +56,6 @@
 						</div>
 						<div class="col-sm-2">
 							<select class="form-select" aria-label="Default select example" name="scate" style="width: auto;">
-							  <option selected>선택 안함</option>
 							  <option value="한식">한식</option>
 							  <option value="중식">중식</option>
 							  <option value="양식">양식</option>
@@ -75,19 +74,19 @@
 						<div class="col-auto">
 							<div class="input-group dayOff">
 								<input class="btn-check" type="checkbox" id="monday" autocomplete="off" value="1">
-								<label class="btn btn-outline-secondary" for="monday">Mon</label> 
+								<label class="btn btn-outline-secondary" for="monday">월요일</label> 
 								<input class="btn-check" type="checkbox" id="tuesday" autocomplete="off" value="2">
-								<label class="btn btn-outline-secondary" for="tuesday">tue</label> 
+								<label class="btn btn-outline-secondary" for="tuesday">화요일</label> 
 								<input class="btn-check" type="checkbox" id="wednesday" autocomplete="off" value="3">
-								<label class="btn btn-outline-secondary" for="wednesday">wed</label>
+								<label class="btn btn-outline-secondary" for="wednesday">수요일</label>
 								<input class="btn-check" type="checkbox" id="thursday" autocomplete="off" value="4">
-								<label class="btn btn-outline-secondary" for="thursday">thu</label>
+								<label class="btn btn-outline-secondary" for="thursday">목요일</label>
 								<input class="btn-check" type="checkbox" id="friday" autocomplete="off" value="5">
-								<label class="btn btn-outline-secondary" for="friday">fri</label>
+								<label class="btn btn-outline-secondary" for="friday">금요일</label>
 								<input class="btn-check" type="checkbox" id="saturday" autocomplete="off" value="6">
-								<label class="btn btn-outline-secondary" for="saturday">sat</label>
+								<label class="btn btn-outline-secondary" for="saturday">토요일</label>
 								<input class="btn-check" type="checkbox" id="sunday" autocomplete="off" value="0">
-								<label class="btn btn-outline-secondary" for="sunday">sun</label>
+								<label class="btn btn-outline-secondary" for="sunday">일요일</label>
 								<input class="btn-check"> <!-- 의미 x  -->
 							</div>
 						</div>
@@ -144,7 +143,7 @@
 							</div>
 						</div>
 						<div class="col-auto">
-					    	<span style="font-size: 12px; color: gray;">설명</span>
+					    	<span style="font-size: 12px; color: gray;">예약 불가능한 경우에는 0명 설정</span>
 					    </div>
 					</div>
 					<div class="row mb-3 depositRow" style="display: none;">

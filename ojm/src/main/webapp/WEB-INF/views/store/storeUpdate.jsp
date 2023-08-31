@@ -32,7 +32,7 @@
 					      <div class="invalid-feedback">전화번호를 입력해주세요.</div>
 					    </div>
 					    <div class="col-auto">
-					    	<span style="font-size: 12px; color: gray;">부가 설명</span>
+					    	<span style="font-size: 12px; color: gray;">하이픈 없이 입력</span>
 					    </div>
 					  </div>
 					<div class="row mb-3">
@@ -42,7 +42,6 @@
 						</div>
 						<div class="col-sm-2">
 							<select class="form-select" aria-label="Default select example" name="scate" style="width: auto;">
-							  <option selected>선택 안함</option>
 							  <option value="한식">한식</option>
 							  <option value="중식">중식</option>
 							  <option value="양식">양식</option>
@@ -128,7 +127,7 @@
 							</div>
 						</div>
 						<div class="col-auto">
-							<span style="font-size: 12px; color: gray;">부가 설명</span>
+							<span style="font-size: 12px; color: gray;">예약 불가능한 경우에는 0명 설정</span>
 						</div>
 					</div>
 					<div class="row mb-3 depositRow" style="display: none;">

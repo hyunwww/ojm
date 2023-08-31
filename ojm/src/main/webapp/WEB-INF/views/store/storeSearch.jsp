@@ -667,6 +667,13 @@
 			    		store.str = '';
 					    store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
 					    store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
+					    store.str += '<div class="row">';
+					    store.str += '<div class="col-3">';
+					    if (store.imgList.length > 0) {
+						    store.str += '<img src="/images/'+store.imgList[0].uuid+"_"+store.imgList[0].fileName+'" alt="image" style="height : -webkit-fill-available; width : -webkit-fill-available; object-fit : cover;">';
+						}
+					    store.str += '</div>';
+					    store.str += '<div class="col-9">';
 					    store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
 					    store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
 					    store.str += '<p style="text-align : right; margin : 0;">';
@@ -675,6 +682,12 @@
 					    store.str += '</p>';
 					    store.str += '</div>';
 					    store.str += '</div>';
+					    store.str += '</div>';
+					    store.str += '</div>';
+					    
+					    
+					    
+					    
 							
 			    		storeResult.push(store);
 					  }

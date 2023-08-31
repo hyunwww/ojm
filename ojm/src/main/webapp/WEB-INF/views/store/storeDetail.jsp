@@ -521,6 +521,7 @@ $(function() {
 		    	  	reservation : sres},
 		      success: function (result, status, xhr) {
 		    		console.log(result);
+		    		$(".recent-posts").eq(0).append('<h3 class="sidebar-title">비슷한 매장 추천</h3>');
 					for (var store of result) {
 			    		if (sno == store.sno) { //현재 매장 제외
 							continue;
@@ -544,7 +545,7 @@ $(function() {
 					}
 		    	  	
 					if ($(".recent-posts").eq(0).find(".post-item").length < 1) { //매칭 결과 없을 경우
-					    $(".recent-posts").eq(0).append("메세지");
+					    $(".recent-posts").eq(0).empty();
 					}
 		    	
 		    		
@@ -1018,7 +1019,6 @@ $(function() {
     <!-- ======= Blog Single Section ======= -->
     <section id="blog" class="blog">
       <div class="container" data-aos="fade-up">
-
         <div class="row">
 
           <div class="col-lg-8 entries">
@@ -1149,9 +1149,9 @@ $(function() {
 	              <div>
 	                <h4></h4>
 	                <div class="social-links">
-	                  <a href="#"><i class="bi bi-star-fill"></i>${review.rvstar }</a>
+	                  <a href="#"><i class="bi bi-star-fill" style="color: indianred"></i>${review.rvstar }</a>
 	                </div>
-	                <p>${review.rvcontent }</p>
+	                <p style="font-size: 20px; color: black;">${review.rvcontent }</p>
 	              </div>
 	            </div><!-- End blog author bio -->
               </c:forEach>
@@ -1188,42 +1188,40 @@ $(function() {
             </div><!-- End blog comments -->
 
           </div><!-- End blog entries list -->
-
           <div class="col-lg-4">
 
             <div class="sidebar">
 
-              <h3 class="sidebar-title">비슷한 매장 추천</h3>
               <div class="sidebar-item recent-posts">
-                <div class="post-item clearfix">
-                  <img src="/resources/img/ja.jpg" alt="">
-                  <h4><a href="blog-single.html">title</a></h4>
-                  <time datetime="2020-01-01">desc</time>
-                </div>
-
               </div><!-- End sidebar recent posts-->
+
 
               <h3 class="sidebar-title">관련 검색어</h3>
               <div class="sidebar-item tags">
                 <ul>
-                  <li><a href="/store/search?searchInput=1">1</a></li>
-                  <li><a href="#">IT</a></li>
-                  <li><a href="#">Business</a></li>
-                  <li><a href="#">Mac</a></li>
-                  <li><a href="#">Design</a></li>
-                  <li><a href="#">Office</a></li>
-                  <li><a href="#">Creative</a></li>
-                  <li><a href="#">Studio</a></li>
-                  <li><a href="#">Smart</a></li>
-                  <li><a href="#">Tips</a></li>
-                  <li><a href="#">Marketing</a></li>
+                	<c:if test=""></c:if>
+                	<c:if test=""></c:if>
+                	<c:if test=""></c:if>
+                  <li><a href="#">${store.scate }</a></li>
+                  <c:if test="${store.sdeli eq 1 }">
+	              	<li><a href="#">배달</a></li>
+	              </c:if>	
+                  <c:if test="${store.smaxreserv gt 0 }">
+	              	<li><a href="#">예약</a></li>
+	              </c:if>
+	              <c:forEach var="me" items="${store.menuList }">
+	              	<li><a href="#">${me.mname }</a></li>
+	              </c:forEach>
+	              <c:forEach var="me" items="${store.menuList }">
+	              	<li><a href="#">${me.mcate }</a></li>
+	              </c:forEach>
                 </ul>
               </div><!-- End sidebar tags-->
 
             </div><!-- End sidebar -->
 
         </div>
-
+      </div>
       </div>
     </section><!-- End Blog Single Section -->
 
