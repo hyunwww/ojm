@@ -177,6 +177,7 @@ $(function() {
 		var sstar = '${store.sstar}';
 		console.log('star : ' + sstar);
 		fillStar(sstar);
+		loadReviewInfo();
 		
 		// 마커 이미지의 주소(현재 위치)
 		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
@@ -463,6 +464,35 @@ $(function() {
 			return dist.toFixed(1);
 		}
 	}
+	
+	function loadReviewInfo(i, uno) {
+		
+		if (uno) {
+			$.ajax({
+			      type: "get",
+			      url: "/store/reviewData",
+			      data: {uno : uno},
+			      success: function (result, status, xhr) {
+			    	  $(".blog-author").eq(i).find("h4").html(result.id);
+			    	  $(".blog-author").eq(i).prepend('<img src="'+result.img+'" class="rounded-circle float-left" alt="images">');
+			    		
+			      }
+			});
+		}
+		
+		
+		
+	}
+	//리뷰 데이터 불러오기용
+	$(function() {
+		for (var i = 0; i < $(".blog-author").length; i++) {
+			
+			if ($(".blog-author")[i].getAttribute("data-uno")) {
+				loadReviewInfo(i, $(".blog-author")[i].getAttribute("data-uno"));
+			}
+		}
+	});
+	
 </script>
 <script type="text/javascript">
 	function recommendByDistance() {
@@ -1115,53 +1145,16 @@ $(function() {
 
               <h4 class="comments-count">reviews</h4><br>
               <c:forEach var="review" items="${store.revList }">
-              	<div class="blog-author d-flex align-items-center">
-	              <img src="/resources/img/profile/man.png" class="rounded-circle float-left" alt="images"><!-- 프로필사진  -->
+              	<div class="blog-author d-flex align-items-center" data-uno ="${review.uno }">
 	              <div>
-	                <h4>유저 아이디</h4>
+	                <h4></h4>
 	                <div class="social-links">
-	                  <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
-	                  <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
-	                  <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
-	                  <a href="https://instagram.com/#"><i class="bi bi-star-fill"></i>${review.rvstar }</a>
+	                  <a href="#"><i class="bi bi-star-fill"></i>${review.rvstar }</a>
 	                </div>
 	                <p>${review.rvcontent }</p>
 	              </div>
 	            </div><!-- End blog author bio -->
               </c:forEach>
-			  
-	            
-			  <div class="blog-author d-flex align-items-center">
-	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="">
-	              <div>
-	                <h4>Jane Smith</h4>
-	                <div class="social-links">
-	                  <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
-	                  <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
-	                  <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
-	                </div>
-	                <p>
-	                  Itaque quidem optio quia voluptatibus dolorem dolor. Modi eum sed possimus accusantium. Quas repellat voluptatem officia numquam sint aspernatur voluptas. Esse et accusantium ut unde voluptas.
-	                </p>
-	              </div>
-	            </div><!-- End blog author bio -->
-	            
-			  <div class="blog-author d-flex align-items-center">
-	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="">
-	              <div>
-	                <h4>Jane Smith</h4>
-	                <div class="social-links">
-	                  <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
-	                  <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
-	                  <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
-	                </div>
-	                <p>
-	                  Itaque quidem optio quia voluptatibus dolorem dolor. Modi eum sed possimus accusantium. Quas repellat voluptatem officia numquam sint aspernatur voluptas. Esse et accusantium ut unde voluptas.
-	                </p>
-	              </div>
-	            </div><!-- End blog author bio -->
-			  
-			  
 
 				
               <div class="reply-form modal modal-sheet modal-lg" id="replyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><!-- 숨겼다가 모달로 사용  -->
@@ -1228,23 +1221,6 @@ $(function() {
               </div><!-- End sidebar tags-->
 
             </div><!-- End sidebar -->
-			
-			<div class="sidebar">
-				<h3 class="sidebar-title">222</h3>
-				<div class="sidebar-item recent-posts">
-					<div class="post-item clearfix">
-						<h5>111</h5>
-					</div>
-					<div class="post-item clearfix">
-						<h5>2</h5>
-					</div>
-					<div class="post-item clearfix">
-						<h5>3</h5>
-					</div>
-
-				</div>
-			</div>
-          </div><!-- End blog sidebar -->
 
         </div>
 

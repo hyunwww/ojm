@@ -52,6 +52,8 @@ public class StoreController {
 	@Autowired
 	private StoreService service;
 	@Autowired
+	private UserService uService;
+	@Autowired
 	private BCryptPasswordEncoder encoder;
 	
 	@GetMapping("/registerTest")
@@ -546,5 +548,16 @@ public class StoreController {
 			session.setAttribute("filterData", fvo);
 			return new ResponseEntity<FilterVO>(fvo, HttpStatus.OK);
 		}
+	}
+	
+	@GetMapping(value = "/reviewData", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> loadReviewData(@RequestParam("uno")int uno){
+		
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("id", uService.getUvoByUno(uno).getUserid());
+		result.put("img", uService.getUserImg(uno));
+		
+		return new ResponseEntity<Map<String,String>>(result, HttpStatus.OK);
 	}
 }

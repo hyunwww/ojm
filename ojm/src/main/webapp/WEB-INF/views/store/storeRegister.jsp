@@ -629,11 +629,11 @@
 		
 		
 		if (menuForm.mname.value == '') {
-			alert("메뉴명을 입력해야합니다.");
+			alert("메뉴명을 입력해주세요.");
 			return;
 		}
 		if (menuForm.mcate.value == 0) {
-			alert(2);
+			alert("카테고리를 입력해주세요.");
 			return;
 		}
 		
@@ -645,8 +645,11 @@
 				selectedAlrg += sel.value+",";
 			}
 		}
-		selectedAlrg = selectedAlrg.substring(0, selectedAlrg.length-1);
-		
+		selectedAlrg += $("#floatingTextarea").val();
+		if ($("#floatingTextarea").val() == '') {
+			selectedAlrg = selectedAlrg.substring(0, selectedAlrg.length-1);
+		}
+				
 		menuService.add({
 			mname : menuForm.mname.value,
 			mcate : menuForm.mcate.value,

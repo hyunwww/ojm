@@ -34,5 +34,9 @@ public class UserMapperTest {
 	 * 
 	 * }
 	 */
-	 
+	 @Test
+	 public void uvoTest() {
+		 
+		 log.info(mapper.getUvoByUno(42));
+	 }
 }
