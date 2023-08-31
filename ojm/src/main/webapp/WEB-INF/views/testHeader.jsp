@@ -260,10 +260,6 @@
 					<sec:authorize access="isAnonymous()">
 						<li><a href="/user/login">Login</a></li>
 					</sec:authorize>
-					<sec:authorize access="isAuthenticated()">
-						<li id="userInfo"><a href="#"> <i class="bi bi-person"></i>
-						</a></li>
-					</sec:authorize>
 				</ul>
 				<i class="bi bi-list mobile-nav-toggle"></i>
 			</nav>

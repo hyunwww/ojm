@@ -9,6 +9,7 @@
 <meta charset="UTF-8">
 <title>내 게시글</title>
 </head>
+<jsp:include page="../../testHeader.jsp"></jsp:include>
 <body>
 	<h1>내 게시글</h1>
 		<hr>

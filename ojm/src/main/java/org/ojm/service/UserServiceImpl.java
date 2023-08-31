@@ -62,6 +62,9 @@ public class UserServiceImpl implements UserService{
 	public int regUser(UserVO uvo,InfoVO ivo,ProfileImgVO img) {	// 일반유저
 		uvo.setUserpw(passwordEncoder.encode(uvo.getUserpw()));		// 비밀번호 인코딩
 		if(mapper.regUser(uvo)>0) {
+			if(ivo.getUaleretc()==null) {
+				ivo.setUaleretc(" ");
+			}
 			mapper.regUserInfo(ivo);
 			mapper.regUserImg(img);
 			mapper.newMailKey(uvo.getUseremail(), " ");				// 아이디 찾기 메일 인증용
@@ -103,7 +106,9 @@ public class UserServiceImpl implements UserService{
 	public int modifyUser(UserVO uvo) {
 		uvo.setUserpw(passwordEncoder.encode(uvo.getUserpw()));
 		if(mapper.modifyUser(uvo)>0) {
-			mapper.modifyUserInfo(uvo.getInfo());
+			if(uvo.getInfo()!=null) {
+				mapper.modifyUserInfo(uvo.getInfo());
+			}
 		}else {
 			return -1;
 		}

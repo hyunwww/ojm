@@ -22,7 +22,7 @@
 
 </script>
 </head>
-
+<jsp:include page="../../testHeader.jsp"></jsp:include>
 <body>
 <jsp:include page="../../testHeader.jsp"></jsp:include>
 	<div id="content">

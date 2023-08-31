@@ -7,13 +7,6 @@
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page import="org.springframework.security.core.Authentication" %>
 <%@ page import="org.ojm.security.domain.CustomUser" %>
-<%
-Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-Object principal = auth.getPrincipal();
-
-pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo()); 
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -67,7 +60,8 @@ pageContext.setAttribute("uvo", ((CustomUser)principal).getUvo());
 	      	data: form1,
 	      	dataType : 'text',
 	     	success : function(result){ 
-	     		alert("success")
+	     		alert(result);
+	     		location.href='main';
 	      	},
 	      	error : function(result){
 	      		console.log(result.responseText);

@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>비밀번호 찾기</title>
 </head>
+<jsp:include page="../testHeader.jsp"></jsp:include>
 <body>
 	<c:choose>
 		<c:when test="${userid eq null }">
@@ -26,6 +27,7 @@
 	</c:choose>
 	
 </body>
+<jsp:include page="../testFooter.jsp"></jsp:include>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	var form = $("#form");

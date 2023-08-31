@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>아이디 찾기</title>
 </head>
+<jsp:include page="../testHeader.jsp"></jsp:include>
 <body>
 	<form action="/user/findIDCheck" method="post" id="form">
 		이름 <input type="text" name="username"><br>
@@ -14,6 +15,7 @@
 		<input type="button" name="registerBtn" value="회원가입">
 	</form>
 </body>
+<jsp:include page="../testFooter.jsp"></jsp:include>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	var form = $("#form");

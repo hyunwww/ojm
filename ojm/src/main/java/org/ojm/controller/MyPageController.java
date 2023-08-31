@@ -132,6 +132,18 @@ public class MyPageController {
 		return modifyCount == 1 ? new ResponseEntity<>("회원정보를 수정했습니다.", HttpStatus.OK) :
 				new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	@RequestMapping(value = "/b/modify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
+			method = RequestMethod.POST)
+	public ResponseEntity<String> b_modify(UserVO uvo){
+		log.info(uvo);
+		log.info("modify .... uno : " + uvo.getUno());
+		int modifyCount = service.modifyUser(uvo);
+		log.info("modifyCount : " + modifyCount);
+		
+		
+		return modifyCount == 1 ? new ResponseEntity<>("회원정보를 수정했습니다.", HttpStatus.OK) :
+			new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
 	
 	
@@ -141,7 +153,10 @@ public class MyPageController {
 	public String b_main(Principal pr,Model model) {
 		log.info("myPageBmain...... id : " + pr.getName());
 		
-		model.addAttribute("uno", service.getUno(pr.getName()));
+		UserVO user = service.getUser(pr.getName());
+		log.info(user);
+		
+		model.addAttribute("uvo", user);
 		
 		return "user/myPage/b/main";
 	}

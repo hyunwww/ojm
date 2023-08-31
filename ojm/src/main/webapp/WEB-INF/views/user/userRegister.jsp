@@ -9,8 +9,14 @@
 	img{
 		width: 50px;
 	}
+	textarea {
+		width: 300px;
+		height: 6.25em;
+		resize: none;
+	}
 </style>
 </head>
+<jsp:include page="../testHeader.jsp"></jsp:include>
 <body>
 	<form action="" method="post">
 		id<input type="text" name="userid" id="userid">
@@ -24,24 +30,21 @@
 		이메일<input type="text" name="useremail"><br>
 		닉네임<input type="text" name="nickname"><br>
 		주소<input type="text" name="uaddress" readonly="readonly" onclick="findAddr()"><br>
-		<!-- 주소찾기 api로 새 창에서 동작 후 채워줄 것 
-			배달기능까지 추가한다면 상세주소까지.
-		-->
-		성별<br>
-		<input type="radio" value="male" name="ugender">남
+		성별
+		<input type="radio" value="male" name="ugender" checked="checked">남
 		<input type="radio" value="female" name="ugender">여<br>
 		광고여부	<input type="checkbox" value="sms" name="uads">sms
 				<input type="checkbox" value="mail" name="uads">e-mail<br>
-				<input type="checkbox" value="" name="uads" hidden="hidden" checked="checked">
+				<input type="checkbox" value=" " name="uads" hidden="hidden" checked="checked">
 				
 		알러지	<input type='checkbox' name='ualer' value='aler1' />갑각류
 				<input type='checkbox' name='ualer' value='aler2' />견과
 				<input type='checkbox' name='ualer' value='aler3' />달걀
-				<input type='checkbox' name='ualer' value='' hidden="hidden" checked="checked"/>
-				<br>
-		<input type='checkbox' name='ualer' value='ualeretc' />
-		<textarea rows="3" cols="10" name="ualeretc" placeholder="기타 알레르기 직접 입력"></textarea>
-		<!-- aleretc가 체크되면 ualeretc를 submit할 거임 -->
+				<input type='checkbox' name='ualer' value=' ' hidden="hidden" checked="checked"/>
+		<br>
+		<input type='checkbox' name='ualer' value='ualeretc' id="ualeretc"/>기타
+		<br>
+		<textarea rows="3" cols="10" id="etc" name="ualeretc" placeholder="기타 알레르기 직접 입력" disabled="disabled"></textarea>
 		<br>
 		관심 음식 카테고리	<input type='checkbox' name='ufavor' value='favor1' />한식
 				<input type='checkbox' name='ufavor' value='favor2' />양식
@@ -63,12 +66,12 @@
 		
 		
 		<input type="hidden" name="uploadpath" value="resources/img/profile">
-		<input type="hidden" name="filename" value="">
+		<input type="hidden" name="filename" value="man.png">
 		
 		<input type="hidden" name="ulikestore" value="">
-		<input type="hidden" name="ulikejob" value="">
 	</form>
 </body>
+<jsp:include page="../testFooter.jsp"></jsp:include>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
@@ -132,6 +135,17 @@
 			$("#pwchecked").html("비밀번호를 확인해주십시오");
 		}
 	});
+	
+	// 기타 알러지 입력 제어
+	$("#ualeretc").on("change",function(){
+		var check = $('#etc').attr("disabled");
+		if(check!=null){
+			$('#etc').removeAttr("disabled");
+		}else{
+			$('#etc').attr("disabled",'disabled');
+			$('#etc').val('');
+		}
+	})
 	
 	function idCheck(){	// id 중복체크
 		var userid = $("#userid").val();

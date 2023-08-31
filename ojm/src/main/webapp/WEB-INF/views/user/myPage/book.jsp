@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>내 예약내역</title>
 </head>
+<jsp:include page="../../testHeader.jsp"></jsp:include>
 <body>
 	<h1>내 예약내역</h1>
 		<hr>

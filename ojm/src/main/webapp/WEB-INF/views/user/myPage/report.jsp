@@ -6,6 +6,7 @@
 <%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
 <%@page import="org.springframework.security.core.Authentication"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<jsp:include page="../../testHeader.jsp"></jsp:include>
 <!DOCTYPE html>
 <html>
 	<head>

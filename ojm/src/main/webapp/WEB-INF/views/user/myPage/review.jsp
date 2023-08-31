@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>내 리뷰</title>
 </head>
+<jsp:include page="../../testHeader.jsp"></jsp:include>
 <body>
 	<h1>내 리뷰</h1>
 	<c:if test="${not empty revList }">

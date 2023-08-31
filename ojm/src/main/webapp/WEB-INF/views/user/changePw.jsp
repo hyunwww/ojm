@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>비밀번호 변경</title>
 </head>
+<jsp:include page="../testHeader.jsp"></jsp:include>
 <body>
 	<form action="" method="post">
 		비밀번호 <input type="password" name="userpw" id="pw"><br>
@@ -14,6 +15,7 @@
 		<input type="hidden" value="${userid }" name="userid">
 	</form>
 </body>
+<jsp:include page="../testFooter.jsp"></jsp:include>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	function change(f){

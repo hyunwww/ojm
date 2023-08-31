@@ -47,6 +47,7 @@
 		</style>
 <title>내 구인구직</title>
 </head>
+<jsp:include page="../../testHeader.jsp"></jsp:include>
 <body>
 	<h1>내 구직 현황</h1>
 		<hr>

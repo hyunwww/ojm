@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>회원가입</title>
 </head>
+<jsp:include page="../testHeader.jsp"></jsp:include>
 <body>
 	<form action="" method="post">
 		id<input type="text" name="userid" id="userid">
@@ -23,6 +24,7 @@
 		<input type="button" value="홈으로" id="homeBtn">
 	</form>
 </body>
+<jsp:include page="../testFooter.jsp"></jsp:include>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	var idChecked=false;
@@ -90,7 +92,7 @@
 		}
 		
 		$.ajax({	
-	      	type : 'post',
+	      	type : 'get',
 	     	url : 'userIdCheck',
 	      	data: {userid:userid},
 	     	success : function(){ 

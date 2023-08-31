@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>비밀번호 찾기</title>
 </head>
+<jsp:include page="../testHeader.jsp"></jsp:include>
 <body>
 	<form action="/user/findPwCheck" method="post" id="form">
 		아이디 <input type="text" name="userid"><br>
@@ -14,6 +15,7 @@
 		<input type="button" name="homeBtn" value="홈으로">
 	</form>
 </body>
+<jsp:include page="../testFooter.jsp"></jsp:include>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	var form = $("#form");
