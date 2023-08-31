@@ -57,9 +57,11 @@
 						<div class="col-sm-2">
 							<select class="form-select" aria-label="Default select example" name="scate" style="width: auto;">
 							  <option selected>선택 안함</option>
-							  <option value="1">kor</option>
-							  <option value="2">chn</option>
-							  <option value="3">west</option>
+							  <option value="한식">한식</option>
+							  <option value="중식">중식</option>
+							  <option value="양식">양식</option>
+							  <option value="일식">일식</option>
+							  <option value="아시아">아시아</option>
 							</select>
 						</div>
 						<div class="col-auto"></div>
@@ -181,7 +183,7 @@
 					<div class="row mb-3">
 						<div class="col-1">메뉴</div>
 						<div class="btn-group btn-group-sm col-1" role="group">
-						  <button type="button" class="btn btn-outline-dark" id="menuAddBtn" data-bs-toggle="modal" data-bs-target="#menuModal">+</button>
+						  <button type="button" class="btn btn-outline-dark" id="menuAddBtn">+</button>
 						</div>
 					</div>
 					<div id="menuContainer"></div>
@@ -234,16 +236,18 @@
 		                  </div>
 		                  <div class="row mb-2">
 		                  	<div class="col-auto">
-		                  		<input class="btn-check" type="checkbox" name="maler" id="aler1" autocomplete="off" value="1">
-								<label class="btn btn-outline-warning" for="aler1">1</label> 
-		                  		<input class="btn-check" type="checkbox" name="maler" id="aler2" autocomplete="off" value="1">
-								<label class="btn btn-outline-warning" for="aler2">2</label> 
-		                  		<input class="btn-check" type="checkbox" name="maler" id="aler3" autocomplete="off" value="1">
-								<label class="btn btn-outline-warning" for="aler3">3</label> 
-		                  		<input class="btn-check" type="checkbox" name="maler" id="aler4" autocomplete="off" value="1">
-								<label class="btn btn-outline-warning" for="aler4">4</label> 
-		                  		<input class="btn-check" type="checkbox" name="maler" id="aler5" autocomplete="off" value="1">
-								<label class="btn btn-outline-warning" for="aler5">5</label> 
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler1" autocomplete="off" value="갑각류">
+								<label class="btn btn-outline-warning" for="aler1">갑각류</label> 
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler2" autocomplete="off" value="달걀">
+								<label class="btn btn-outline-warning" for="aler2">달걀</label> 
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler3" autocomplete="off" value="견과류">
+								<label class="btn btn-outline-warning" for="aler3">견과류</label> 
+		                  		<input class="btn-check" type="checkbox" id="aleretc" autocomplete="off" value="">
+								<label class="btn btn-outline-warning" for="aleretc">기타</label> 
+								<div class="form-floating mt-2" style="display: none;" id="aleretcInput">
+								  <textarea class="form-control" placeholder="직접 입력" id="floatingTextarea" style="resize: none;"></textarea>
+								  <label for="floatingTextarea">기타 알레르기</label>
+								</div>
 		                  	</div>
 		                  </div>
 		                  <div style="text-align: right;">
@@ -292,9 +296,19 @@
 		});
 		//메뉴 추가 버튼
 		$("#menuAddBtn").click(function() {
+			menuModal.show();
 			$("#menuModal form")[0].reset();
+			$("#aleretcInput").hide();
 		});
 		
+		$("#aleretc").click(function() {
+			console.log($(this));
+			if ($(this)[0].checked) {
+				$("#aleretcInput").show();
+			}else{
+				$("#aleretcInput").hide();
+			}
+		});
 		
 		//regForm 제어
 		$("form button").on("click", function() {

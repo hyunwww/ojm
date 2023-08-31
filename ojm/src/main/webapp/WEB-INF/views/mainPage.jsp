@@ -208,7 +208,7 @@
 
     </div>
   </section><!-- End Hero -->
-	
+	<div class="min-vh-100"></div>
 	
 <!-- 
   Vendor JS Files

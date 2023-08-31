@@ -25,7 +25,7 @@
 <body>
 <jsp:include page="../../testHeader.jsp"></jsp:include>
 	<h1>유저정보</h1>
-	<div id="content">
+	<div id="content" class="d-flex flex-column min-vh-100">
 		<form action="" method="post">
 			프로필 이미지 <br><img src="${imgRoot }"><br>	<!-- 수정도 가능하게 바꿔야함 -->
 			id<input type="text" name="userid" value="${uvo.userid }" readonly="readonly"><br>

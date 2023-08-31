@@ -205,6 +205,10 @@
 		$("input[name='keyword']").on("keydown", function(e) {
 			if (e.keyCode == 13) {
 				e.preventDefault();
+				if ($(this).val() == '') {
+					alert("검색어 입력 필요.");
+					return;
+				}
 				point = 1;
 				keywordSearch($("input[name='keyword']").val());
 			}

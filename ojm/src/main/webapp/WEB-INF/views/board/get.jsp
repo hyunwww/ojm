@@ -76,26 +76,24 @@
 					<ul></ul>
 				</td>
 			</tr>
-			<c:choose>
-				<c:when test="${not empty uvo.uno and like == 0}">
-					<tr id="blike">
-						<td colspan="2">
-							<input class="like" type="hidden" value="${like }">
-							<button class="btn btn-primary" name="blikeBtn">추천</button>
-							${vo.blike}
-						</td>
-					</tr>
-				</c:when>
-				<c:when test="${not empty uvo.uno and like == 1}">
-					<tr id="blike">
-						<td colspan="2">
-							<input class="like" type="hidden" value="${like }">
-							<button class="btn btn-primary" name="blikeBtn">추천 취소</button>
-							${vo.blike}
-						</td>
-					</tr>
-				</c:when>
-			</c:choose>
+			<tr id="blikeRow">
+				<c:choose>
+					<c:when test="${not empty uvo.uno and like == 0}">
+							<td id="blike" colspan="2">
+								<input class="like" type="hidden" value="${like }">
+								<button class="btn btn-primary" name="blikeBtn">추천</button>
+								${vo.blike}
+							</td>
+					</c:when>
+					<c:when test="${not empty uvo.uno and like == 1}">
+							<td id="blike" colspan="2">
+								<input class="like" type="hidden" value="${like }">
+								<button class="btn btn-primary" name="blikeBtn">추천 취소</button>
+								${vo.blike}
+							</td>
+					</c:when>
+				</c:choose>
+			</tr>
 		</table>
 		</div>
 		</div>
@@ -149,7 +147,7 @@
 		var uno = "${uvo.uno}";
 
 		$(function(){
-			$("#blike").on("click","button[name='blikeBtn']", function(){
+			$("#blikeRow").on("click","button[name='blikeBtn']", function(){
 				if ($(".like").val() == 1) {
 					down();
 				}else if ($(".like").val() == 0) {
@@ -161,6 +159,7 @@
 		});
 		
 		function down(down, callback, error){
+			
 			$.ajax({
 				type : 'post',
 				url : '/like/bLikeDown',
@@ -172,7 +171,7 @@
 					}
 				),
 				success : function(result, status, xhr){
-					$('#blike').load(location.href+' #blike');
+					$('#blikeRow').load(location.href+' #blike');
 					$(".like").val(0);
 				},
 				error : function(xhr, status, er){
@@ -195,7 +194,7 @@
 						}
 					),
 					success : function(result, status, xhr){
-						$('#blike').load(location.href+' #blike');
+						$('#blikeRow').load(location.href+' #blike');
 						$(".like").val(1);
 					},
 					error : function(xhr, status, er){

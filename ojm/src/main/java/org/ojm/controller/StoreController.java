@@ -467,7 +467,7 @@ public class StoreController {
 		
 		
 		if (service.updateStore(storeInfo) > 0) {
-			return "redirect:/store/myStore?uno="+storeInfo.getUno();
+			return "redirect:/user/myPage/b/store";
 		}else {
 			return "redrect:/";
 		}

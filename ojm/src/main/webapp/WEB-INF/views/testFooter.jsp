@@ -11,10 +11,30 @@
   <script src="/resources/vendor/php-email-form/validate.js"></script>
 
   <script src="/resources/js/main.js"></script>
-
 	<footer id="footer" class="py-3 mt-auto text-center">
 	    <div>
-	    	<h3>footer 영역</h3>
+	    	<div class="container">
+	    		<div class="row">
+	    			<div class="col-lg-3 border-end border-dark-subtle py-3">
+		    			<p>내용</p>
+		    			<p>내용</p>
+		    			<p>내용</p>
+		    			<p>내용</p>
+	    			</div>
+	    			<div class="col-lg-3 border-end border-dark-subtle py-3">
+		    			<p>내용</p>
+		    			<p>내용</p>
+		    			<p>내용</p>
+		    			<p>내용</p>
+	    			</div>
+	    			<div class="col-lg-6 py-3">
+		    			<p>내용</p>
+		    			<p>내용</p>
+		    			<p>내용</p>
+		    			<p>내용</p>
+	    			</div>
+	    		</div>
+	    	</div>
 	    </div>
 	</footer>
 	

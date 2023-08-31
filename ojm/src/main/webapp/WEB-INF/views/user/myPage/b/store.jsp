@@ -34,6 +34,7 @@
 										<c:out value="${store.sname }"></c:out>
 									</a>
 								</td>
+								<td><button onclick="location.href='/store/update?sno=${store.sno}'">정보 수정</button></td>
 							</tr>
 						</c:forEach>
 					</c:otherwise>

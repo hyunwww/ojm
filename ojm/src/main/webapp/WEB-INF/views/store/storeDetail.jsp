@@ -1056,18 +1056,19 @@ $(function() {
                 <ul class="cats">
                   <li><a href="#">${store.scate }</a></li>
                 </ul>
-
-                <i class="bi bi-tags"></i>
-                <ul class="tags">
-                  <c:if test="${store.sdeli eq 1 }">
-                  	<li><a href="#">배달 가능</a></li>
-                  </c:if>	
-                  <c:if test="${store.smaxreserv gt 0 }">
-                  	<li><a href="#">예약 가능</a></li>
-                  </c:if>	
-                </ul>
+				<c:if test="${store.sdeli eq 1 or store.smaxreserv gt 0 }">
+	                <i class="bi bi-tags"></i>
+	                <ul class="tags">
+	                  <c:if test="${store.sdeli eq 1 }">
+	                  	<li><a href="#">배달 가능</a></li>
+	                  </c:if>	
+	                  <c:if test="${store.smaxreserv gt 0 }">
+	                  	<li><a href="#">예약 가능</a></li>
+	                  </c:if>	
+	                </ul>
+				</c:if>
                 <div class="border-bottom py-3"></div>
-                <div id="btnContainer" style="text-align: right; padding: 10px;">
+                <div id="btnContainer" style="text-align: right; padding-top : 10px;">
                 	<c:choose>
 						<c:when test="${isLike }">
 							<button style="float: left; " class="likeBtn btn btn-outline-dark"><i class="bi bi-hand-thumbs-up-fill"></i> 좋아요 ${store.slike }</button>
@@ -1103,6 +1104,9 @@ $(function() {
             			<c:forEach var="menu" items="${store.menuList }">
             				<p>${menu.mname } =============== ${menu.mprice }</p>
             			</c:forEach>
+            			<c:if test="${empty store.menuList }">
+            				<p>메뉴 정보 없음</p>
+            			</c:if>
             		</div>
             	</div>
             </article>
@@ -1112,7 +1116,7 @@ $(function() {
               <h4 class="comments-count">reviews</h4><br>
               <c:forEach var="review" items="${store.revList }">
               	<div class="blog-author d-flex align-items-center">
-	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="images"><!-- 프로필사진  -->
+	              <img src="/resources/img/profile/man.png" class="rounded-circle float-left" alt="images"><!-- 프로필사진  -->
 	              <div>
 	                <h4>유저 아이디</h4>
 	                <div class="social-links">
