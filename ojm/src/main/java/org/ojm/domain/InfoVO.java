@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class InfoVO {
 	private int uno,uino;
 	private String nickname,uaddress,uads,ualer,ualeretc,ufavor,ugender;
-	private String ulikestore,ulikejob;
+	private String ulikestore;
 }

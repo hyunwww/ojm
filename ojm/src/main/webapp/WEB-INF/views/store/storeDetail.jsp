@@ -1382,7 +1382,7 @@ $(function() {
 	closeModalBtn.addEventListener("click", () => {
 		modal1.style.display = "none";
 		document.getElementById("review-content1").value = "";
-		document.querySelector('.star span').style.width = 0+'%';
+		document.querySelector('#rvstar').style.width = 0+'%';
 		document.body.style.overflow = "auto"; // 스크롤바 보이기
 	});
 </script>

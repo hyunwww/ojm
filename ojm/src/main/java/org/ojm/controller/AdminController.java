@@ -63,7 +63,7 @@ public class AdminController {
 		model.addAttribute("srList", sService.getSrList(cri));
 		model.addAttribute("tota", sService.getSrTotal());
 		model.addAttribute("pageMaker", new PageDTO(cri, sService.getSrTotal()));
-		return "admin/storeRegister";
+		return "admin/storeRegisterList";
 	}
 	
 	@GetMapping("/srGet")
