@@ -106,7 +106,7 @@ textarea {
 	border: 1px solid #888;
 	width: 80%;
 }
-#cbtn {
+.cbtn {
 	background-color: aqua;
 	color: white;
 }
@@ -550,7 +550,6 @@ $(function() {
 </script>
 <!-- 달력 스크립트 -->
 <script type="text/javascript">
-		
 	var getTime = "${store.openHour}";
 	var times = getTime.split('~');
 	var openbe = parseInt(times[0].split(":"))+100;
@@ -616,6 +615,7 @@ $(function() {
 			cell.setAttribute('id', i); // 달력의 셀마다(일수) id 값 적용 1일 id = "1" 
 			cell.innerHTML = i; // cell 입력란에 i 값 입력
 			cell.style.color = "black";
+			cell.style.fontSize = "20px";
 			cell.align = "center"; // cell 입력이 되면 cell 가운데 정렬
 			if (cnt % 7 == 1) { // 일요일 조건
 				cell.innerHTML = "<font color=red>" + i + "</font>";
@@ -759,6 +759,7 @@ $(function() {
 				if(nowDate <= clickedDateNum && nowMonth == realDate.getMonth() || realDate.getMonth() + 1 == nowMonth){					
 					document.getElementById(rememberId).style.color = "black";
 					document.getElementById(rememberId).style.backgroundColor = "#FFFFFF";
+					$('.disapear').attr('style', "display:'';");
 					document.getElementById(clickedDateId).style.color = "#FFFFFF";
 					document.getElementById(clickedDateId).style.backgroundColor = "#00FF00";
 					rememberId = clickedDateId;
@@ -845,64 +846,64 @@ $(function() {
 				cell = row.insertCell();
 			}
 		}
-		document.getElementById("show1").value = cDay; // 
+		
 		
 		// 오늘날 요일에 dayoff유무
 		
-		switch (cDay) {
-		case 1:
-			if(off.includes(substring0) == true){
-				clearAll();
-				return;				
-			}
-			checkedToday();		
-			return;
-		case 2:
-			if(off.includes(substring1) == true){		
-				clearAll();
-				return;
-			}
-			checkedToday();
-			return;
-		case 3:
-			if(off.includes(substring2) == true){		
-				clearAll();
-				return;
-			}
-			checkedToday();
-			return;
-		case 4:
-			if(off.includes(substring3) == true){		
-				clearAll();
-				return;
-			}
-			checkedToday();
-			return;
-		case 5:
-			if(off.includes(substring4) == true){		
-				clearAll();
-				return;
-			}
-			checkedToday();
-			return;
-		case 6:
-			if(off.includes(substring5) == true){		
-				clearAll();
-				return;
-			}	
-			checkedToday();
-			return;
-		case 7:
-			if(off.includes(substring6) == true){		
-				clearAll();
-				return;
-			}
-			checkedToday();
-			return;
+		//switch (cDay) {
+		//case 1:
+			//if(off.includes(substring0) == true){
+			//	clearAll();
+			//	return;				
+			//}
+			//checkedToday();		
+			//return;
+		//case 2:
+		//	if(off.includes(substring1) == true){		
+			//	clearAll();
+			//	return;
+			//}
+			//checkedToday();
+			//return;
+		//case 3:
+			//if(off.includes(substring2) == true){		
+				//clearAll();
+				//return;
+			//}
+			//checkedToday();
+			//return;
+		//case 4:
+			//if(off.includes(substring3) == true){		
+				//clearAll();
+				//return;
+			//}
+			//checkedToday();
+			//return;
+		//case 5:
+			//if(off.includes(substring4) == true){		
+				//clearAll();
+				//return;
+			//}
+			//checkedToday();
+			//return;
+		//case 6:
+			//if(off.includes(substring5) == true){		
+				//clearAll();
+				//return;
+			//}	
+			//checkedToday();
+			//return;
+		//case 7:
+			//if(off.includes(substring6) == true){		
+				//clearAll();
+				//return;
+			//}
+			//checkedToday();
+			//return;
 		
-		default:
-			break;
-		}
+		//default:
+			//break;
+		//}
 	}
 	
 	function buildTimeTable(selectedMonth, selectedDate){
@@ -996,6 +997,30 @@ $(function() {
 			}
 		}	
 	}
+	function clearAll(){		// 다음으로 넘어가거나 이전할때 테이블 데이터 남아있으므로 해당 함수 필요 
+		document.getElementById("bdate").value = '';
+		document.getElementById("bday").value = '';
+		document.getElementById("bman").value = 'none';
+		document.getElementById("bname").value = '';
+		document.getElementById("bphone").value = '';
+		document.getElementById("breq").value = '';
+		document.getElementById("btime").value = '';
+		buildTimeTable();
+	}
+//	function checkedToday(){
+//		var nowYear = currentDate.getFullYear();
+//		var crMonth = currentDate.getMonth()+1;
+//		var nowDate = currentDate.getDate();
+//		var nowday = currentDate.getDay();
+//		if(currentDate.getMonth() == realDate.getMonth()){
+				
+//			var ak12 = nowYear + "/" + crMonth + "/" + nowDate;
+				
+//			document.getElementById("show1").value = ak12; 
+//			document.getElementById("bdate").value = ak12;
+//			document.getElementById("bday").value = nowday;
+//			}
+//	}
 	
 	function backCalendar() {
 		//currentDate.setDate(1);
@@ -1011,7 +1036,7 @@ $(function() {
 		}
 		buildCalendar();	// 달력 생성
 		clearAll();			// 전달로 이동시 초기화
-		checkedToday();		// 초기화와 동시에 오늘 날짜 선택
+		//checkedToday();		// 초기화와 동시에 오늘 날짜 선택
 	}
 	
 	function nextCalendar() {
@@ -1037,41 +1062,14 @@ $(function() {
 		console.log("current : " + currentDate.getMonth() + ", " + realDate.getMonth());
 	}
 	
-	function checkedToday(){
-		var nowYear = currentDate.getFullYear();
-		var crMonth = parseInt(currentDate.getMonth())+1;
-		var nowDate = currentDate.getDate();
-		var nowday = currentDate.getDay();
-		if(currentDate.getMonth() == realDate.getMonth()){
-				
-				var ak12 = nowYear + "/" + crMonth + "/" + nowDate;
-				
-				
-				document.getElementById("bdate").value = ak12;
-				document.getElementById("bday").value = nowday;
-			}
-		
-	}
-	
-	function clearAll(){		// 다음으로 넘어가거나 이전할때 테이블 데이터 남아있으므로 해당 함수 필요 
-		document.getElementById("bdate").value = '';
-		document.getElementById("bday").value = '';
-		document.getElementById("bman").value = 'none';
-		document.getElementById("bname").value = '';
-		document.getElementById("bphone").value = '';
-		document.getElementById("breq").value = '';
-		document.getElementById("btime").value = '';
-		buildTimeTable();
-	}
-	
 	function hideTimeTable(){
 		const row = document.getElementById('timeTable');
-		row.style.display = 'none';
+		row.style.visibility = 'hidden';
 	}
 	
 	function showTimeTable(){
 		const row = document.getElementById('timeTable');
-		row.style.display = '';	
+		row.style.visibility = '';	
 	}
 </script>
 <main id="main">
@@ -1369,7 +1367,7 @@ $(function() {
 					<td colspan="5" align="center" id="maincalendar"></td>
 					<td align="center"><label onclick="nextCalendar()">&gt;</label></td>
 				</tr>
-				<tr id="date">
+				<tr id="calendarDay">
 					<td>일</td>
 					<td>월</td>
 					<td>화</td>
@@ -1381,38 +1379,41 @@ $(function() {
 			</table>
 			
 			<table id="timeTable"></table>
-				<!-- 테스트용 뷰 -->
-				<input type='text' id="show1"> <input type="text" id="show2">
-				<!-- 가게 예약 최대 인원 -->
-				<input type='hidden' id='hidesmax' value="${store.smaxreserv }">
+			
+			<!-- 테스트용 뷰 -->
+			<input type='hidden' id="show1"> <input type="hidden" id="show2">
+			
+			<!-- 가게 예약 최대 인원 -->
+			<input type='hidden' id='hidesmax' value="${store.smaxreserv }">
 
-				<p>예약 정보 입력</p>
-				<!-- 예약 폼 -->
-				<form action="/store/bookregister" method="post" role="form" id="bookForm">
-					<select name="bman" id="bman" class="bman">
-						<option id="bman1" value="none" selected disabled hidden>인원 선택</option>
-					</select><br /> 
-					예약자:<input type="text" id="bname" name="bname"><br />
-					전화번호:<input type="text" id="bphone" name="bphone"><br />
-					요청사항:<textarea id="breq" name="breq"></textarea><br />
-					<h6 align="center" id="realcalendar"></h6>
+			<p>예약 정보 입력</p>
+			<!-- 예약 폼 -->
+			<form action="/store/bookregister" method="post" role="form" id="bookForm">
+				<select name="bman" id="bman" class="bman">
+					<option id="bman1" value="none" selected disabled hidden>인원 선택</option>
+				</select><br /> 
+				<div class="disapear">
+					예약자 : <input type="text" id="bname" name="bname"><br />
+							
+					전화번호 : <input type="text" id="bphone" name="bphone"><br />
+							
+					요청사항 : <textarea id="breq" name="breq"></textarea><br />
+				</div>			
+				<h6 align="center" id="realcalendar"></h6>
 					<script type="text/javascript">
 						buildCalendar();
 					</script>
-
-					<input type="hidden" id="sno" name="sno" value="${store.sno }"><br />
-					<input type="hidden" id="uno" name="uno" value="${uvo.uno }"><br />
-					<input type="text" id="bdate" name="bdate"><br /> 
-					<input type="hidden" id="bday" name="bday"><br /> 
-					<input type="hidden" id="btime" name="btime"><br /> 
-					<input type="hidden" id="bdepo" name="bdepo" value="${store.sdepo }"><br />
-					<input type="submit" value="예약 신청" data-oper="bookreg" id="cbtn">
-					<input type="button" value="취소" id="cbtn" data-oper="cancle"><br />
-				</form>
-			<button id="close-modal2">닫기</button>
+				<input type="hidden" id="sno" name="sno" value="${store.sno }"><br />
+				<input type="hidden" id="uno" name="uno" value="${uvo.uno }"><br />
+				<input type="hidden" id="bdate" name="bdate"><br /> 
+				<input type="hidden" id="bday" name="bday"><br /> 
+				<input type="hidden" id="btime" name="btime"><br /> 
+				<input type="hidden" id="bdepo" name="bdepo" value="${store.sdepo }"><br />
+				<input type="submit" value="예약 신청" data-oper="bookreg" class="cbtn">
+				<input type="button" value="취소" id="close-modal2" class="cbtn" data-oper="cancle">
+			</form>	
 		</div>
 	</div>
-	
   	<!-- 지도 팝업  -->
 	<div class="map-overlay">
 		<div class="mapModal"></div>
@@ -1429,14 +1430,19 @@ $(function() {
 		document.querySelector('#rvstar').style.width = drawstar * 20
 				+ '%';
 	}
+	function Tremendo() {
+		  document.getElementById("calendarDay").style.fontSize = "25px";
+	}
 	const modal1 = document.getElementById("modal1");
 	const openModalBtn = document.getElementById("open-modal1");
 	const closeModalBtn = document.getElementById("close-modal1");
+	
 	
 	// 모달창 열기
 	openModalBtn.addEventListener("click", () => {
 		modal1.style.display = "block";
 		document.body.style.overflow = "hidden"; // 스크롤바 제거
+		clearAll();
 	});
 	
 	// 모달창 닫기
@@ -1445,10 +1451,15 @@ $(function() {
 		document.getElementById("review-content1").value = "";
 		document.querySelector('#rvstar').style.width = 0+'%';
 		document.body.style.overflow = "auto"; // 스크롤바 보이기
+		clearAll();
 	});
 </script>
 
 <script type="text/javascript">
+
+	var smax = document.getElementById('hidesmax').value;
+	var numsmax = parseInt(smax);
+	
 	$("button[data-oper='revreg']").click(function() { //리뷰 폼 버튼
 		//유효성 검사 추가할거면 밑에 작성
 		$("#modal1 form").submit();
@@ -1456,15 +1467,18 @@ $(function() {
 	});
 	
 	
-	function bmanget(){
-		var smax = document.getElementById('hidesmax').value;
-		var numsmax = parseInt(smax);
-			
-					
+	$(function(){
 		for(var i = 1; i <= numsmax; i++){
 			var option = $("<option value="+i+">"+i+"</option>");
 			$(".bman").append(option);						
 		}
+	});
+	
+	function bmanclear(){
+		for(var i = 1; i <= numsmax; i++){
+			var option = $("<option value="+i+">"+i+"</option>");
+			$(".bman option[value="+i+"]").remove();				
+		} 
 	}
 	$(function(){
 		var bookForm = $("#bookForm");
@@ -1507,21 +1521,24 @@ $(function() {
 	const modal2 = document.getElementById("modal2");
 	const openModalBtn2 = document.getElementById("open-modal2");
 	const closeModalBtn2 = document.getElementById("close-modal2");
-	
 	// 예약 모달 열기
 	openModalBtn2.addEventListener("click", () => {
+		Tremendo();
+		$('.disapear').attr('style', "visibility:hidden");
 		modal2.style.display = "block";
 		document.body.style.overflow = "hidden"; // 스크롤바 제거
 		var manman = document.getElementById("hidesmax").value;
 		if(manman == "0"){	  
 			document.getElementById("bman").style.display = "none";
 		}
-		bmanget();
+		hideTimeTable();
 	});
 	// 예약 모달 닫기
 	closeModalBtn2.addEventListener("click", () => {
 		modal2.style.display = "none";
 		document.body.style.overflow = "auto"; // 스크롤바 보이기
+		clearAll();
+		//$('select').children('option:not(:first)').remove();
 	});
 	<!-- book -->
 </script>
