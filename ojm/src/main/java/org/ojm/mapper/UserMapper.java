@@ -37,6 +37,9 @@ public interface UserMapper {
 	public String findID(@Param("username") String name,
 			@Param("useremail") String email);
 	
+	public String findPw(@Param("id") String userid,
+			@Param("useremail") String email);
+	
 	
 	// 메일인증
 	public int newMailKey(@Param("email") String email,@Param("mail_key") String mail_key);
@@ -74,6 +77,7 @@ public interface UserMapper {
 	
 	// 노헌추가_0829
 	public UsertableVO getUvoByUno(int uno);
+
 	
 	
 }

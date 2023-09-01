@@ -27,6 +27,7 @@ public interface UserService {
 	public int modifyUser(UserVO uvo);
 	
 	public String findID(String name,String email);
+	public String findPw(String id,String email);
 	
 	// 메일인증
 	public int newMailKey(String email,String mail_key);

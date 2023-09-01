@@ -18,6 +18,7 @@
 <jsp:include page="../testFooter.jsp"></jsp:include>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
+
 	function change(f){
 		if(f.pw.value==''){
 			alert("비밀번호를 입력해주세요.");

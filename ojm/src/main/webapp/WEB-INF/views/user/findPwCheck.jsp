@@ -11,7 +11,7 @@
 <body>
 	<c:choose>
 		<c:when test="${userid eq null }">
-			해당 사용자 정보가 없습니다 <br>
+			<p>해당 사용자 정보가 없습니다 </p>
 			<input type="button" value="뒤로가기" onclick="history.go(-1)">
 		</c:when>
 		<c:otherwise>

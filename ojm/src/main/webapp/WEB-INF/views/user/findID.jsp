@@ -29,7 +29,10 @@
 			alert("이름을 입력해주세요");
 			return;
 		}else if(email.val()==''){
-			alert("전화번호를 입력해주세요");
+			alert("이메일 입력해주세요");
+			return;
+		}else if(!checkEmail(email.val())){
+			alert("이메일 형식이 올바르지 않습니다.");
 			return;
 		}
 		form.submit();
@@ -37,5 +40,10 @@
 	home.on("click",function(){
 		location.href="/user/register";
 	});
+	
+	function checkEmail(email) {
+		var ex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+		return ex.test(email);
+	}
 </script>
 </html>
