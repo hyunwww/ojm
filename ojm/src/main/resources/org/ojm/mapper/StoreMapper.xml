@@ -186,13 +186,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			sysdate
 		)
 	</insert>
-	<!-- 푸쉬용 -->
+	
 	<insert id="addbook" parameterType="org.ojm.domain.BookVO">
 		insert into book (bkno, sno,
 		uno, bdate, btime, bman, bname, bphone, bdepo, breq, bcdate)
 		values(seq_bkno.nextval, #{sno}, #{uno}, #{bdate}, #{btime}, #{bman}, #{bname}, #{bphone},
 		#{bdepo}, #{breq}, sysdate)
-
 	</insert>
 	
 	<select id="countStore" resultType="int">

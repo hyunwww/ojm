@@ -9,7 +9,7 @@
 <title>내 구인구직</title>
 </head>
 <body>
-	<h1>내 구직</h1>
+	<h1>내 구인글</h1>
 		<hr>
 		<table>
 			<thead>
@@ -19,7 +19,6 @@
 					<th>제목</th>
 					<th>작성자</th>
 					<th>작성일</th>
-					<th>수정일</th>					
 					<th>조회</th>
 				</tr>
 			</thead>
@@ -27,7 +26,7 @@
 				<c:choose>
 					<c:when test="${empty jlist }">
 						<tr>
-							<td colspan="8">게시글이 없습니다.</td>
+							<td colspan="7">게시글이 없습니다.</td>
 						</tr>
 					</c:when>
 					<c:otherwise>
@@ -43,7 +42,6 @@
 								</td>
 								<td><c:out value="${job.jwriter }"></c:out></td>
 								<td><fmt:formatDate value="${job.jdate }" pattern="yyyy년 MM월 dd일"/></td>
-								<td><fmt:formatDate value="${job.jupdatedate }" pattern="yyyy년 MM월 dd일"/></td>
 								<td><c:out value="${job.jview }"></c:out></td>
 							</tr>
 						</c:forEach>   
@@ -76,7 +74,7 @@
 		
 		<button onclick="location.href='/'">메인</button>
 		
-		<form action="/jboard/jlist" method="get" id="jActionForm">
+		<form action="jboard" method="get" id="jActionForm">
 			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
 			<input type="hidden" name="total" value="${total }">
@@ -103,8 +101,8 @@
 	$(".paginate_button a").on('click', function(e){
 		e.preventDefault();	//
 		
-		actionForm.find("input[name='pageNum']").val($(this).attr("href"));
-		actionForm.submit();
+		jActionForm.find("input[name='pageNum']").val($(this).attr("href"));
+		jActionForm.submit();
 	});
 	
 </script>

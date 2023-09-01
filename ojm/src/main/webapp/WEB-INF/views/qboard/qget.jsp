@@ -56,7 +56,7 @@
 		<hr>
 		
 		<!-- 댓글 입력 -->
-		<c:if test="${not empty uvo.uno}">
+		<sec:authorize access="hasRole('ROLE_admin')">
 		<form>
 			<h3>댓글 작성</h3>
 				<table>
@@ -72,7 +72,7 @@
 		</form>
 		<button name="qreplyregisterbtn" type="submit">댓글 등록</button>
 		<hr>
-		</c:if>
+		</sec:authorize>
 		
 		<!-- 댓글 출력 -->
 		<h3>댓글 목록</h3>

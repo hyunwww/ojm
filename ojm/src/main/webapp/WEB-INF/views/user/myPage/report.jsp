@@ -13,21 +13,33 @@
 		<meta charset="UTF-8">
 		<title>내 신고 페이지</title>
 		<style type="text/css">
-			table {
-				border: 1px solid black;
-				border-collapse: collapse;
+			.div1 {
+				margin-top: 120px;
+				margin-bottom: 50px;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
 			}
-			th, td{
-				border: 1px solid black;
+			.div2 {
+				margin-bottom: 50px;
+			}
+			.div3 {
+				text-align: right;
+				margin-bottom: 50px;
+				margin-right: 100px;
+			}
+			a:hover {
+				color: #ff9999;
 			}
 		</style>
 	</head>
 	<body>
-		<h1>내 신고 페이지</h1>
+		<div class="div1">
+		<h1 style="text-align: center">내 신고 페이지</h1>
 		<hr>
-		
-		<table>
-			<thead>
+		<div class="border d-flex justify-content-center">
+		<table class="table table-bordered table-hover table-sm">
+			<thead class="thead-dark">
 				<tr>
 					<th>제목</th>
 					<th>신고 사유</th>
@@ -45,11 +57,7 @@
 					<c:otherwise>
 						<c:forEach var="rpvo" items="${reportList }">
 							<tr>
-								<td>
-									<a class="move" href='<c:out value="${rpvo.rpno }"/>'>
-										<c:out value="${rpvo.rptitle }"></c:out>
-									</a>
-								</td>
+								<td><c:out value="${rpvo.rptitle }"></c:out></td>
 								<td><c:out value="${rpvo.rpreason }"></c:out></td>
 								<td><fmt:formatDate value="${rpvo.rpdate}" pattern="yyyy년 MM월 dd일"/></td>								
 								<td><c:out value="${rpvo.rpstate }"></c:out></td>
@@ -59,23 +67,25 @@
 				</c:choose>
 			</tbody>
 		</table>
-		
+		</div>
+		</div>
+		<hr>
 		<!-- page -->
-		<div>
-			<ul>
+		<div class="div2">
+			<ul class="pagination justify-content-center">
 				<c:if test="${pageMaker.prev }">
-					<li class="paginate_button previous">
-						<a href="${pageMaker.startPage-1 }">&lt;</a>
+					<li class="paginate_button previous page-item">
+						<a class="page-link" href="${pageMaker.startPage-1 }">&lt;</a>
 					</li>
 				</c:if>
 				<c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }" step="1">
-					<li class="paginate_button ${pageMaker.cri.pageNum == num ? 'active' : '' }">
-						<a href="${num }">${num }</a>
+					<li class="paginate_button ${pageMaker.cri.pageNum == num ? 'active' : '' } page-item">
+						<a class="page-link" href="${num }">${num }</a>
 					</li>
 				</c:forEach>
 				<c:if test="${pageMaker.next }">
-					<li class="paginate_button">
-						<a href="${pageMaker.endPage+1 }">&gt;</a>
+					<li class="paginate_button page-item">
+						<a class="page-link" href="${pageMaker.endPage+1 }">&gt;</a>
 					</li>
 				</c:if>
 			</ul>
@@ -92,7 +102,7 @@
 		<br><br><jsp:include page="myPageFooter.jsp"></jsp:include>
 		
 	</body>
-	
+	<jsp:include page="../../testFooter.jsp"></jsp:include>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script type="text/javascript">
 		// ---------- 조회 화면 이동 이벤트 처리 ----------	

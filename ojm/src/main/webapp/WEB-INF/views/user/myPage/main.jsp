@@ -16,47 +16,80 @@
 	img{
 		width: 50px;
 	}
+	.div1 {
+		margin-top: 120px;
+		margin-bottom: 50px;
+		margin-left: 100px;
+		margin-right: 100px;
+		text-align: center;
+	}
+	tr>td:nth-child(1) {background-color: lightgray;}
 </style>
 <script type="text/javascript">
 
 </script>
 </head>
 
-<body>
 <jsp:include page="../../testHeader.jsp"></jsp:include>
+<body>
+	<div class="div1">
 	<h1>유저정보</h1>
-	<div id="content" class="d-flex flex-column min-vh-100">
-		<form action="" method="post">
-			프로필 이미지 <br><img src="${imgRoot }"><br>	<!-- 수정도 가능하게 바꿔야함 -->
-			id<input type="text" name="userid" value="${uvo.userid }" readonly="readonly"><br>
-			이름<input type="text" name="username" value="${uvo.username }" readonly="readonly"><br>
-			생년월일<input type="text" name="userbirth" value="${uvo.userbirth }" readonly="readonly"><br>
-			번호<input type="text" name="userphone" value="${uvo.userphone }" readonly="readonly"><br>
-			이메일<input type="text" name="useremail" value="${uvo.useremail }" readonly="readonly"><br>
-			닉네임<input type="text" name="nickname" value="${uvo.info.nickname }" readonly="readonly"><br>
-			주소<input type="text" name="uaddress" value="${uvo.info.uaddress }" readonly="readonly"><br>
-			성별 : 
+	<div id="content">
+		<img src="${imgRoot }">
+		<table class="table table-bordered">
+		<tr>
+			<td>아이디</td>
+			<td>${uvo.userid }</td>
+		</tr>
+		<tr>
+			<td>이름</td>
+			<td>${uvo.username }</td>
+		</tr>
+		<tr>
+			<td>생년월일</td>
+			<td>${uvo.userbirth }</td>
+		</tr>
+		<tr>
+			<td>번호</td>
+			<td>${uvo.userphone }</td>
+		</tr>
+		<tr>
+			<td>이메일</td>
+			<td>${uvo.useremail }</td>
+		</tr>
+		<tr>
+			<td>닉네임</td>
+			<td>${uvo.info.nickname }</td>
+		</tr>
+		<tr>
+			<td>주소</td>
+			<td>${uvo.info.uaddress }</td>
+		</tr>
+		<tr>
+			<td>성별</td>
 			<c:choose>
 				<c:when test="${uvo.info.ugender eq 'male' }">
-					남
+					<td>남</td>
 				</c:when>
 				<c:otherwise>
-					여
+					<td>여</td>
 				</c:otherwise>
 			</c:choose>
-			<br>
-			<b>알러지</b>	
-			<div id="aler">
-			</div>
-			<b>관심 음식 카테고리</b>
-			<div id="favor">
-			</div>	
-			
-			<input type="button" value="수정하기" id="modifyBtn" onclick="location.href='mainModify'">
-			<input type="button" value="홈으로" id="homeBtn" onclick="location.href='/'">
-			
-			<input type="hidden" name="uno" value="${uvo.uno }">
-		</form>
+		</tr>
+		<tr>
+			<td>알러지</td>
+			<td><div id="aler"></div></td>
+		</tr>
+		<tr>
+			<td>관심 음식 카테고리</td>
+			<td><div id="favor"></div></td>
+		</tr>
+		</table>
+		<input type="button" value="수정하기" id="modifyBtn" onclick="location.href='mainModify'">
+		<input type="button" value="홈으로" id="homeBtn" onclick="location.href='/'">
+		
+		<input type="hidden" name="uno" value="${uvo.uno }">
+	</div>
 	</div>
 	<jsp:include page="myPageFooter.jsp"></jsp:include>
 </body>

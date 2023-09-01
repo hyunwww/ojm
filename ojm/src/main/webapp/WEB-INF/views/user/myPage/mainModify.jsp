@@ -24,7 +24,6 @@
 </head>
 <jsp:include page="../../testHeader.jsp"></jsp:include>
 <body>
-<jsp:include page="../../testHeader.jsp"></jsp:include>
 	<div id="content">
 		<form action="" method="post">
 			프로필 이미지 <br><img src="${imgRoot }"><br>	<!-- 수정도 가능하게 바꿔야함 -->

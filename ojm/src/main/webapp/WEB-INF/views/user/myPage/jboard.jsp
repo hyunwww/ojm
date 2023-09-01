@@ -44,15 +44,32 @@
 			  text-decoration: none;
 			  cursor: pointer;
 			}
+			.div1 {
+				margin-top: 120px;
+				margin-bottom: 50px;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			.div2 {
+				margin-bottom: 50px;
+			}
+			.div3 {
+				text-align: right;
+				margin-bottom: 50px;
+				margin-right: 100px;
+			}
 		</style>
 <title>내 구인구직</title>
 </head>
 <jsp:include page="../../testHeader.jsp"></jsp:include>
 <body>
-	<h1>내 구직 현황</h1>
+	<div class="div1">
+	<h1 style="text-align: center">내 구직 현황</h1>
 		<hr>
-		<table>
-			<thead>
+		<div class="border d-flex justify-content-center">
+		<table class="table table-bordered table-hover table-sm">
+			<thead class="thead-dark">
 				<tr>
 					<th>번호</th>
 					<th>가게이름</th>
@@ -70,7 +87,7 @@
 						<c:forEach var="job" items="${jlist }" varStatus="i">
 							<tr>
 								<td><c:out value = "${i.count }"/></td>
-								<td style="color: blue" onclick="show('${job.jsno}')">
+								<td>
 									<c:out value="${job.sname }"></c:out>
 								</td>
 								<td><fmt:formatDate value="${job.jsdate }" pattern="yyyy년 MM월 dd일"/></td>	
@@ -132,14 +149,13 @@
 					<input type="hidden" name="sname" value="${store.sname}">
 			</div>
 		</div>
-		
+		</div>
+		</div>
 		<hr>
 		
-		<button onclick="location.href='/'">메인</button>
-		
-	
 	<br><br><jsp:include page="myPageFooter.jsp"></jsp:include>
 </body>
+<jsp:include page="../../testFooter.jsp"></jsp:include>
 	
 	<!-- 모달 스크립트 -->
 	<script type="text/javascript">

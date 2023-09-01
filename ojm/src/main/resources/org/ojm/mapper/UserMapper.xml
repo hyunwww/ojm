@@ -193,10 +193,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<select id="getReviews" resultType="org.ojm.domain.ReviewVO">
 		<![CDATA[
-			select rvno, sno, uno, rvcontent, rvlike, rvdate
+			select rvno, sno, uno, rvstar, rvcontent, rvlike, rvdate
 			from
 				(select /*+INDEX_DESC(review pk_review) */
-				rownum rn, rvno, sno, uno, rvcontent, rvlike, rvdate from review
+				rownum rn, rvno, sno, uno, rvstar, rvcontent, rvlike, rvdate from review
 				where]]>
 				<![CDATA[
 				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
@@ -254,6 +254,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		join 
 			book b on b.sno=s.sno 
 		where s.uno=#{uno}
+	</select>
+	<select id="getJobList" resultType="org.ojm.domain.JobVO">
+		<![CDATA[
+			select jno, sno, jaddress, jtitle, jwriter, jdate, jview, jupdatedate
+			from
+				(select /*+INDEX_DESC(job pk_job) */
+				rownum rn, jno, sno, jaddress, jtitle, jwriter, jdate, jview, jupdatedate from job
+				where]]>
+				<![CDATA[
+				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
+				where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+		]]>
 	</select>
 	<!-- 사업자 끝 -->
 	

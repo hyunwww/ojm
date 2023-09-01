@@ -8,6 +8,7 @@ import org.ojm.domain.BookVO;
 import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.JobSendVO;
+import org.ojm.domain.JobVO;
 import org.ojm.domain.ProfileImgVO;
 import org.ojm.domain.QboardVO;
 import org.ojm.domain.ReportVO;
@@ -197,6 +198,14 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public String getUseridByUno(int uno) {
 		return mapper.getUseridByUno(uno);
+	}
+	@Override
+	public List<JobVO> getJlist(Criteria cri, int uno) {
+		return mapper.getJobList(cri, uno);
+	}
+	@Override
+	public List<JobSendVO> getJobApplyList(int jno) {
+		return mapper.getJobApplyList(jno);
 	}
 }
 

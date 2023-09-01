@@ -45,6 +45,24 @@
 			a:hover {
 				color: #ff9999;
 			}
+			.bigPictureWrapper {
+				position: absolute;
+				display: none;
+				justify-content: center;
+				align-items: center;
+				top:0%;
+				width:100%;
+				height:100%;
+				background-color: gray; 
+				z-index: 100;
+				background:rgba(255,255,255,0.5);
+			}
+			.bigPicture {
+				position: relative;
+				display:flex;
+				justify-content: center;
+				align-items: center;
+			}
 		</style>
 	</head>
 	<body>
@@ -79,6 +97,7 @@
 			<tr id="blikeRow">
 				<c:choose>
 					<c:when test="${not empty uvo.uno and like == 0}">
+<<<<<<< HEAD
 							<td id="blike" colspan="2">
 								<input class="like" type="hidden" value="${like }">
 								<button class="btn btn-primary" name="blikeBtn">추천</button>
@@ -91,6 +110,20 @@
 								<button class="btn btn-primary" name="blikeBtn">추천 취소</button>
 								${vo.blike}
 							</td>
+=======
+						<td id="blike" colspan="2">
+							<input class="like" type="hidden" value="${like }">
+							<button class="btn btn-primary" name="blikeBtn">추천</button>
+							${vo.blike}
+						</td>
+					</c:when>
+					<c:when test="${not empty uvo.uno and like == 1}">
+						<td id="blike" colspan="2">
+							<input class="like" type="hidden" value="${like }">
+							<button class="btn btn-primary" name="blikeBtn">취소</button>
+							${vo.blike}
+						</td>
+>>>>>>> branch 'master' of https://github.com/hyunwww/ojm.git
 					</c:when>
 				</c:choose>
 			</tr>
@@ -99,6 +132,12 @@
 		</div>
 		<hr>
 		
+		<!-- 이미지 클릭 이벤트 -->
+		<div class='bigPictureWrapper'>
+			<div class='bigPicture'>
+			</div>
+		</div>
+
 		<!-- 댓글 입력 -->
 		<c:if test="${not empty uvo.uno}">
 		<form>
@@ -141,6 +180,30 @@
 	</body>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<!-- 이미지 클릭 이벤트 -->
+	<script type="text/javascript">
+		$(document).ready(function (e){
+			
+			$(document).on("click","img",function(){
+				var path = $(this).attr('src')
+				showImage(path);
+			});//end click event
+			
+			function showImage(fileCallPath){
+			    
+			    $(".bigPictureWrapper").css("display","flex").show();
+			    
+			    $(".bigPicture")
+			    .html("<img src='"+fileCallPath+"' >");
+			    
+			  }//end fileCallPath
+			  
+			$(".bigPictureWrapper").on("click", function(e){
+			    $('.bigPictureWrapper').hide();
+			  });//end bigWrapperClick event
+		});
+	</script>
+	
 	<!-- 좋아요 버튼 클릭 이벤트 스크립트 -->
 	<script type="text/javascript">
 		var bno = "${vo.bno }";
@@ -240,7 +303,7 @@
 					$(result).each(function(i, obj){
 						// 인코딩
 						var fileCallPath = encodeURIComponent(obj.uploadpath + "/" + obj.uuid + "_" + obj.filename);
-						str += '<img class="img-thumbnail" style="height: 200px" alt="' + obj.filename + '" src="/ojm/' + obj.uploadpath + '/' + obj.uuid + '_' + obj.filename + '">';
+						str += '<img class="img-thumbnail" style="height: 100px" alt="' + obj.filename + '" src="/ojm/' + obj.uploadpath + '/' + obj.uuid + '_' + obj.filename + '">';
 					});
 					$(".uploadResult ul").html(str);
 				}			

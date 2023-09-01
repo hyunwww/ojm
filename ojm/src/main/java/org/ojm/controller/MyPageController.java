@@ -172,7 +172,8 @@ public class MyPageController {
 	public String b_jboard(Principal pr,Model model,Criteria cri) {
 		log.info("myPageBjboard......");
 		
-		model.addAttribute("jlist", js.getJlist(cri));
+		UserVO user = service.getUser(pr.getName());
+		model.addAttribute("jlist", service.getJlist(cri,user.getUno()));
 		model.addAttribute("total", js.getJtotal());
 		model.addAttribute("pageMaker", new PageDTO(cri, js.getJtotal()));
 		return "user/myPage/b/jboard";
