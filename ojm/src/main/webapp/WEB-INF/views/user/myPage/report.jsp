@@ -57,11 +57,7 @@
 					<c:otherwise>
 						<c:forEach var="rpvo" items="${reportList }">
 							<tr>
-								<td>
-									<a class="move" href='<c:out value="${rpvo.rpno }"/>'>
-										<c:out value="${rpvo.rptitle }"></c:out>
-									</a>
-								</td>
+								<td><c:out value="${rpvo.rptitle }"></c:out></td>
 								<td><c:out value="${rpvo.rpreason }"></c:out></td>
 								<td><fmt:formatDate value="${rpvo.rpdate}" pattern="yyyy년 MM월 dd일"/></td>								
 								<td><c:out value="${rpvo.rpstate }"></c:out></td>

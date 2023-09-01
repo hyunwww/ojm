@@ -193,10 +193,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<select id="getReviews" resultType="org.ojm.domain.ReviewVO">
 		<![CDATA[
-			select rvno, sno, uno, rvcontent, rvlike, rvdate
+			select rvno, sno, uno, rvstar, rvcontent, rvlike, rvdate
 			from
 				(select /*+INDEX_DESC(review pk_review) */
-				rownum rn, rvno, sno, uno, rvcontent, rvlike, rvdate from review
+				rownum rn, rvno, sno, uno, rvstar, rvcontent, rvlike, rvdate from review
 				where]]>
 				<![CDATA[
 				rownum <= #{cri.pageNum} * #{cri.amount} and uno=#{uno})
