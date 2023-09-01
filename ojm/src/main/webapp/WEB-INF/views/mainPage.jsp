@@ -117,7 +117,7 @@
 		
 		<sec:authorize access="isAnonymous()">
 		<!-- 대표 이미지(비로그인) -->
-			<div class="carousel-item active" style="background-image: url(/resources/img/service-2.jpg);">
+			<div class="carousel-item active" style="background-image: url(/resources/img/sam.jpg);">
 	          <div class="carousel-container">
 	            <div class="carousel-content">
 	              <h2>오늘 점심 뭐 먹을까?</h2>
@@ -129,7 +129,7 @@
         </sec:authorize>
         
 		<sec:authorize access="isAuthenticated()">
-			<div class="carousel-item active" style="background-image: url(/resources/img/service-2.jpg);">
+			<div class="carousel-item active" style="background-image: url(/resources/img/sam.jpg);">
 	          <div class="carousel-container">
 	            <div class="carousel-content">
 	              <h2>오늘 점심 뭐 먹을까?</h2>

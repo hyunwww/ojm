@@ -10,7 +10,6 @@ import org.ojm.domain.Criteria;
 import org.ojm.domain.InfoVO;
 import org.ojm.domain.JobSendVO;
 import org.ojm.domain.JobVO;
-import org.ojm.domain.JobWithApplyVO;
 import org.ojm.domain.ProfileImgVO;
 import org.ojm.domain.QboardVO;
 import org.ojm.domain.ReportVO;
@@ -77,12 +76,8 @@ public interface UserMapper {
 	
 	// 노헌추가_0829
 	public UsertableVO getUvoByUno(int uno);
-<<<<<<< HEAD
 	// 유빈추가_0901
 	public String getUseridByUno(int uno);
-=======
-
->>>>>>> branch 'master' of https://github.com/hyunwww/ojm.git
 	
 	
 }

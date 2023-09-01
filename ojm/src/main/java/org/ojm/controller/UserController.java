@@ -167,7 +167,7 @@ public class UserController {
 		log.info("id : " + userid);
 		log.info("email : " + useremail);
 		
-		String id = service.findID(userid, useremail);
+		String id = service.findPw(userid, useremail);
 		log.info("ID : " + id);
 		
 		if (id == null) {
