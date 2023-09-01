@@ -19,7 +19,6 @@
 					<th>제목</th>
 					<th>작성자</th>
 					<th>작성일</th>
-					<th>수정일</th>					
 					<th>조회</th>
 				</tr>
 			</thead>
@@ -27,7 +26,7 @@
 				<c:choose>
 					<c:when test="${empty jlist }">
 						<tr>
-							<td colspan="8">게시글이 없습니다.</td>
+							<td colspan="7">게시글이 없습니다.</td>
 						</tr>
 					</c:when>
 					<c:otherwise>
@@ -43,7 +42,6 @@
 								</td>
 								<td><c:out value="${job.jwriter }"></c:out></td>
 								<td><fmt:formatDate value="${job.jdate }" pattern="yyyy년 MM월 dd일"/></td>
-								<td><fmt:formatDate value="${job.jupdatedate }" pattern="yyyy년 MM월 dd일"/></td>
 								<td><c:out value="${job.jview }"></c:out></td>
 							</tr>
 						</c:forEach>   

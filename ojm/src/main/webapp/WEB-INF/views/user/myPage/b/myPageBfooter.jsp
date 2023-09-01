@@ -9,17 +9,17 @@
 <body>
 	<div id="btns">
 		<br><br>
-		<input type="button" class="btn" value="main" data-page="main">
-		<input type="button" class="btn" value="store" data-page="board">
-		<input type="button" class="btn" value="book" data-page="book">
-		<input type="button" class="btn" value="jboard" data-page="jboard">
+		<input type="button" class="btn" data-page="main" value="내 정보">
+		<input type="button" class="btn" data-page="store" value="내 가게">
+		<input type="button" class="btn" data-page="book" value="예약목록">
+		<input type="button" class="btn" data-page="jboard" value="구인목록">
 	</div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	// 버튼클릭	
 	$(".btn").on("click",function(){
-		var tv = this.value;
+		var tv = $(this).data("page");
 		if(tv=='main'){
 			location.href="/user/myPage/b/main";
 		}else if(tv=='store'){
