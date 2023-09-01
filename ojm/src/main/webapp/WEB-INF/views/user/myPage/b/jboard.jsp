@@ -9,7 +9,7 @@
 <title>내 구인구직</title>
 </head>
 <body>
-	<h1>내 구직</h1>
+	<h1>내 구인글</h1>
 		<hr>
 		<table>
 			<thead>
