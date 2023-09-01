@@ -129,7 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<select id="searchStoreByCate" parameterType="Map" resultMap="storeMap">
-			select s.sno,s.uno,sname,saddress,wd,kd,sphone,sdeli,scrn,sdepo,slike,sstar,spermmit,openhour,smaxreserv,dayoff,rvno,r.sno rsno,r.uno runo,rvstar,rvcontent,rvlike,rvdate  
+			select s.sno,s.uno,sname,saddress,wd,kd,sphone,scate,sdeli,scrn,sdepo,slike,sstar,spermmit,openhour,smaxreserv,dayoff,rvno,r.sno rsno,r.uno runo,rvstar,rvcontent,rvlike,rvdate  
 			from store s left join review r on s.sno = r.sno 
 			<choose>
 				<when test="cateList != null and cateList.size() > 0">

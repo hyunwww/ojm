@@ -32,7 +32,7 @@
 					      <div class="invalid-feedback">전화번호를 입력해주세요.</div>
 					    </div>
 					    <div class="col-auto">
-					    	<span style="font-size: 12px; color: gray;">부가 설명</span>
+					    	<span style="font-size: 12px; color: gray;">하이픈 없이 입력</span>
 					    </div>
 					  </div>
 					<div class="row mb-3">
@@ -41,11 +41,12 @@
 						    <input type="text" readonly class="form-control-plaintext" id="scateInput" value="카테고리">
 						</div>
 						<div class="col-sm-2">
-							<select class="form-select" aria-label="Default select example" name="scate">
-							  <option selected>선택 안함</option>
-							  <option value="1">kor</option>
-							  <option value="2">chn</option>
-							  <option value="3">west</option>
+							<select class="form-select" aria-label="Default select example" name="scate" style="width: auto;">
+							  <option value="한식">한식</option>
+							  <option value="중식">중식</option>
+							  <option value="양식">양식</option>
+							  <option value="일식">일식</option>
+							  <option value="아시아">아시아</option>
 							</select>
 						</div>
 						<div class="col-auto"></div>
@@ -126,7 +127,7 @@
 							</div>
 						</div>
 						<div class="col-auto">
-							<span style="font-size: 12px; color: gray;">부가 설명</span>
+							<span style="font-size: 12px; color: gray;">예약 불가능한 경우에는 0명 설정</span>
 						</div>
 					</div>
 					<div class="row mb-3 depositRow" style="display: none;">
@@ -158,7 +159,7 @@
 						</div>
 					</div>
 					<div class="row mb-3">
-						<div class="col-auto" id="imgContainer">
+						<div class="col-12" id="imgContainer">
 							<c:forEach var="img" items="${store.imgList }">
 								<div class="imgBox">
 									<img alt="1" src="/images/${img.uuid }_${img.fileName}" class="thumbnail"
@@ -167,6 +168,7 @@
 									<button class="imgBtn">x</button>
 								</div>
 							</c:forEach>
+							<div id="newImgs" style="display: inline-block;"></div>
 						</div>
 					</div>
 					<div class="row mb-3">
@@ -224,16 +226,18 @@
 		                  </div>
 		                  <div class="row mb-2">
 		                  	<div class="col-auto">
-		                  		<input class="btn-check" type="checkbox" name="maler" id="aler1" autocomplete="off" value="1">
-								<label class="btn btn-outline-warning" for="aler1">1</label> 
-		                  		<input class="btn-check" type="checkbox" name="maler" id="aler2" autocomplete="off" value="1">
-								<label class="btn btn-outline-warning" for="aler2">2</label> 
-		                  		<input class="btn-check" type="checkbox" name="maler" id="aler3" autocomplete="off" value="1">
-								<label class="btn btn-outline-warning" for="aler3">3</label> 
-		                  		<input class="btn-check" type="checkbox" name="maler" id="aler4" autocomplete="off" value="1">
-								<label class="btn btn-outline-warning" for="aler4">4</label> 
-		                  		<input class="btn-check" type="checkbox" name="maler" id="aler5" autocomplete="off" value="1">
-								<label class="btn btn-outline-warning" for="aler5">5</label> 
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler1" autocomplete="off" value="갑각류">
+								<label class="btn btn-outline-warning" for="aler1">갑각류</label> 
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler2" autocomplete="off" value="달걀">
+								<label class="btn btn-outline-warning" for="aler2">달걀</label> 
+		                  		<input class="btn-check" type="checkbox" name="maler" id="aler3" autocomplete="off" value="견과류">
+								<label class="btn btn-outline-warning" for="aler3">견과류</label> 
+		                  		<input class="btn-check" type="checkbox" id="aleretc" autocomplete="off" value="">
+								<label class="btn btn-outline-warning" for="aleretc">기타</label> 
+								<div class="form-floating mt-2" style="display: none;" id="aleretcInput">
+								  <textarea class="form-control" placeholder="직접 입력" id="floatingTextarea" style="resize: none;"></textarea>
+								  <label for="floatingTextarea">기타 알레르기</label>
+								</div>
 		                  	</div>
 		                  </div>
 		                  <div style="text-align: right;">
@@ -249,6 +253,7 @@
 <script type="text/javascript" src="../resources/js/menuAjax.js"></script>
 <script type="text/javascript">
 var sno = '${store.sno}';
+var deleteTarget = [];
 	$(function() {
 		menuService.getMenuList();
 		
@@ -281,10 +286,6 @@ var sno = '${store.sno}';
 			if (value > 0) {
 				$("#reserveValue").html(--value);
 			}
-		});
-		//메뉴 추가 버튼
-		$("#menuAddBtn").click(function() {
-			$("#menuModal form")[0].reset();
 		});
 		
 		
@@ -324,6 +325,7 @@ var sno = '${store.sno}';
 					menuInput += '<input type="hidden" name="menuList['+i+'].mcate" value="'+menuList[i].mcate+'" />';
 					menuInput += '<input type="hidden" name="menuList['+i+'].maler" value="'+menuList[i].maler+'" />';
 					menuInput += '<input type="hidden" name="menuList['+i+'].mprice" value="'+menuList[i].mprice+'" />';
+					
 				}
 				
 				//기존 파일
@@ -540,7 +542,7 @@ var sno = '${store.sno}';
 			 
 			//썸네일 보여주기(업로드하려는 파일 시각화)
 			function fileThumbnails(files) {
-				 $("#imgContainer").empty();
+				 $("#newImgs").empty();
 				 for (var image of files) {
 			          var reader = new FileReader();
 			          reader.fileName = image.name;
@@ -554,7 +556,7 @@ var sno = '${store.sno}';
 				          img.classList.add('thumbnail');
 				          imgBox.append(img);
 				          imgBox.append(btn);
-					      $("#imgContainer").append(imgBox);
+					      $("#newImgs").append(imgBox);
 			          };
 
 			          reader.readAsDataURL(image);
@@ -583,8 +585,6 @@ var sno = '${store.sno}';
 									fileName : fName});
 				console.log(deleteTarget);
 				$(this).closest("div").remove();
-				
-				
 				
 			}else{	//추가 이미지 파일
 				// submit할 배열에서 제거
@@ -631,6 +631,24 @@ var sno = '${store.sno}';
 	var menuModal = new bootstrap.Modal('#menuModal', {
 		  focus: false
 		})
+	
+	//메뉴 + 버튼
+	$("#menuAddBtn").click(function() {
+		menuModal.show();
+		$("#menuModal form")[0].reset();
+		$("#aleretcInput").hide();
+	});
+	
+	$("#aleretc").click(function() {
+		console.log($(this));
+		if ($(this)[0].checked) {
+			$("#aleretcInput").show();
+		}else{
+			$("#aleretcInput").hide();
+			$("#floatingTextarea").val("");
+		}
+	});
+	
 	//메뉴 추가하기 버튼
 	$("#addMenuBtn").on("click", function() {
 		
@@ -652,13 +670,16 @@ var sno = '${store.sno}';
 				selectedAlrg += sel.value+",";
 			}
 		}
-		selectedAlrg = selectedAlrg.substring(0, selectedAlrg.length-1);
+		selectedAlrg += $("#floatingTextarea").val();
+		if ($("#floatingTextarea").val() == '') {
+			selectedAlrg = selectedAlrg.substring(0, selectedAlrg.length-1);
+		}
 		
 		menuService.add({
 			mname : menuForm.mname.value,
 			mcate : menuForm.mcate.value,
 			maler : selectedAlrg,
-			mprice : menuForm.mprice.value 
+			mprice : menuForm.mprice.value
 		}, function() {
 			alert("good");
 		})

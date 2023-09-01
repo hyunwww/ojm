@@ -70,6 +70,8 @@ public interface UserMapper {
 	
 	// 노헌추가_0829
 	public UsertableVO getUvoByUno(int uno);
+	// 유빈추가_0901
+	public String getUseridByUno(int uno);
 	
 	
 }

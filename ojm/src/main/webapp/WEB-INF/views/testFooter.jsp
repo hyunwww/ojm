@@ -16,22 +16,22 @@
 	    	<div class="container">
 	    		<div class="row">
 	    			<div class="col-lg-3 border-end border-dark-subtle py-3">
-		    			<p>내용</p>
-		    			<p>내용</p>
-		    			<p>내용</p>
-		    			<p>내용</p>
+		    			<p>-</p>
+		    			<p>-</p>
+		    			<p>-</p>
+		    			<p>-</p>
 	    			</div>
 	    			<div class="col-lg-3 border-end border-dark-subtle py-3">
-		    			<p>내용</p>
-		    			<p>내용</p>
-		    			<p>내용</p>
-		    			<p>내용</p>
+		    			<p>-</p>
+		    			<p>-</p>
+		    			<p>-</p>
+		    			<p>-</p>
 	    			</div>
 	    			<div class="col-lg-6 py-3">
-		    			<p>내용</p>
-		    			<p>내용</p>
-		    			<p>내용</p>
-		    			<p>내용</p>
+		    			<p>-</p>
+		    			<p>-</p>
+		    			<p>-</p>
+		    			<p>-</p>
 	    			</div>
 	    		</div>
 	    	</div>

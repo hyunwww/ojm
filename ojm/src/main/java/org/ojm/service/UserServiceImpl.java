@@ -194,5 +194,9 @@ public class UserServiceImpl implements UserService{
 	public UsertableVO getUvoByUno(int uno) {
 		return mapper.getUvoByUno(uno);
 	}
+	@Override
+	public String getUseridByUno(int uno) {
+		return mapper.getUseridByUno(uno);
+	}
 }
 

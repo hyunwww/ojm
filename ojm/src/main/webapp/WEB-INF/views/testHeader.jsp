@@ -82,7 +82,7 @@
 }
 
 .owl-next, .owl-prev {
-	background-color: rgba(245, 126, 100, 0.6);
+	background-color: gray;
 	color: white;
 	border-radius: 10px;
 	width: auto;

@@ -321,16 +321,25 @@
 				    		 //출력될 태그 부여
 				    		if (Number(store.distance) <= Number(distLimit) || Number(distLimit) == 0) {
 				    			store.str = '';
-				    			store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
-				    			store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
-				    			store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
-				    			store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
-				    			store.str += '<p style="text-align : right; margin : 0;">';
-				    			store.str += '<i class="bi bi-star-fill">'+store.sstar+'</i>  ';
-				    			store.str += '<i class="bi bi-hand-thumbs-up">'+store.slike+'</i>  ';
-				    			store.str += '</p>';
-				    			store.str += '</div>';
-				    			store.str += '</div>';
+							    store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
+							    store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
+							    store.str += '<div class="row">';
+							    store.str += '<div class="col-3">';
+							    if (store.imgList.length > 0) {
+								    store.str += '<img src="/images/'+store.imgList[0].uuid+"_"+store.imgList[0].fileName+'" alt="image" style="height : 150px; width : -webkit-fill-available; object-fit : fill;">';
+								}
+							    store.str += '</div>';
+							    store.str += '<div class="col-9">';
+							    store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+							    store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
+							    store.str += '<p style="text-align : right; margin : 0;">';
+							    store.str += '<i class="bi bi-star-fill">'+store.sstar+'</i>  ';
+							    store.str += '<i class="bi bi-hand-thumbs-up">'+store.slike+'</i>  ';
+							    store.str += '</p>';
+							    store.str += '</div>';
+							    store.str += '</div>';
+							    store.str += '</div>';
+							    store.str += '</div>';
 				    			
 								
 				    		  storeResult.push(store);
@@ -583,17 +592,25 @@
 				    		//출력될 태그 부여
 				    		if (Number(store.distance) <= dist || dist == 0) {
 				    			store.str = '';
-				    			store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
-				    			store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
-				    			store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
-				    			store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
-				    			store.str += '<p style="text-align : right; margin : 0;">';
-				    			store.str += '<i class="bi bi-star-fill">'+store.sstar+'</i>  ';
-				    			store.str += '<i class="bi bi-hand-thumbs-up">'+store.slike+'</i>  ';
-				    			store.str += '</p>';
-				    			store.str += '</div>';
-				    			store.str += '</div>';
-				    			
+							    store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
+							    store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
+							    store.str += '<div class="row">';
+							    store.str += '<div class="col-3">';
+							    if (store.imgList.length > 0) {
+								    store.str += '<img src="/images/'+store.imgList[0].uuid+"_"+store.imgList[0].fileName+'" alt="image" style="height : 150px; width : -webkit-fill-available; object-fit : fill;">';
+								}
+							    store.str += '</div>';
+							    store.str += '<div class="col-9">';
+							    store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+							    store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
+							    store.str += '<p style="text-align : right; margin : 0;">';
+							    store.str += '<i class="bi bi-star-fill">'+store.sstar+'</i>  ';
+							    store.str += '<i class="bi bi-hand-thumbs-up">'+store.slike+'</i>  ';
+							    store.str += '</p>';
+							    store.str += '</div>';
+							    store.str += '</div>';
+							    store.str += '</div>';
+							    store.str += '</div>';
 								
 				    		  storeResult.push(store);
 							}
@@ -667,6 +684,13 @@
 			    		store.str = '';
 					    store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
 					    store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
+					    store.str += '<div class="row">';
+					    store.str += '<div class="col-3">';
+					    if (store.imgList.length > 0) {
+						    store.str += '<img src="/images/'+store.imgList[0].uuid+"_"+store.imgList[0].fileName+'" alt="image" style="height : 150px; width : -webkit-fill-available; object-fit : fill;">';
+						}
+					    store.str += '</div>';
+					    store.str += '<div class="col-9">';
 					    store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
 					    store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
 					    store.str += '<p style="text-align : right; margin : 0;">';
@@ -675,6 +699,12 @@
 					    store.str += '</p>';
 					    store.str += '</div>';
 					    store.str += '</div>';
+					    store.str += '</div>';
+					    store.str += '</div>';
+					    
+					    
+					    
+					    
 							
 			    		storeResult.push(store);
 					  }
@@ -712,16 +742,25 @@
 				    	store.distance = getDistance(Number(store.kd), Number(store.wd), currentPosition.latitude, currentPosition.longitude);
 			    		//출력될 태그 부여
 			    		store.str = '';
-			    		store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
-			    		store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
-			    		store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
-			    		store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
-			    		store.str += '<p style="text-align : right; margin : 0;">';
-			    		store.str += '<i class="bi bi-star-fill">'+store.sstar+'</i>  ';
-			    		store.str += '<i class="bi bi-hand-thumbs-up">'+store.slike+'</i>  ';
-			    		store.str += '</p>';
-			    		store.str += '</div>';
-			    		store.str += '</div>';
+					    store.str += '<div class="col-lg-12 aos-init aos-animate mb-3" data-aos="fade-up">';
+					    store.str += '<div class="entry store mb-4" data-sno="'+store.sno+'" tabindex="0">';
+					    store.str += '<div class="row">';
+					    store.str += '<div class="col-3">';
+					    if (store.imgList.length > 0) {
+						    store.str += '<img src="/images/'+store.imgList[0].uuid+"_"+store.imgList[0].fileName+'" alt="image" style="height : 150px; width : -webkit-fill-available; object-fit : fill;">';
+						}
+					    store.str += '</div>';
+					    store.str += '<div class="col-9">';
+					    store.str += '<h2><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h2>';
+					    store.str += '<p class="d-flex justify-content-between">'+store.saddress+'<i class="bi bi-cursor-fill">'+store.distance+" km"+'</i></p>';
+					    store.str += '<p style="text-align : right; margin : 0;">';
+					    store.str += '<i class="bi bi-star-fill">'+store.sstar+'</i>  ';
+					    store.str += '<i class="bi bi-hand-thumbs-up">'+store.slike+'</i>  ';
+					    store.str += '</p>';
+					    store.str += '</div>';
+					    store.str += '</div>';
+					    store.str += '</div>';
+					    store.str += '</div>';
 			    	
 					
 			    		storeResult.push(store);

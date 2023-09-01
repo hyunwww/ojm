@@ -261,4 +261,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getUvoByUno" resultType="org.ojm.domain.UsertableVO">
 		select * from usertable where uno = #{uno}
 	</select>
+	
+	<!-- uno로 유저 검색 추가_노헌_0829 -->
+	<select id="getUseridByUno" resultType="String">
+		select userid from usertable where uno = #{uno}
+	</select>
 </mapper>

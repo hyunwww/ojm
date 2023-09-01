@@ -52,6 +52,8 @@ public class StoreController {
 	@Autowired
 	private StoreService service;
 	@Autowired
+	private UserService uService;
+	@Autowired
 	private BCryptPasswordEncoder encoder;
 	
 	@GetMapping("/registerTest")
@@ -388,6 +390,11 @@ public class StoreController {
 	public String goDelete(@RequestParam("sno") int sno, Model model,
 							@AuthenticationPrincipal CustomUser user) {
 		
+		if (service.storeInfo(sno) == null) {
+			model.addAttribute("errorCode", "noInfo");
+			return "mainPage";
+		}
+		
 		if (user != null) {
 			if (user.getUvo().getUno() != service.storeInfo(sno).getUno()) {	//유저 검증
 				model.addAttribute("errorCode", "access");
@@ -546,5 +553,16 @@ public class StoreController {
 			session.setAttribute("filterData", fvo);
 			return new ResponseEntity<FilterVO>(fvo, HttpStatus.OK);
 		}
+	}
+	
+	@GetMapping(value = "/reviewData", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> loadReviewData(@RequestParam("uno")int uno){
+		
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("id", uService.getUseridByUno(uno));
+		result.put("img", uService.getUserImg(uno));
+		
+		return new ResponseEntity<Map<String,String>>(result, HttpStatus.OK);
 	}
 }

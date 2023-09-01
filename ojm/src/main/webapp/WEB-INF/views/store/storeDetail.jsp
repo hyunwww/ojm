@@ -177,6 +177,7 @@ $(function() {
 		var sstar = '${store.sstar}';
 		console.log('star : ' + sstar);
 		fillStar(sstar);
+		loadReviewInfo();
 		
 		// 마커 이미지의 주소(현재 위치)
 		var markerImageUrl = '/resources/img/icon/free-icon-restaurant-4552186.png', 
@@ -463,6 +464,35 @@ $(function() {
 			return dist.toFixed(1);
 		}
 	}
+	
+	function loadReviewInfo(i, uno) {
+		
+		if (uno) {
+			$.ajax({
+			      type: "get",
+			      url: "/store/reviewData",
+			      data: {uno : uno},
+			      success: function (result, status, xhr) {
+			    	  $(".blog-author").eq(i).find("h4").html(result.id);
+			    	  $(".blog-author").eq(i).prepend('<img src="'+result.img+'" class="rounded-circle float-left" alt="images">');
+			    		
+			      }
+			});
+		}
+		
+		
+		
+	}
+	//리뷰 데이터 불러오기용
+	$(function() {
+		for (var i = 0; i < $(".blog-author").length; i++) {
+			
+			if ($(".blog-author")[i].getAttribute("data-uno")) {
+				loadReviewInfo(i, $(".blog-author")[i].getAttribute("data-uno"));
+			}
+		}
+	});
+	
 </script>
 <script type="text/javascript">
 	function recommendByDistance() {
@@ -470,16 +500,8 @@ $(function() {
 		var saddr = '${store.saddress}';
 		var sdel = [];
 		var sres = [];
-		if ('${store.sdeli}' == 0) {
-			sdel.push("");
-		}else{
-			sdel.push("1");
-		}
-		if ('${store.smaxreserv}' == 0) {
-			sres.push("");
-		}else{
-			sres.push("1");
-		}
+		sdel.push("");
+		sres.push("");
 		
 		//지역과 카테고리 기준으로 불러오기
 		$.ajax({
@@ -491,6 +513,7 @@ $(function() {
 		    	  	reservation : sres},
 		      success: function (result, status, xhr) {
 		    		console.log(result);
+		    		$(".recent-posts").eq(0).append('<h3 class="sidebar-title">비슷한 매장 추천</h3>');
 					for (var store of result) {
 			    		if (sno == store.sno) { //현재 매장 제외
 							continue;
@@ -503,9 +526,9 @@ $(function() {
 					    	var str = '';
 					    	
 					    	str += '<div class="post-item clearfix">';
-					    	str += '<img src="/resources/img/ja.jpg" alt="image">';
+					    	str += '<img src="/images/'+store.imgList[0].uuid+"_"+store.imgList[0].fileName+'" alt="image">';
 					    	str += '<h4><a href="/store/detail?sno='+store.sno+'">'+store.sname+'</a></h4>';
-					    	str += '<time datetime="2020-01-01">detail</time>';
+					    	str += '<time datetime="2020-01-01">'+store.scate+'</time>';
 					    	str += '</div>';
 					    	
 					    	$(".recent-posts").eq(0).append(str);
@@ -514,7 +537,7 @@ $(function() {
 					}
 		    	  	
 					if ($(".recent-posts").eq(0).find(".post-item").length < 1) { //매칭 결과 없을 경우
-					    $(".recent-posts").eq(0).append("메세지");
+					    $(".recent-posts").eq(0).empty();
 					}
 		    	
 		    		
@@ -988,7 +1011,6 @@ $(function() {
     <!-- ======= Blog Single Section ======= -->
     <section id="blog" class="blog">
       <div class="container" data-aos="fade-up">
-
         <div class="row">
 
           <div class="col-lg-8 entries">
@@ -1025,16 +1047,6 @@ $(function() {
 								  </a>
 					        </div>
               			</c:forEach>
-				         <div class="item cons">
-					          <a data-fslightbox href="/resources/img/ja.jpg">
-					         	<img alt="image" src="/resources/img/ja.jpg">
-							  </a>
-				         </div>
-				         <div class="item cons">
-					          <a data-fslightbox href="/resources/img/carousel-1.jpg">
-					         	<img alt="image" src="/resources/img/carousel-1.jpg">
-							  </a>
-				         </div>
 				      </div>
 				      <div class="owl-nav d-flex justify-content-between" style="text-align: center; z-index: 5; position: relative;">
 				         <div class="owl-prev owl-lastItem">&lt;</div>
@@ -1114,54 +1126,29 @@ $(function() {
             <div class="blog-comments">
 
               <h4 class="comments-count">reviews</h4><br>
-              <c:forEach var="review" items="${store.revList }">
-              	<div class="blog-author d-flex align-items-center">
-	              <img src="/resources/img/profile/man.png" class="rounded-circle float-left" alt="images"><!-- 프로필사진  -->
+              <c:choose>
+              	<c:when test="${empty store.revList }">
+              		<div class="blog-author d-flex align-items-center" data-uno ="${review.uno }">
 	              <div>
-	                <h4>유저 아이디</h4>
-	                <div class="social-links">
-	                  <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
-	                  <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
-	                  <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
-	                  <a href="https://instagram.com/#"><i class="bi bi-star-fill"></i>${review.rvstar }</a>
-	                </div>
-	                <p>${review.rvcontent }</p>
+	                <h4>작성된 리뷰가 없습니다</h4>
 	              </div>
 	            </div><!-- End blog author bio -->
-              </c:forEach>
-			  
-	            
-			  <div class="blog-author d-flex align-items-center">
-	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="">
-	              <div>
-	                <h4>Jane Smith</h4>
-	                <div class="social-links">
-	                  <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
-	                  <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
-	                  <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
-	                </div>
-	                <p>
-	                  Itaque quidem optio quia voluptatibus dolorem dolor. Modi eum sed possimus accusantium. Quas repellat voluptatem officia numquam sint aspernatur voluptas. Esse et accusantium ut unde voluptas.
-	                </p>
-	              </div>
-	            </div><!-- End blog author bio -->
-	            
-			  <div class="blog-author d-flex align-items-center">
-	              <img src="assets/img/blog/blog-author.jpg" class="rounded-circle float-left" alt="">
-	              <div>
-	                <h4>Jane Smith</h4>
-	                <div class="social-links">
-	                  <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
-	                  <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
-	                  <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
-	                </div>
-	                <p>
-	                  Itaque quidem optio quia voluptatibus dolorem dolor. Modi eum sed possimus accusantium. Quas repellat voluptatem officia numquam sint aspernatur voluptas. Esse et accusantium ut unde voluptas.
-	                </p>
-	              </div>
-	            </div><!-- End blog author bio -->
-			  
-			  
+              	</c:when>
+              	<c:otherwise>
+              		<c:forEach var="review" items="${store.revList }">
+		              	<div class="blog-author d-flex align-items-center" data-uno ="${review.uno }">
+			              <div>
+			                <h4></h4>
+			                <div class="social-links">
+			                  <a href="#"><i class="bi bi-star-fill" style="color: indianred"></i>${review.rvstar }</a>
+			                </div>
+			                <p style="font-size: 20px; color: black;">${review.rvcontent }</p>
+			              </div>
+			            </div><!-- End blog author bio -->
+		              </c:forEach>
+              	</c:otherwise>
+              </c:choose>
+              
 
 				
               <div class="reply-form modal modal-sheet modal-lg" id="replyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><!-- 숨겼다가 모달로 사용  -->
@@ -1195,59 +1182,40 @@ $(function() {
             </div><!-- End blog comments -->
 
           </div><!-- End blog entries list -->
-
           <div class="col-lg-4">
 
             <div class="sidebar">
 
-              <h3 class="sidebar-title">비슷한 매장 추천</h3>
               <div class="sidebar-item recent-posts">
-                <div class="post-item clearfix">
-                  <img src="/resources/img/ja.jpg" alt="">
-                  <h4><a href="blog-single.html">title</a></h4>
-                  <time datetime="2020-01-01">desc</time>
-                </div>
-
               </div><!-- End sidebar recent posts-->
+
 
               <h3 class="sidebar-title">관련 검색어</h3>
               <div class="sidebar-item tags">
                 <ul>
-                  <li><a href="/store/search?searchInput=1">1</a></li>
-                  <li><a href="#">IT</a></li>
-                  <li><a href="#">Business</a></li>
-                  <li><a href="#">Mac</a></li>
-                  <li><a href="#">Design</a></li>
-                  <li><a href="#">Office</a></li>
-                  <li><a href="#">Creative</a></li>
-                  <li><a href="#">Studio</a></li>
-                  <li><a href="#">Smart</a></li>
-                  <li><a href="#">Tips</a></li>
-                  <li><a href="#">Marketing</a></li>
+                	<c:if test=""></c:if>
+                	<c:if test=""></c:if>
+                	<c:if test=""></c:if>
+                  <li><a href="#">${store.scate }</a></li>
+                  <c:if test="${store.sdeli eq 1 }">
+	              	<li><a href="#">배달</a></li>
+	              </c:if>	
+                  <c:if test="${store.smaxreserv gt 0 }">
+	              	<li><a href="#">예약</a></li>
+	              </c:if>
+	              <c:forEach var="me" items="${store.menuList }">
+	              	<li><a href="#">${me.mname }</a></li>
+	              </c:forEach>
+	              <c:forEach var="me" items="${store.menuList }">
+	              	<li><a href="#">${me.mcate }</a></li>
+	              </c:forEach>
                 </ul>
               </div><!-- End sidebar tags-->
 
             </div><!-- End sidebar -->
-			
-			<div class="sidebar">
-				<h3 class="sidebar-title">222</h3>
-				<div class="sidebar-item recent-posts">
-					<div class="post-item clearfix">
-						<h5>111</h5>
-					</div>
-					<div class="post-item clearfix">
-						<h5>2</h5>
-					</div>
-					<div class="post-item clearfix">
-						<h5>3</h5>
-					</div>
-
-				</div>
-			</div>
-          </div><!-- End blog sidebar -->
 
         </div>
-
+      </div>
       </div>
     </section><!-- End Blog Single Section -->
 
