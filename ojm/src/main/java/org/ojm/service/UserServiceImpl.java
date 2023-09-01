@@ -121,8 +121,8 @@ public class UserServiceImpl implements UserService{
 		return mapper.findID(name, email);
 	}
 	@Override
-	public String findPw(String id, String email) {
-		return mapper.findPw(id, email);
+	public String findPw(String userid, String email) {
+		return mapper.findPw(userid, email);
 	}
 	
 	// 메일인증

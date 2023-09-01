@@ -37,7 +37,7 @@ public interface UserMapper {
 	public String findID(@Param("username") String name,
 			@Param("useremail") String email);
 	
-	public String findPw(@Param("id") String userid,
+	public String findPw(@Param("userid") String userid,
 			@Param("useremail") String email);
 	
 	
