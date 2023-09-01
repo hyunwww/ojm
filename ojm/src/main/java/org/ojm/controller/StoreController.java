@@ -522,14 +522,12 @@ public class StoreController {
 		service.reportSubmit(report);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
-	// 푸쉬용
+	
 	@PostMapping("/bookregister")
 	public String addBook(BookVO vo, RedirectAttributes rttr, Model model) {
-		log.info(vo);
-		log.info(vo);
-		log.info(vo.getBdate());
-		//service.addBook(vo);
 		log.info("addBook.......");
+		log.info(vo);
+		service.addBook(vo);
 		rttr.addFlashAttribute("result", "ok");
 		return "redirect:/store/detail?sno="+vo.getSno();
 	}
