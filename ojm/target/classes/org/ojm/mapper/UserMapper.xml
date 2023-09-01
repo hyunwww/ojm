@@ -125,6 +125,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="findID" parameterType="map" resultType="String">
 		select userid from usertable where username=#{username} and useremail=#{useremail}
 	</select>
+	<select id="findPw" parameterType="map" resultType="String">
+		select userid from usertable where userid=#{userid} and useremail=#{useremail}
+	</select>
 	
 	<!-- 메일인증 -->
 	<insert id="newMailKey">

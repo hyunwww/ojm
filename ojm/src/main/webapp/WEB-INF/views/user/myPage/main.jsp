@@ -17,13 +17,20 @@
 		width: 50px;
 	}
 	.div1 {
-		margin-top: 120px;
 		margin-bottom: 50px;
 		margin-left: 100px;
 		margin-right: 100px;
 		text-align: center;
+		display: flex ;
+		justify-content: center;
 	}
-	tr>td:nth-child(1) {background-color: lightgray;}
+	tr>td:nth-child(1) {
+		background-color: lightgray;
+		width:200px;
+	}
+	.table{
+		border: 1px solid;
+	}
 </style>
 <script type="text/javascript">
 
@@ -32,11 +39,11 @@
 
 <jsp:include page="../../testHeader.jsp"></jsp:include>
 <body>
-	<div class="div1">
-	<h1>유저정보</h1>
+	<h1 style="text-align: center; font-weight: 700;">유저정보</h1>
+	<div class="div1" >
 	<div id="content">
 		<img src="${imgRoot }">
-		<table class="table table-bordered">
+		<table class="table">
 		<tr>
 			<td>아이디</td>
 			<td>${uvo.userid }</td>

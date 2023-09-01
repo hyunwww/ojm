@@ -14,10 +14,11 @@
 <title>내 정보</title>
 <style type="text/css">
 	.div1 {
-		margin-top: 120px;
 		margin-bottom: 50px;
 		margin-left: 100px;
 		margin-right: 100px;
+		display: flex ;
+		justify-content: center;
 	}
 	tr>td:nth-child(1) {background-color: lightgray;}
 </style>

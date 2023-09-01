@@ -142,10 +142,11 @@ public class UserController {
 
 	@PostMapping("/findIDCheck")
 	public void findIDCheck(@RequestParam("useremail") String useremail, @RequestParam("username") String username,
-			Model model) throws Exception {
+			Model model,@RequestParam(value="no", required = false) String no) throws Exception {
 		log.info("findIDCheck......");
 		log.info("name : " + username);
 		log.info("email : " + useremail);
+		log.info(no);
 
 		String id = service.findID(username, useremail);
 		log.info("ID : " + id);
@@ -166,6 +167,12 @@ public class UserController {
 		log.info("id : " + userid);
 		log.info("email : " + useremail);
 		
+		String id = service.findID(userid, useremail);
+		log.info("ID : " + id);
+		
+		if (id == null) {
+			return;
+		}
 		
 		model.addAttribute("userid", userid);
 		model.addAttribute("useremail", useremail);
