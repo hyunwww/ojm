@@ -509,7 +509,7 @@ var deleteTarget = [];
 			fileInputChange();
 		});
 		
-		var regex = new RegExp("(.*?)\.(png|jpg|gif)$"); //파일타입 정규식
+		var regex = new RegExp("(.*?)\.(PNG|jpg|gif)$"); //파일타입 정규식
 		var maxSize = 31457280; //파일 최대크기 (단위 : byte) 약 30MB
 		var copy = $("input[name='uploadImgs']").clone();
 		var names;
@@ -572,7 +572,6 @@ var deleteTarget = [];
 			
 			//기존의 파일
 			if ($(this).closest("div").find("img").data("type") == 'local') {
-				alert("기존 파일입니다.");
 				
 				//기존 파일 삭제
 				var fName  = $(this).closest("div").find("img").data("name");

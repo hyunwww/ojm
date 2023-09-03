@@ -156,6 +156,11 @@ $(function() {
 	if ($(".owl-stage .cons").length < 1) {
 		$(".owl-next").addClass("owl-lastItem");
 	}
+	
+	//이미지 1개일 경우
+	if ($(".cons").length < 2) {
+		$(".owl-next").addClass("owl-lastItem");
+	}
 });
 	
 </script>
@@ -1283,9 +1288,7 @@ $(function() {
 	              <c:forEach var="me" items="${store.menuList }">
 	              	<li><a href="#">${me.mname }</a></li>
 	              </c:forEach>
-	              <c:forEach var="me" items="${store.menuList }">
-	              	<li><a href="#">${me.mcate }</a></li>
-	              </c:forEach>
+	              <li><a href="#">${store.menuList[0].mcate }</a></li>
                 </ul>
               </div><!-- End sidebar tags-->
 

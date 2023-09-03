@@ -521,7 +521,7 @@
 			fileInputChange();
 		});
 		
-		var regex = new RegExp("(.*?)\.(png|jpg|gif)$"); //파일타입 정규식
+		var regex = new RegExp("(.*?)\.(PNG|jpg|gif)$"); //파일타입 정규식
 		var maxSize = 31457280; //파일 최대크기 (단위 : byte) 약 30MB
 		var copy = $("input[name='uploadImgs']").clone();
 		var names;
@@ -649,7 +649,8 @@
 		if ($("#floatingTextarea").val() == '') {
 			selectedAlrg = selectedAlrg.substring(0, selectedAlrg.length-1);
 		}
-				
+		
+		console.log(selectedAlrg);
 		menuService.add({
 			mname : menuForm.mname.value,
 			mcate : menuForm.mcate.value,

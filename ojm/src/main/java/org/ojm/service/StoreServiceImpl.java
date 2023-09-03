@@ -145,8 +145,12 @@ public class StoreServiceImpl implements StoreService{
 
 	@Override
 	public List<StoreVO> searchStore(String input) {
+		List<StoreVO> list = mapper.searchStore(input);
+		for (StoreVO store : list) {
+			store.setImgList(iMapper.getImg(store.getSno()));
+		}
 		
-		return mapper.searchStore(input);
+		return list;
 	}
 	
 	@Override
