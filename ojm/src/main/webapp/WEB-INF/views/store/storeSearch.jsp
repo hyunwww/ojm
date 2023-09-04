@@ -512,9 +512,8 @@
 			var str = '';
 			if (!$("#blank")[0]) { //감지할 blank div 최초 생성
 	  		  $("#searchResult .row").append('<div id="blank"><div>');
-	  		  observer.observe($("#blank")[0]);
 	  		  }
-			console.log("============================================================");
+			//마커 생성
 			if ((current*amount) > storeResult.length || storeResult.length < amount) {
 				for (var i = amount*(current-1); i < storeResult.length; i++) {
 					str += storeResult[i].str;
@@ -528,6 +527,9 @@
 				}
 				$("#blank").before(str);
 			}
+			
+			
+			observer.observe($("#blank")[0]);
 		}else{
 			console.log("결과없음");
 			$(".mapBox").hide();
@@ -853,7 +855,7 @@
 	        };
 	    var overImage = new kakao.maps.MarkerImage(overImageUrl, overImageSize, overImageOptions);
 		
-	    
+	    /* 
 	 	// 커스텀 오버레이에 표출될 내용
 	    var content = '<div class="bubble">' +
 	        '    <span class="title" style="margin-left : 25px; font-weight : 600;">'+object.sname+'</span>' +
@@ -869,6 +871,7 @@
 	        xAnchor: 0,
 	        zIndex: -1
 	    });
+	    
 	    customOverlay.setMap(null);
 	  	//지도 레벨 변동 감지
 		// 지도가 확대 또는 축소되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
@@ -876,7 +879,7 @@
 	    
 		    // 지도의 현재 레벨을 얻어옵니다
 		    var level = map.getLevel();
-		    if (level <= 7) {
+		    if (level <= 5) {	//레벨이 작을수록 높은 배율
 		    	//오버레이 표시 추후에 추가 필요
 		    	customOverlay.setMap(map);
 			}else{
@@ -885,7 +888,7 @@
 			}
 		     
 		});
-	    
+	     */
 	    
 	   	function addE() {	//마커에 이벤트 부여
 			kakao.maps.event.addListener(marker, 'mouseout', function() {
