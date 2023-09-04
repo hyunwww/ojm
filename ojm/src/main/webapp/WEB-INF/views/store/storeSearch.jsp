@@ -42,7 +42,7 @@
 		<div class="row">
 			<div class="col-lg-3 d-flex flex-column flex-shrink-0 p-3">
 				<div class="sidebar sideFilter blog">
-					<h3 class="sidebar-title">title</h3>
+					<h3 class="sidebar-title">검색</h3>
 					<div class="sidebar-item search-form">
 						<form action="#">
 							<input type="text" name="keyword">
@@ -52,7 +52,7 @@
 							</button>
 						</form>
 					</div>
-					<h3 class="sidebar-title">location</h3>
+					<h3 class="sidebar-title">지역</h3>
 					<div class="sidebar-item text-dark">
 						<select name="location">
 							<option value="">지역 선택</option>
@@ -69,7 +69,7 @@
 						</select>
 					</div>
 					<div class="border-top py-3"></div>
-					<h3 class="sidebar-title">categories</h3>
+					<h3 class="sidebar-title">카테고리</h3>
 					<div class="sidebar-item text-dark">
 						<input type="checkbox" name="scate" value="한식">한식
 						<input type="checkbox" name="scate" value="일식">일식
@@ -79,13 +79,13 @@
 						<input type="checkbox" name="scate" value="아시아">아시아
 					</div>
 					<div class="border-top py-3"></div>
-					<h3 class="sidebar-title">dist</h3>
+					<h3 class="sidebar-title">거리</h3>
 					<div class="sidebar-item text-dark">
 						<span id="distLim"></span>
 						<input type="range" value="0" min="0" max="50" step="1"  style="width: -webkit-fill-available">
 					</div>
 					<div class="border-top py-3"></div>
-					<h3 class="sidebar-title">etc</h3>
+					<h3 class="sidebar-title">예약,배달</h3>
 					<div class="sidebar-item">
 						<span>예약 가능</span>&nbsp;<input type="checkbox" name="smaxreserv" value="1">
 						<br>

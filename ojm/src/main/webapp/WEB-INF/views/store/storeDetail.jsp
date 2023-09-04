@@ -1285,10 +1285,12 @@ $(function() {
                   <c:if test="${store.smaxreserv gt 0 }">
 	              	<li><a href="#">예약</a></li>
 	              </c:if>
-	              <c:forEach var="me" items="${store.menuList }">
-	              	<li><a href="#">${me.mname }</a></li>
-	              </c:forEach>
-	              <li><a href="#">${store.menuList[0].mcate }</a></li>
+	              <c:if test="${not empty store.menuList }">
+		              <c:forEach var="me" items="${store.menuList }">
+		              	<li><a href="#">${me.mname }</a></li>
+		              </c:forEach>
+		              <li><a href="#">${store.menuList[0].mcate }</a></li>
+	              </c:if>
                 </ul>
               </div><!-- End sidebar tags-->
 
