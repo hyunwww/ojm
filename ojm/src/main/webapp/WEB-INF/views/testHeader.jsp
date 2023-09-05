@@ -228,8 +228,8 @@
 			<div id="divUser"></div>
 			<nav id="navbar" class="navbar">
 				<ul>
-					<li><a class="active" href="/">Home</a></li>
-					<li class="dropdown"><a href="#"><span>Community</span><i
+					<li><a class="active" href="/">홈</a></li>
+					<li class="dropdown"><a href="#"><span>커뮤니티</span><i
 							class="bi bi-chevron-down"></i></a>
 						<ul>
 							<li><a href="/board/list">자유게시판</a></li>
@@ -237,16 +237,16 @@
 							<li><a href="/jboard/jlist">구인구직 게시판</a></li>
 						</ul>
 					</li>
-					<li><a href="/store/search">Search</a></li>
-					<li><a href="/store/register">Register</a></li>
+					<li><a href="/store/search">매장 검색</a></li>
+					<li><a href="/store/register">매장 등록</a></li>
 					<sec:authorize access="hasRole('ROLE_user')">
-						<li><a href="/user/myPage/main">myPage</a></li>
+						<li><a href="/user/myPage/main">마이페이지</a></li>
 					</sec:authorize>
 					<sec:authorize access="hasRole('ROLE_business')">
-						<li><a href="/user/myPage/main">myPage</a></li>
+						<li><a href="/user/myPage/main">마이페이지</a></li>
 					</sec:authorize>
 					<sec:authorize access="hasRole('ROLE_admin')">
-						<li class="dropdown"><a href="#"><span>adminPage</span><i class="bi bi-chevron-down"></i></a>
+						<li class="dropdown"><a href="#"><span>관리자페이지</span><i class="bi bi-chevron-down"></i></a>
 							<ul>
 								<li><a href="/admin/reportList">신고 관리</a></li>
 								<li><a href="/qboard/qlist">Q&A 관리</a></li>
