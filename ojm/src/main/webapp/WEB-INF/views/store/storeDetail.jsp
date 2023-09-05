@@ -324,7 +324,7 @@ $(function() {
 			      success: function (result, status, xhr) {
 			    	  if(result){// 좋아요 적용
 			    		  slike++;
-			    		  $(".likeBtn").html('<i class="bi bi-hand-thumbs-up"></i>'+" 좋아요 "+slike);
+			    		  $(".likeBtn").html('<i class="bi bi-hand-thumbs-up-fill"></i>'+" 좋아요 "+slike);
 			    		  nowLike = true;
 			    	  }else{//해제
 			    		  slike--;

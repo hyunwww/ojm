@@ -423,7 +423,7 @@
                 $("input[name='addr']").val(addr);
                 
                 
-              	//map
+              	//map생성
               	$("#mapContainer").show();
         		var mapContainer = $("#mapContainer")[0];
         		var options = { //지도를 생성할 때 필요한 기본 옵션
@@ -456,7 +456,7 @@
                 		$("#regForm").append(kd);
                 		$("#regForm").append(wd);
 					}else{
-						alert("지도 오류");
+						console.log("kakaomap Error");
 					}
                 	
 				});

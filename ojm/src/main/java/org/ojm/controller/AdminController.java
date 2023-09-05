@@ -88,7 +88,7 @@ public class AdminController {
 	
 	@GetMapping("/srPermmit")
 	public String srPermmit(@RequestParam("sno") int sno) {
-		log.info("srPermmit...");
+		log.info("srPermmit..." + sno);
 		sService.storePermit(sno);
 		return "admin/storeRegisterList";
 	}

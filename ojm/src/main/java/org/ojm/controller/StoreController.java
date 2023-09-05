@@ -344,11 +344,6 @@ public class StoreController {
 			}
 			log.info(uvo.getInfo().getUlikestore());
 			
-			
-			
-			
-			
-			
 			// 현재유저의 해당 매장 좋아요 여부 판단하여 true/false 전달
 			return new ResponseEntity<Boolean>(!current, HttpStatus.OK);
 		}else {	//비로그인 유저
@@ -421,10 +416,10 @@ public class StoreController {
 		log.warn("user : " + uvo);
 		
 		
-		log.info("delete store, pw : " + pw);
 		// 유저 pw 체크 후 검증성공 시 삭제, 실패 시 실패 메세지와 함께 오류status 전송 후 script 처리
 		if (encoder.matches(pw, uvo.getUvo().getUserpw())) {
 			log.info("일치");
+			service.deleteStore(sno);
 			return new ResponseEntity<String>("삭제되었습니다." ,HttpStatus.OK);
 		}else {
 			log.info("불일치");
