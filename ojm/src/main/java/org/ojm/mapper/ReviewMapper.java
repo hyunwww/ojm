@@ -2,7 +2,6 @@ package org.ojm.mapper;
 
 import java.util.List;
 
-import org.ojm.domain.ReviewAttachVO;
 import org.ojm.domain.ReviewVO;
 
 public interface ReviewMapper {
